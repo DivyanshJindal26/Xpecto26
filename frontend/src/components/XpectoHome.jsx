@@ -1,11 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useAuth } from '../context/AuthContext';
+import GoogleLoginButton from './GoogleLoginButton';
+import UserProfile from './UserProfile';
 
 // Xpecto Space-Themed Homepage (single-file React component)
 // Usage: Place this component in src/components/XpectoHome.jsx and import into App.js
 // Make sure Tailwind CSS is configured and `src/index.css` is imported in your app.
 
 export default function XpectoHome() {
+  const { isAuthenticated, loading } = useAuth();
+
   return (
     <div className="relative min-h-screen overflow-hidden text-white font-sans bg-black">
       {/* background nebula gradient + subtle noise */}
@@ -63,7 +68,13 @@ export default function XpectoHome() {
           <a className="hover:text-white transition">Events</a>
           <a className="hover:text-white transition">Workshops</a>
           <a className="hover:text-white transition">Sponsors</a>
-          <button className="ml-2 rounded-full px-4 py-2 bg-gradient-to-r from-indigo-500 to-violet-500 text-white shadow-lg hover:brightness-90">Register</button>
+          {!loading && (
+            isAuthenticated ? (
+              <UserProfile />
+            ) : (
+              <GoogleLoginButton className="ml-2" />
+            )
+          )}
         </div>
       </nav>
 
