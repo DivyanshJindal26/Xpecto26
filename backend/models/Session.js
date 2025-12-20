@@ -24,7 +24,7 @@ const sessionSchema = new mongoose.Schema(
       type: String,
     },
     duration: {
-      type: Number
+      type: String
     },
     date: {
       type: Date,
@@ -33,7 +33,6 @@ const sessionSchema = new mongoose.Schema(
     image: [
       {
         type: String,
-        required: true,
       }
     ],
     registrationLimit: {

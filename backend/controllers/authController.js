@@ -1,9 +1,9 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 // @desc    Google OAuth callback
 // @route   GET /api/auth/google/callback
 // @access  Public
-const googleCallback = (req, res) => {
+export const googleCallback = (req, res) => {
   try {
     // Validate user object
     if (!req.user || !req.user._id) {
@@ -16,6 +16,7 @@ const googleCallback = (req, res) => {
         id: req.user._id.toString(), 
         email: req.user.email,
         name: req.user.name,
+        role: req.user.role,
         iat: Math.floor(Date.now() / 1000)
       },
       process.env.JWT_SECRET,
@@ -42,7 +43,7 @@ const googleCallback = (req, res) => {
 // @desc    Get current user
 // @route   GET /api/auth/me
 // @access  Private
-const getCurrentUser = async (req, res) => {
+export const getCurrentUser = async (req, res) => {
   try {
     res.status(200).json({
       success: true,
@@ -51,6 +52,7 @@ const getCurrentUser = async (req, res) => {
         name: req.user.name,
         email: req.user.email,
         avatar: req.user.avatar,
+        role: req.user.role,
       },
     });
   } catch (error) {
@@ -64,7 +66,7 @@ const getCurrentUser = async (req, res) => {
 // @desc    Logout user
 // @route   POST /api/auth/logout
 // @access  Public (but should have valid cookie)
-const logout = (req, res) => {
+export const logout = (req, res) => {
   // Clear the cookie
   res.clearCookie('token', {
     httpOnly: true,
@@ -86,10 +88,4 @@ const logout = (req, res) => {
       message: 'Logged out successfully' 
     });
   });
-};
-
-module.exports = {
-  googleCallback,
-  getCurrentUser,
-  logout,
 };

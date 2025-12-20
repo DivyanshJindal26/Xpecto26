@@ -1,8 +1,9 @@
-const express = require('express');
+import express from 'express';
+import passport from 'passport';
+import { googleCallback, getCurrentUser, logout } from '../controllers/authController.js';
+import authMiddleware from '../middleware/authMiddleware.js';
+
 const router = express.Router();
-const passport = require('passport');
-const { googleCallback, getCurrentUser, logout } = require('../controllers/authController');
-const authMiddleware = require('../middleware/authMiddleware');
 
 // @route   GET /api/auth/google
 // @desc    Initiate Google OAuth
@@ -36,4 +37,4 @@ router.get('/me', authMiddleware, getCurrentUser);
 // @access  Public (but should have valid cookie)
 router.post('/logout', logout);
 
-module.exports = router;
+export default router;

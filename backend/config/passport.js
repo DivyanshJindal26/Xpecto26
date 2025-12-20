@@ -1,6 +1,7 @@
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const User = require('../models/User');
+import 'dotenv/config';
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import User from '../models/User.js';
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -24,10 +25,22 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
+        const email = profile.emails[0].value;
+        const adminEmails = process.env.ADMINS ? process.env.ADMINS.split(',').map(e => e.trim().toLowerCase()) : [];
+        const isAdmin = adminEmails.includes(email.toLowerCase());
+
         // Check if user already exists
         let user = await User.findOne({ googleId: profile.id });
 
         if (user) {
+          // Update role if admin status changed
+          if (isAdmin && user.role !== 'admin') {
+            user.role = 'admin';
+            await user.save();
+          } else if (!isAdmin && user.role === 'admin') {
+            user.role = 'user';
+            await user.save();
+          }
           return done(null, user);
         }
 
@@ -35,8 +48,9 @@ passport.use(
         user = await User.create({
           googleId: profile.id,
           name: profile.displayName,
-          email: profile.emails[0].value,
+          email: email,
           avatar: profile.photos[0]?.value,
+          role: isAdmin ? 'admin' : 'user',
         });
 
         done(null, user);
@@ -47,4 +61,4 @@ passport.use(
   )
 );
 
-module.exports = passport;
+export default passport;
