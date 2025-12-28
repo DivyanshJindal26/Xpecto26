@@ -1,41 +1,52 @@
 import jwt from 'jsonwebtoken';
+import collegeMap from '../utils/collegeMap.js';
 
 // @desc    Google OAuth callback
 // @route   GET /api/auth/google/callback
 // @access  Public
 export const googleCallback = (req, res) => {
   try {
-    // Validate user object
+    
     if (!req.user || !req.user._id) {
       return res.redirect(`${process.env.FRONTEND_URL}/auth/error`);
     }
 
-    // Generate JWT token
+
+    const email = req.user.email.toLowerCase();
+    const college = collegeMap.get(email) || "Unknown";
+
+  
     const token = jwt.sign(
       { 
         id: req.user._id.toString(), 
         email: req.user.email,
         name: req.user.name,
         role: req.user.role,
+        college,
         iat: Math.floor(Date.now() / 1000)
       },
       process.env.JWT_SECRET,
-      { expiresIn: '7d', issuer: 'xpecto-api' }
+      { 
+        expiresIn: '7d', 
+        issuer: 'xpecto-api' 
+      }
     );
 
-    // Set token in httpOnly cookie
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      maxAge: 7 * 24 * 60 * 60 * 1000,
       path: '/',
-      domain: process.env.NODE_ENV === 'production' ? process.env.COOKIE_DOMAIN : undefined,
+      domain: process.env.NODE_ENV === 'production'
+        ? process.env.COOKIE_DOMAIN
+        : undefined,
     });
 
     // Redirect to frontend success page
     res.redirect(`${process.env.FRONTEND_URL}/auth/success`);
   } catch (error) {
+    console.error(error);
     res.redirect(`${process.env.FRONTEND_URL}/auth/error`);
   }
 };
@@ -53,6 +64,7 @@ export const getCurrentUser = async (req, res) => {
         email: req.user.email,
         avatar: req.user.avatar,
         role: req.user.role,
+        college: req.user.college, 
       },
     });
   } catch (error) {
@@ -65,15 +77,16 @@ export const getCurrentUser = async (req, res) => {
 
 // @desc    Logout user
 // @route   POST /api/auth/logout
-// @access  Public (but should have valid cookie)
+// @access  Public
 export const logout = (req, res) => {
-  // Clear the cookie
   res.clearCookie('token', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
     path: '/',
-    domain: process.env.NODE_ENV === 'production' ? process.env.COOKIE_DOMAIN : undefined,
+    domain: process.env.NODE_ENV === 'production'
+      ? process.env.COOKIE_DOMAIN
+      : undefined,
   });
 
   req.logout((err) => {
