@@ -88,7 +88,8 @@ const Home = () => {
   >
     {/* Background Image */}
     <div className="absolute inset-0
-      bg-[url('https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=2070')]
+      bg-[url('/public/nav1.jpg')]
+      
       bg-cover bg-center
       transition-transform duration-700
       group-hover:scale-110
@@ -159,7 +160,7 @@ const Home = () => {
   >
     {/* Background Image */}
     <div className="absolute inset-0
-      bg-[url('https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2071')]
+      bg-[url('/public/events1.jpg')]
       bg-cover bg-center
       transition-transform duration-700
       group-hover:scale-110
@@ -231,7 +232,7 @@ const Home = () => {
   >
     {/* Background Image */}
     <div className="absolute inset-0
-      bg-[url('https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=2074')]
+      bg-[url('/public/sessions2.jpg')]
       bg-cover bg-center
       transition-transform duration-700
       group-hover:scale-110
