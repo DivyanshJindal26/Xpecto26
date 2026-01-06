@@ -47,6 +47,8 @@ const Navbar = () => {
           <Link to="/exhibition" className={getButtonClass('/exhibition')}>EXHIBITION</Link>
           <Link to="/events" className={getButtonClass('/events')}>EVENTS</Link>
           <Link to="/sessions" className={getButtonClass('/sessions')}>SESSIONS</Link>
+          <Link to="/Team" className={getButtonClass('/Team')}>Team</Link>
+          <Link to="/Sponsors" className={getButtonClass('/Sponsors')}>Sponsors</Link>
         </div>
 
         {/* Mobile Menu Text */}

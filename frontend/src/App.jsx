@@ -9,6 +9,8 @@ import Exhibition from './pages/Exhibition';
 import Events from './pages/Events';        
 import Sessions from './pages/Sessions';   
 import Payments from './pages/Payment';
+import Team from './pages/Team';
+import Sponsors from './pages/Sponsors';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -35,6 +37,9 @@ function App() {
             <Route path="/events" element={<Events />} />
             <Route path="/sessions" element={<Sessions />} />
             <Route path="/payments" element={<Payments />} />
+            <Route path="/Team" element={<Team />} />
+            <Route path="/Sponsors" element={<Sponsors />} />
+            
           </Routes>
         </div>
 
