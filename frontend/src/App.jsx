@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion'; 
 import Navbar from './components/Navbar';
 import StarBackground from './components/StarBackground'; 
-import Footer from './components/Footer'; // Import Footer
+import Footer from './components/Footer'; 
+import PageTransition from './components/PageTransition'; 
 
 import Home from './pages/Home';
 import Exhibition from './pages/Exhibition'; 
@@ -11,44 +13,80 @@ import Sessions from './pages/Sessions';
 import Payments from './pages/Payment';
 import Team from './pages/Team';
 import Sponsors from './pages/Sponsors';
+import About from './pages/About';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   React.useEffect(() => {
-    window.scrollTo(0, 0);
+    // Reset scroll inside the transition container, not the window
+    const scrollContainer = document.querySelector('.page-content');
+    if (scrollContainer) scrollContainer.scrollTop = 0;
   }, [pathname]);
   return null;
 };
 
+// Wrapper for Page + Footer
+const PageWithFooter = ({ children }) => (
+  <PageTransition>
+    <div className="flex flex-col min-h-screen">
+      <div className="flex-grow">{children}</div>
+      <Footer />
+    </div>
+  </PageTransition>
+);
+
+const ContentArea = ({ isMenuOpen }) => {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode='wait'>
+      {/* 
+         If menu is CLOSED (!isMenuOpen), show the page.
+         If menu is OPEN, unmount the page (Trigger Exit Animation).
+      */}
+      {!isMenuOpen && (
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<PageWithFooter><Home /></PageWithFooter>} />
+          <Route path="/exhibition" element={<PageWithFooter><Exhibition /></PageWithFooter>} />
+          <Route path="/events" element={<PageWithFooter><Events /></PageWithFooter>} />
+          <Route path="/sessions" element={<PageWithFooter><Sessions /></PageWithFooter>} />
+          <Route path="/payments" element={<PageWithFooter><Payments /></PageWithFooter>} />
+          <Route path="/Team" element={<PageWithFooter><Team /></PageWithFooter>} />
+          <Route path="/Sponsors" element={<PageWithFooter><Sponsors /></PageWithFooter>} />
+          <Route path="/about" element={<PageWithFooter><About /></PageWithFooter>} />
+        </Routes>
+      )}
+    </AnimatePresence>
+  );
+};
+
 function App() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <Router>
       <ScrollToTop />
-      <div className="relative w-full min-h-screen bg-black text-white selection:bg-cyan-500/30 flex flex-col">
+      {/* FIXED CONTAINER: Keeps everything locked to the screen */}
+      <div className="fixed inset-0 w-full h-full bg-black text-white selection:bg-cyan-500/30 overflow-hidden">
         
-        <Navbar />
         <StarBackground />
 
-        {/* Main Content (flex-grow pushes footer down if content is short) */}
-        <div className="relative z-10 flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/exhibition" element={<Exhibition />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/sessions" element={<Sessions />} />
-            <Route path="/payments" element={<Payments />} />
-            <Route path="/Team" element={<Team />} />
-            <Route path="/Sponsors" element={<Sponsors />} />
-            
-          </Routes>
+        {/* Content Area */}
+        <div className="absolute inset-0 z-10">
+           <ContentArea isMenuOpen={isMenuOpen} />
         </div>
 
-        {/* Footer sits at the bottom */}
-        <div className="relative z-10">
-          <Footer />
-        </div>
+        {/* Navbar on Top */}
+        <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
 
       </div>
+      
+      {/* Global Scrollbar Style */}
+      <style>{`
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+      `}</style>
     </Router>
   );
 }
