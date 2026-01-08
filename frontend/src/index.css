@@ -49,3 +49,119 @@ html, body {
   background: #333;
   border-radius: 10px;
 }
+@keyframes planetRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-planet-rotate {
+  animation: planetRotate 40s linear infinite;
+}
+
+@keyframes starsMove {
+  from { background-position: 0 0; }
+  to { background-position: 10000px 10000px; }
+}
+
+.animate-stars {
+  animation: starsMove 15s linear infinite;
+}
+
+.glow-text {
+  text-shadow:
+    0 0 10px rgba(255,255,255,0.9),
+    0 0 30px rgba(150,120,255,0.8),
+    0 0 60px rgba(120,80,255,0.9);
+}
+.home-universe {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, #b1b1b2, #d1cdd9),
+    url("/stars.png");
+  background-size: cover;
+  background-repeat: repeat;
+  position: relative;
+  overflow: hidden;
+}
+/* ================= SHOOTING STARS ================= */
+.shooting-stars {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255,255,255,0.9) 0px,
+      rgba(255,255,255,0.9) 2px,
+      transparent 2px,
+      transparent 120px
+    );
+  animation: shootingStars 3s linear infinite;
+  opacity: 0.25;
+}
+
+@keyframes shootingStars {
+  0% { background-position: 0 0; }
+  100% { background-position: -1000px 1000px; }
+}
+
+/* ================= PLANET ROTATION ================= */
+@keyframes planetRotate {
+  from { transform: rotateZ(0deg); }
+  to { transform: rotateZ(360deg); }
+}
+
+.animate-planet-rotate {
+  animation: planetRotate 30s linear infinite;
+}
+/* ================= NEWS TICKER / MARQUEE ================= */
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+
+
+
+/* SHOOTING STARS */
+.shooting-stars {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.9) 0px,
+      rgba(255,255,255,0.9) 2px,
+      transparent 2.5px,
+      transparent 120px
+    );
+  animation: shootingStars 10s linear infinite;
+  opacity: 0.2;
+}
+
+@keyframes shootingStars {
+  from { background-position: 0 0; }
+  to { background-position: -1000px 1000px; }
+}
+
+/* PLANET ROTATION */
+@keyframes planetRotate {
+  from { transform: rotateZ(0deg); }
+  to { transform: rotateZ(360deg); }
+}
+
+.animate-planet-rotate {
+  animation: planetRotate 30s linear infinite;
+}
+
+
+
+
