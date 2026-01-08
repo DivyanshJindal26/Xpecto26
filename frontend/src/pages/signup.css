@@ -1,0 +1,322 @@
+/* ============================= */
+/* COSMIC BACKGROUND */
+/* ============================= */
+
+.signup-universe {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: radial-gradient(
+      ellipse at bottom,
+      #1b2735 0%,
+  );
+  cursor: url("https://cur.cursors-4u.net/nature/nat-10/nat979.cur"), auto;
+}
+
+/* ============================= */
+/* STAR FIELD */
+/* ============================= */
+
+.signup-universe::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(2px 2px at 20% 30%, white, transparent),
+    radial-gradient(1px 1px at 80% 40%, white, transparent),
+    radial-gradient(1.5px 1.5px at 50% 80%, white, transparent),
+    radial-gradient(1px 1px at 10% 70%, white, transparent),
+    radial-gradient(2px 2px at 90% 10%, white, transparent);
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  opacity: 0.6;
+  z-index: 0;
+}
+
+/* ============================= */
+/* SHOOTING STARS */
+/* ============================= */
+
+.shooting-star {
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  width: 2px;
+  height: 120px;
+  background: linear-gradient(180deg, white, transparent);
+  opacity: 0.8;
+  animation: shooting 3s linear infinite;
+}
+
+.shooting-star:nth-child(2) {
+  left: 20%;
+  animation-delay: 1s;
+}
+
+.shooting-star:nth-child(3) {
+  left: 75%;
+  animation-delay: 2s;
+}
+
+@keyframes shooting {
+  0% {
+    transform: translateY(-200px) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(120vh) translateX(-300px);
+    opacity: 0;
+  }
+}
+
+/* ============================= */
+/* SIGNUP CARD */
+/* ============================= */
+
+.signup-card {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 420px;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  background: rgba(20, 20, 30, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 40px rgba(120, 200, 255, 0.15);
+}
+
+/* ============================= */
+/* INPUTS */
+/* ============================= */
+
+.signup-card input,
+.signup-card select {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border-radius: 0.75rem;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  outline: none;
+}
+
+.signup-card input:focus,
+.signup-card select:focus {
+  border-color: #7dd3fc;
+  box-shadow: 0 0 10px rgba(125, 211, 252, 0.4);
+}
+
+/* ============================= */
+/* BUTTON */
+/* ============================= */
+
+.signup-card button {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.7rem;
+  border-radius: 999px;
+  font-weight: bold;
+  color: blue;
+  background: linear-gradient(90deg, #7dd3fc, #a5b4fc);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.signup-card button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(125, 211, 252, 0.6);
+}
+/* ===========================
+   Bottom Moving News Ticker
+=========================== */
+
+.signup-ticker {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 42px;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.85),
+    rgba(10, 10, 30, 0.85),
+    rgba(0, 0, 0, 0.85)
+  );
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+}
+
+.ticker-text {
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+  color: #e0f7ff;
+  padding-left: 100%;
+  animation: tickerMove 20s linear infinite;
+  text-shadow: 0 0 12px rgba(0, 200, 255, 0.7);
+}
+
+@keyframes tickerMove {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+.signup-ticker {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 42px;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.85),
+    rgba(10, 10, 30, 0.85),
+    rgba(0, 0, 0, 0.85)
+  );
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+}
+
+.ticker-text {
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+  color: #e0f7ff;
+  padding-left: 100%;
+  animation: tickerMove 20s linear infinite;
+  text-shadow: 0 0 12px rgba(0, 200, 255, 0.7);
+}
+
+@keyframes tickerMove {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+.signup-ticker {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 42px;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.85),
+    rgba(10, 10, 30, 0.85),
+    rgba(0, 0, 0, 0.85)
+  );
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+}
+
+.ticker-text {
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+  color: #e0f7ff;
+  padding-left: 100%;
+  animation: tickerMove 20s linear infinite;
+  text-shadow: 0 0 12px rgba(0, 200, 255, 0.7);
+}
+
+@keyframes tickerMove {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+.signup-ticker {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 42px;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.85),
+    rgba(10, 10, 30, 0.85),
+    rgba(0, 0, 0, 0.85)
+  );
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+}
+
+.ticker-text {
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+  color: #e0f7ff;
+  padding-left: 100%;
+  animation: tickerMove 20s linear infinite;
+  text-shadow: 0 0 12px rgba(0, 200, 255, 0.7);
+}
+
+@keyframes tickerMove {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+/* ✨ Shining Star Cursor */
+.signup-universe {
+  cursor: url("https://cur.cursors-4u.net/nature/nat-11/nat1002.cur"), auto;
+}
+
+.signup-universe input,
+.signup-universe button,
+.signup-universe select {
+  cursor: pointer;
+}
+/* ===========================
+   Second News Ticker (Bottom)
+=========================== */
+
+.second-ticker {
+  bottom: 42px; /* pushes it above the first ticker */
+  background: linear-gradient(
+    to right,
+    rgba(5, 5, 20, 0.9),
+    rgba(20, 10, 40, 0.9),
+    rgba(5, 5, 20, 0.9)
+  );
+}
+
+.second-ticker .ticker-text {
+  animation-duration: 22s; /* slightly slower */
+  color: #ffd6ff;
+  text-shadow: 0 0 10px rgba(255, 180, 255, 0.7);
+}
+
+
+
+  
+
+

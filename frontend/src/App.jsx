@@ -1,4 +1,5 @@
 import React from 'react';
+import SignUp from "./pages/SignUp";
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import StarBackground from './components/StarBackground'; 
@@ -31,6 +32,7 @@ function App() {
         <div className="relative z-10 flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/signup" element={<SignUp />} />
             <Route path="/exhibition" element={<Exhibition />} />
             <Route path="/events" element={<Events />} />
             <Route path="/sessions" element={<Sessions />} />

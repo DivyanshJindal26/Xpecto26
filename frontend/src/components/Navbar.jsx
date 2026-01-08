@@ -55,9 +55,13 @@ const Navbar = () => {
         </div>
 
         {/* Sign Up Button */}
-        <button className="bg-gradient-to-r from-[#A0C4FF] to-[#BDB2FF] hover:brightness-110 text-black text-[10px] md:text-xs font-extrabold px-6 py-2.5 rounded-full shadow-[0_0_20px_rgba(160,196,255,0.4)] transition-transform hover:scale-105 shrink-0">
+        <Link
+        to="/signup"
+        className="bg-gradient-to-r from-[#A0C4FF] to-[#BDB2FF] hover:brightness-110 text-black text-[10px] md:text-xs font-extrabold px-6 py-2.5 rounded-full shadow-[0_0_20px_rgba(160,196,255,0.4)] transition-transform hover:scale-105 shrink-0"
+      >
           SIGN UP
-        </button>
+        </Link>
+
       </div>
     </div>
   );
