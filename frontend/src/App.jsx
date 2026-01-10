@@ -40,10 +40,6 @@ const ContentArea = ({ isMenuOpen }) => {
 
   return (
     <AnimatePresence mode='wait'>
-      {/* 
-         If menu is CLOSED (!isMenuOpen), show the page.
-         If menu is OPEN, unmount the page (Trigger Exit Animation).
-      */}
       {!isMenuOpen && (
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<PageWithFooter><Home /></PageWithFooter>} />
