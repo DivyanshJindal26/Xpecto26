@@ -1,144 +1,236 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import Blackhole3D from '../components/Blackhole3D';
+import {
+  Monitor,
+  Trophy,
+  Rocket,
+  Users,
+  Gem,
+  Info,
+  ArrowRight,
+  Zap,
+} from 'lucide-react';
 
-// Animation for the Banners
-const bannerVariant = {
-  hidden: { opacity: 0, y: 100, scale: 0.95 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    scale: 1, 
-    transition: { duration: 0.8, ease: "easeOut" } 
-  }
-};
+import Blackhole3D from '../components/Blackhole3D';
+import StarBackground from '../components/StarBackground';
 
 const Home = () => {
+  const containerRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  });
+
+  /* ⭐ STAR PARALLAX */
+  const starsY = useTransform(scrollYProgress, [0, 1], ['0%', '35%']);
+
+  /* 🕳 BLACK HOLE GRAVITY EFFECT */
+  const bhScale = useTransform(scrollYProgress, [0, 1], [1, 2.4]);
+  const bhOpacity = useTransform(scrollYProgress, [0, 0.8, 1], [0.6, 1, 0.15]);
+
   return (
-    <div className="w-full min-h-screen bg-[#02020A] flex flex-col">
-      
-      {/* ================= HERO SECTION ================= */}
-      <div className="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden">
-        
-        {/* Background Gradients */}
-        <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[120vw] h-[120vh] bg-[radial-gradient(circle_at_center,_#4a148c_0%,_#311b92_30%,_#000000_70%)] opacity-80 pointer-events-none" />
-        
-        {/* --- 3D MODEL CONTAINER --- */}
-        {/* Use h-[80vh] to make it fill most of the screen vertically */}
-        <div className="absolute inset-0 z-0 flex items-center justify-center">
-            <div className="w-full h-[80vh] md:h-[90vh] max-w-[1200px]">
-                <Blackhole3D />
-            </div>
-        </div>
+    <div
+      ref={containerRef}
+      className="relative min-h-screen w-full text-white overflow-hidden"
+    >
+      {/* ⭐ STAR BACKGROUND — GLOBAL */}
+      <StarBackground />
 
-        {/* --- OVERLAY TEXT --- */}
-        <div className="relative z-10 w-full flex flex-col items-center justify-center">
-            
-            {/* Massive XPECTO Text */}
-            <div className="w-[90%] md:w-[70%] flex justify-between items-center font-michroma pointer-events-none mix-blend-screen opacity-90">
-                <span className="text-6xl md:text-[10rem] tracking-tighter text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.5)] font-bold">X</span>
-                <span className="text-6xl md:text-[10rem] tracking-tighter text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.5)] font-bold">P</span>
-                <span className="text-6xl md:text-[10rem] tracking-tighter text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.5)] font-bold">E</span>
-                <span className="text-6xl md:text-[10rem] tracking-tighter text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.5)] font-bold">C</span>
-                <span className="text-6xl md:text-[10rem] tracking-tighter text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.5)] font-bold">T</span>
-                <span className="text-6xl md:text-[10rem] tracking-tighter text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.5)] font-bold">O</span>
-            </div>
-
-            {/* Subtitle */}
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1, duration: 1 }}
-              className="text-lg md:text-2xl font-bold tracking-[0.5em] text-white/90 mt-[-20px] md:mt-[-40px] text-center uppercase drop-shadow-lg"
-            >
-              Biggest Techfest of Himalayas
-            </motion.h1>
-
-            {/* Scroll Indicator */}
-            <motion.div 
-              animate={{ y: [0, 10, 0] }} 
-              transition={{ duration: 2, repeat: Infinity }}
-              className="absolute bottom-10 text-cyan-400 text-3xl"
-            >
-               ↓
-            </motion.div>
-        </div>
+      {/* 🕳 BLACK HOLE (FIXED CENTER) */}
+      <div className="fixed inset-0 z-[5] pointer-events-none flex items-center justify-center">
+        <motion.div style={{ scale: bhScale, opacity: bhOpacity }}>
+          <div className="w-[800px] h-[800px] md:w-[1200px] md:h-[1200px]">
+            <Blackhole3D />
+          </div>
+        </motion.div>
       </div>
 
+      {/* 🌌 SOFT SPACE VIGNETTE (DOES NOT KILL STARS) */}
+      <div className="fixed inset-0 z-[8] pointer-events-none bg-[radial-gradient(circle_at_center,_rgba(0,0,0,0)_0%,_rgba(0,0,0,0.55)_100%)]" />
 
-      {/* ================= NAVIGATION BANNERS ================= */}
-      {/* Kept exactly as requested */}
-      <div className="w-full flex flex-col gap-12 px-4 md:px-12 pb-20 max-w-[1400px] mx-auto z-10 pt-20">
+      {/* 🧲 CENTRAL TETHER */}
+      <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-cyan-500/40 to-transparent z-[15] md:-translate-x-1/2" />
 
-        {/* 1. EXHIBITION */}
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={bannerVariant}>
-          <Link to="/exhibition" className="group relative block w-full h-[260px] md:h-[330px] rounded-[40px] overflow-hidden cursor-pointer border border-white/10 shadow-[0_0_30px_rgba(255,159,28,0.1)] hover:shadow-[0_0_110px_rgba(255,200,80,0.6)] transition-shadow duration-500 before:absolute before:inset-[-45%] before:rounded-full before:opacity-0 group-hover:before:opacity-100 before:transition-opacity before:duration-700 before:bg-[radial-gradient(circle,rgba(255,230,120,0.65),rgba(255,195,60,0.45),rgba(255,165,0,0.25),transparent_72%)] before:z-0">
-            <div className="absolute inset-0 bg-[url('/public/nav1.jpg')] bg-cover bg-center transition-transform duration-700 group-hover:scale-110 filter brightness-[0.4] group-hover:brightness-[0.6]"></div>
-            <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-24 z-10">
-              <h2 className="text-4xl md:text-6xl font-black text-white italic font-tech uppercase tracking-tight drop-shadow-lg">EXHIBITION</h2>
-              <div className="mt-4 w-10 h-1 bg-orange-500 group-hover:w-36 transition-all duration-500 ease-out"></div>
+      {/* 🧠 CONTENT */}
+      <div className="relative z-[20] flex flex-col items-center">
+
+        {/* ================= HERO ================= */}
+        <section className="min-h-screen flex flex-col items-center justify-center text-center px-4">
+          <motion.h1
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.5 }}
+            className="text-[15vw] md:text-[12rem] font-black font-['Orbitron']
+                       text-transparent bg-clip-text bg-gradient-to-b from-white to-white/10"
+          >
+            XPECTO
+          </motion.h1>
+
+          <div className="text-cyan-400 tracking-[1em] mt-6 font-mono text-sm">
+            2025
+          </div>
+
+          <div className="mt-16 flex flex-col items-center gap-4">
+            <p className="text-gray-400 text-xs font-mono tracking-widest border border-white/10 px-4 py-2 rounded-full bg-black/40 backdrop-blur-md">
+              SCROLL TO INITIATE DESCENT
+            </p>
+            <div className="w-[1px] h-24 bg-gradient-to-b from-cyan-500 to-transparent animate-pulse" />
+          </div>
+        </section>
+
+        {/* ================= SECTIONS ================= */}
+        <Section
+          align="left"
+          title="EXHIBITION"
+          subtitle="INNOVATE"
+          desc="Witness the future. Prototypes, models, and machinery from the brightest minds."
+          path="/exhibition"
+          color="#f97316"
+          icon={<Monitor size={32} />}
+          img="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070"
+        />
+
+        <Section
+          align="right"
+          title="COMPETITIONS"
+          subtitle="DOMINATE"
+          desc="Robowars, Hackathons, and Esports. Prove your skills in the arena."
+          path="/events"
+          color="#06b6d4"
+          icon={<Trophy size={32} />}
+          img="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2071"
+        />
+
+        <Section
+          align="left"
+          title="SESSIONS"
+          subtitle="LEARN"
+          desc="Tech talks from industry leaders. Gain knowledge from the masters."
+          path="/sessions"
+          color="#8b5cf6"
+          icon={<Rocket size={32} />}
+          img="https://images.unsplash.com/photo-1544531586-fde5298cdd40?q=80&w=2070"
+        />
+
+        <Section
+          align="right"
+          title="THE CREW"
+          subtitle="OPERATORS"
+          desc="Meet the minds behind the machine."
+          path="/team"
+          color="#eab308"
+          icon={<Users size={32} />}
+          img="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070"
+        />
+
+        <Section
+          align="left"
+          title="ALLIANCE"
+          subtitle="PARTNERS"
+          desc="Our strategic partners powering the event."
+          path="/sponsors"
+          color="#10b981"
+          icon={<Gem size={32} />}
+          img="https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=2070"
+        />
+
+        {/* ================= ARCHIVES ================= */}
+        <section className="min-h-[80vh] flex items-center justify-center px-4 relative">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="bg-black/50 backdrop-blur-xl border border-white/10 p-12 rounded-[40px] max-w-2xl text-center shadow-2xl"
+          >
+            <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-red-500/50">
+              <Info size={32} className="text-red-500" />
             </div>
-          </Link>
-        </motion.div>
+            <h2 className="text-4xl md:text-6xl font-black font-['Orbitron'] mb-4">
+              ARCHIVES
+            </h2>
+            <p className="text-gray-400 mb-8">
+              Dive into the history of Xpecto. Access the mission logs and previous records.
+            </p>
+            <Link
+              to="/about"
+              className="inline-flex items-center gap-2 bg-white text-black px-8 py-3 rounded-full font-bold tracking-widest hover:bg-red-500 hover:text-white transition"
+            >
+              ACCESS DATA <ArrowRight size={16} />
+            </Link>
+          </motion.div>
+        </section>
 
-        {/* 2. EVENTS */}
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={bannerVariant}>
-          <Link to="/events" className="group relative block w-full h-[260px] md:h-[330px] rounded-[40px] overflow-hidden cursor-pointer border border-white/10 shadow-[0_0_30px_rgba(67,97,238,0.1)] hover:shadow-[0_0_70px_rgba(90,120,255,0.45)] transition-shadow duration-500 before:absolute before:inset-[-40%] before:opacity-0 group-hover:before:opacity-100 before:transition-opacity before:duration-700 before:rounded-full before:bg-[radial-gradient(circle,rgba(120,150,255,0.45),rgba(67,97,238,0.25),transparent_70%)] before:z-0">
-            <div className="absolute inset-0 bg-[url('/public/events1.jpg')] bg-cover bg-center transition-transform duration-700 group-hover:scale-110 filter brightness-[0.4] group-hover:brightness-[0.6]"></div>
-            <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-24 z-10 items-end text-right">
-              <h2 className="text-4xl md:text-6xl font-black text-white italic font-tech uppercase tracking-tight drop-shadow-lg">EVENTS</h2>
-              <div className="mt-4 w-10 h-1 bg-white group-hover:w-36 transition-all duration-500 ease-out"></div>
-            </div>
-          </Link>
-        </motion.div>
-
-        {/* 3. SESSIONS */}
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={bannerVariant}>
-          <Link to="/sessions" className="group relative block w-full h-[260px] md:h-[330px] rounded-[40px] overflow-hidden cursor-pointer border border-white/10 shadow-[0_0_30px_rgba(46,196,182,0.1)] hover:shadow-[0_0_90px_rgba(46,220,200,0.5)] transition-shadow duration-500 before:absolute before:inset-[-45%] before:rounded-full before:opacity-0 group-hover:before:opacity-100 before:transition-opacity before:duration-700 before:bg-[radial-gradient(circle,rgba(46,220,200,0.55),rgba(0,255,255,0.35),rgba(0,200,200,0.15),transparent_72%)] before:z-0">
-            <div className="absolute inset-0 bg-[url('/public/sessions2.jpg')] bg-cover bg-center transition-transform duration-700 group-hover:scale-110 filter brightness-[0.4] group-hover:brightness-[0.6]"></div>
-            <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-24 z-10">
-              <h2 className="text-4xl md:text-6xl font-black text-white italic font-tech uppercase tracking-tight drop-shadow-lg">SESSIONS</h2>
-              <div className="mt-4 w-10 h-1 bg-cyan-400 group-hover:w-36 transition-all duration-500 ease-out"></div>
-            </div>
-          </Link>
-        </motion.div>
-
-        {/* 4. TEAM */}
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={bannerVariant}>
-          <Link to="/Team" className="group relative block w-full h-[260px] md:h-[330px] rounded-[40px] overflow-hidden cursor-pointer border border-white/10 shadow-[0_0_30px_rgba(189,0,255,0.1)] hover:shadow-[0_0_90px_rgba(189,0,255,0.5)] transition-shadow duration-500 before:absolute before:inset-[-45%] before:rounded-full before:opacity-0 group-hover:before:opacity-100 before:transition-opacity before:duration-700 before:bg-[radial-gradient(circle,rgba(200,100,255,0.55),rgba(189,0,255,0.35),rgba(100,0,200,0.15),transparent_72%)] before:z-0">
-            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070')] bg-cover bg-center transition-transform duration-700 group-hover:scale-110 filter brightness-[0.4] group-hover:brightness-[0.6]"></div>
-            <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-24 z-10 items-end text-right">
-              <h2 className="text-4xl md:text-6xl font-black text-white italic font-tech uppercase tracking-tight drop-shadow-lg">TEAM</h2>
-              <div className="mt-4 w-10 h-1 bg-purple-500 group-hover:w-36 transition-all duration-500 ease-out"></div>
-            </div>
-          </Link>
-        </motion.div>
-
-        {/* 5. SPONSORS */}
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={bannerVariant}>
-          <Link to="/Sponsors" className="group relative block w-full h-[260px] md:h-[330px] rounded-[40px] overflow-hidden cursor-pointer border border-white/10 shadow-[0_0_30px_rgba(16,185,129,0.1)] hover:shadow-[0_0_90px_rgba(16,185,129,0.5)] transition-shadow duration-500 before:absolute before:inset-[-45%] before:rounded-full before:opacity-0 group-hover:before:opacity-100 before:transition-opacity before:duration-700 before:bg-[radial-gradient(circle,rgba(52,211,153,0.55),rgba(16,185,129,0.35),rgba(6,95,70,0.15),transparent_72%)] before:z-0">
-            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486406140926-c627a92ad1ab?q=80&w=2070')] bg-cover bg-center transition-transform duration-700 group-hover:scale-110 filter brightness-[0.4] group-hover:brightness-[0.6]"></div>
-            <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-24 z-10">
-              <h2 className="text-4xl md:text-6xl font-black text-white italic font-tech uppercase tracking-tight drop-shadow-lg">SPONSORS</h2>
-              <div className="mt-4 w-10 h-1 bg-emerald-500 group-hover:w-36 transition-all duration-500 ease-out"></div>
-            </div>
-          </Link>
-        </motion.div>
-
-        {/* 6. ABOUT */}
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={bannerVariant}>
-          <Link to="/About" className="group relative block w-full h-[260px] md:h-[330px] rounded-[40px] overflow-hidden cursor-pointer border border-white/10 shadow-[0_0_30px_rgba(239,68,68,0.1)] hover:shadow-[0_0_90px_rgba(239,68,68,0.5)] transition-shadow duration-500 before:absolute before:inset-[-45%] before:rounded-full before:opacity-0 group-hover:before:opacity-100 before:transition-opacity before:duration-700 before:bg-[radial-gradient(circle,rgba(248,113,113,0.55),rgba(239,68,68,0.35),rgba(153,27,27,0.15),transparent_72%)] before:z-0">
-            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072')] bg-cover bg-center transition-transform duration-700 group-hover:scale-110 filter brightness-[0.4] group-hover:brightness-[0.6]"></div>
-            <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-24 z-10 items-end text-right">
-              <h2 className="text-4xl md:text-6xl font-black text-white italic font-tech uppercase tracking-tight drop-shadow-lg">ABOUT US</h2>
-              <div className="mt-4 w-10 h-1 bg-red-500 group-hover:w-36 transition-all duration-500 ease-out"></div>
-            </div>
-          </Link>
-        </motion.div>
-
+        {/* ================= FOOTER ================= */}
+        <div className="h-[20vh] flex items-end justify-center pb-10">
+          <div className="flex items-center gap-2 text-[10px] font-mono text-white/30">
+            <Zap size={12} /> END OF LINE
+          </div>
+        </div>
       </div>
     </div>
+  );
+};
+
+/* ================= SECTION COMPONENT ================= */
+
+const Section = ({ align, title, subtitle, desc, path, color, icon, img }) => {
+  const isLeft = align === 'left';
+
+  return (
+    <section className="min-h-[80vh] w-full flex items-center justify-center py-20 relative">
+      <div
+        className={`max-w-6xl w-full px-6 md:px-12 flex flex-col md:flex-row items-center gap-12 ${
+          !isLeft && 'md:flex-row-reverse'
+        }`}
+      >
+        {/* TEXT */}
+        <motion.div
+          initial={{ opacity: 0, x: isLeft ? -50 : 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+          className="flex-1"
+        >
+          <div className="flex items-center gap-4 mb-4">
+            <span
+              className="text-xs font-mono px-3 py-1 border rounded tracking-widest"
+              style={{ color, borderColor: color }}
+            >
+              {subtitle}
+            </span>
+            <div style={{ color }}>{icon}</div>
+          </div>
+
+          <h2 className="text-5xl md:text-8xl font-black font-['Orbitron'] mb-6">
+            {title}
+          </h2>
+
+          <p className="text-gray-400 max-w-md mb-8">{desc}</p>
+
+          <Link to={path} className="inline-flex items-center gap-3 text-sm tracking-widest">
+            <span style={{ color }}>EXPLORE</span>
+            <div className="w-12 h-[1px]" style={{ backgroundColor: color }} />
+          </Link>
+        </motion.div>
+
+        {/* IMAGE */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8 }}
+          className="flex-1"
+        >
+          <div className="aspect-[4/3] rounded-3xl overflow-hidden border border-white/10 bg-black shadow-2xl">
+            <img
+              src={img}
+              alt={title}
+              className="w-full h-full object-cover opacity-70 hover:opacity-100 transition-opacity"
+            />
+          </div>
+        </motion.div>
+      </div>
+    </section>
   );
 };
 

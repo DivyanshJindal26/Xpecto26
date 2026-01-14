@@ -1,42 +1,23 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React from "react";
 
 const StarBackground = () => {
-  // Generate random stars
-  const stars = Array.from({ length: 50 }).map((_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: Math.random() * 2 + 1,
-    duration: Math.random() * 3 + 2,
-    delay: Math.random() * 2
-  }));
-
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none bg-black">
-      {stars.map((star) => (
-        <motion.div
-          key={star.id}
-          className="absolute bg-white rounded-full opacity-0"
-          style={{
-            left: `${star.x}%`,
-            top: `${star.y}%`,
-            width: star.size,
-            height: star.size,
-          }}
-          animate={{
-            opacity: [0, 1, 0],
-            scale: [0.5, 1.5, 0.5],
-          }}
-          transition={{
-            duration: star.duration,
-            repeat: Infinity,
-            delay: star.delay,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-    </div>
+    <div
+      className="fixed inset-0 pointer-events-none z-[-1]"
+      style={{
+        backgroundColor: "#020205",
+        backgroundImage: `
+          radial-gradient(1px 1px at 20% 30%, white, transparent),
+          radial-gradient(1px 1px at 80% 40%, white, transparent),
+          radial-gradient(1px 1px at 40% 70%, white, transparent),
+          radial-gradient(2px 2px at 60% 20%, white, transparent),
+          radial-gradient(1px 1px at 10% 90%, white, transparent),
+          radial-gradient(2px 2px at 90% 80%, white, transparent)
+        `,
+        backgroundRepeat: "repeat",
+        backgroundSize: "300px 300px",
+      }}
+    />
   );
 };
 
