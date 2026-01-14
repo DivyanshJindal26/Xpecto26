@@ -184,7 +184,7 @@ const PrismScroller = () => {
              <div className="flex items-center gap-3">
                  <Sparkles size={16} className="text-yellow-400 animate-spin-slow" />
                  <span className="text-sm md:text-base font-black font-['Orbitron'] text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-orange-400 to-yellow-200 tracking-widest">
-                    XPECTO '25 IS LIVE
+                    XPECTO '26 IS LIVE
                  </span>
              </div>
              <div className="flex items-center gap-2 opacity-50">
