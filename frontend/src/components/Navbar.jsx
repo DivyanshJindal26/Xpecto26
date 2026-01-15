@@ -15,7 +15,6 @@ import {
 
 const navLinks = [
   { name: 'HOME', path: '/', icon: <Home size={20} />, color: '#00f0ff' },
-  { name: 'EXHIBITION', path: '/exhibition', icon: <Monitor size={20} />, color: '#ff0055' },
   { name: 'EVENTS', path: '/events', icon: <Trophy size={20} />, color: '#ffd700' },
   { name: 'TEAM', path: '/team', icon: <Users size={20} />, color: '#bd00ff' },
   { name: 'SPONSORS', path: '/sponsors', icon: <Gem size={20} />, color: '#ff8800' },
