@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
 // @desc    Google OAuth callback
 // @route   GET /api/auth/google/callback
@@ -12,25 +12,28 @@ export const googleCallback = (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign(
-      { 
-        id: req.user._id.toString(), 
+      {
+        id: req.user._id.toString(),
         email: req.user.email,
         name: req.user.name,
         role: req.user.role,
-        iat: Math.floor(Date.now() / 1000)
+        iat: Math.floor(Date.now() / 1000),
       },
       process.env.JWT_SECRET,
-      { expiresIn: '7d', issuer: 'xpecto-api' }
+      { expiresIn: "7d", issuer: "xpecto-api" },
     );
 
     // Set token in httpOnly cookie
-    res.cookie('token', token, {
+    res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      path: '/',
-      domain: process.env.NODE_ENV === 'production' ? process.env.COOKIE_DOMAIN : undefined,
+      path: "/",
+      domain:
+        process.env.NODE_ENV === "production"
+          ? process.env.COOKIE_DOMAIN
+          : undefined,
     });
 
     // Redirect to frontend success page
@@ -53,12 +56,55 @@ export const getCurrentUser = async (req, res) => {
         email: req.user.email,
         avatar: req.user.avatar,
         role: req.user.role,
+        collegeEmail: req.user.collegeEmail,
+        collegeName: req.user.collegeName,
       },
     });
   } catch (error) {
-    res.status(500).json({ 
-      success: false, 
-      message: error.message 
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// @desc    Complete user profile
+// @route   PUT /api/auth/complete-profile
+// @access  Private
+export const completeProfile = async (req, res) => {
+  try {
+    const { collegeEmail, collegeName } = req.body;
+
+    // Validation
+    if (!collegeEmail || !collegeName) {
+      return res.status(400).json({
+        success: false,
+        message: "College email and college name are required",
+      });
+    }
+
+    // Update user profile
+    req.user.collegeEmail = collegeEmail;
+    req.user.collegeName = collegeName;
+    await req.user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Profile completed successfully",
+      user: {
+        id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
+        avatar: req.user.avatar,
+        role: req.user.role,
+        collegeEmail: req.user.collegeEmail,
+        collegeName: req.user.collegeName,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
     });
   }
 };
@@ -68,24 +114,27 @@ export const getCurrentUser = async (req, res) => {
 // @access  Public (but should have valid cookie)
 export const logout = (req, res) => {
   // Clear the cookie
-  res.clearCookie('token', {
+  res.clearCookie("token", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-    path: '/',
-    domain: process.env.NODE_ENV === 'production' ? process.env.COOKIE_DOMAIN : undefined,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+    path: "/",
+    domain:
+      process.env.NODE_ENV === "production"
+        ? process.env.COOKIE_DOMAIN
+        : undefined,
   });
 
   req.logout((err) => {
     if (err) {
-      return res.status(500).json({ 
-        success: false, 
-        message: 'Error logging out' 
+      return res.status(500).json({
+        success: false,
+        message: "Error logging out",
       });
     }
-    res.status(200).json({ 
-      success: true, 
-      message: 'Logged out successfully' 
+    res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
     });
   });
 };

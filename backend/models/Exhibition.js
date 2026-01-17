@@ -23,13 +23,13 @@ const exhibitionSchema = new mongoose.Schema(
     image: [
       {
         type: String,
-      }
+      },
     ],
     company: {
       type: String,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Exhibition = mongoose.model("Exhibition", exhibitionSchema);

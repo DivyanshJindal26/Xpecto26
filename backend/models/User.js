@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
@@ -9,12 +9,12 @@ const userSchema = new mongoose.Schema(
     },
     name: {
       type: String,
-      required: [true, 'Please add a name'],
+      required: [true, "Please add a name"],
       trim: true,
     },
     email: {
       type: String,
-      required: [true, 'Please add an email'],
+      required: [true, "Please add an email"],
       unique: true,
       lowercase: true,
       trim: true,
@@ -29,14 +29,23 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['user', 'admin'],
-      default: 'user',
+      enum: ["user", "admin"],
+      default: "user",
+    },
+    collegeEmail: {
+      type: String,
+      trim: true,
+      lowercase: true,
+    },
+    collegeName: {
+      type: String,
+      trim: true,
     },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 export default User;

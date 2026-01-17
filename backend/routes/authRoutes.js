@@ -1,6 +1,6 @@
 import express from 'express';
 import passport from 'passport';
-import { googleCallback, getCurrentUser, logout } from '../controllers/authController.js';
+import { googleCallback, getCurrentUser, completeProfile, logout } from '../controllers/authController.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -31,6 +31,11 @@ router.get(
 // @desc    Get current user
 // @access  Private
 router.get('/me', authMiddleware, getCurrentUser);
+
+// @route   PUT /api/auth/complete-profile
+// @desc    Complete user profile
+// @access  Private
+router.put('/complete-profile', authMiddleware, completeProfile);
 
 // @route   POST /api/auth/logout
 // @desc    Logout user
