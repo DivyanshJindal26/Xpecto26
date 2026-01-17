@@ -23,25 +23,19 @@ const eventSchema = new mongoose.Schema(
     image: [
       {
         type: String,
-      }
+      },
     ],
     company: {
       type: String,
     },
-    ticketPrice: {
-      type: Number,
-      default: 0,
-    },
-    maxCapacity: {
-      type: Number,
-      default: 200,
-    },
-    availableTickets: {
-      type: Number,
-      default: 200,
-    },
+    registrations: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Event = mongoose.model("Event", eventSchema);
