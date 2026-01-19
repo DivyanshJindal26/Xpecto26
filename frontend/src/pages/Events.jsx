@@ -12,8 +12,7 @@ import {
 import { useAuth } from "../context/AuthContext";
 import FloatingElement from "../components/ui/FloatingElement";
 
-const BACKEND_URL =
-  import.meta.env.BACKEND_URL || "https://xpecto.iitmandi.co.in/api";
+const BACKEND_URL = import.meta.env.BACKEND_URL || "https://xpecto.org/api";
 
 const EventCard = ({
   event,

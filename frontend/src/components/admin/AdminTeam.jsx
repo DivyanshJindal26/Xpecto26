@@ -24,8 +24,7 @@ export default function AdminTeam() {
     order: 0,
   });
 
-  const apiUrl =
-    import.meta.env.VITE_API_URL || "https://xpecto.iitmandi.co.in/api";
+  const apiUrl = import.meta.env.VITE_API_URL || "https://xpecto.org/api";
 
   // Fetch team members
   const fetchTeamMembers = async () => {

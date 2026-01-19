@@ -10,8 +10,7 @@ import React, {
 const AuthContext = createContext(undefined);
 
 // API base URL - adjust based on your backend
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "https://xpecto.iitmandi.co.in/api";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://xpecto.org/api";
 
 export const useAuth = () => {
   const context = useContext(AuthContext);

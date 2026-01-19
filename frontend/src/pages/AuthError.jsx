@@ -6,7 +6,7 @@ import { IconAlertTriangle, IconHome, IconRefresh } from "@tabler/icons-react";
 
 export default function AuthError() {
   const handleRetry = () => {
-    window.location.href = `${import.meta.env.VITE_API_URL || "https://xpecto.iitmandi.co.in/api"}/auth/google`;
+    window.location.href = `${import.meta.env.VITE_API_URL || "https://xpecto.org/api"}/auth/google`;
   };
 
   return (

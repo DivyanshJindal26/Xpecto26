@@ -54,8 +54,7 @@ export default function GoogleOneTap() {
 
             try {
               const apiUrl =
-                import.meta.env.VITE_API_URL ||
-                "https://xpecto.iitmandi.co.in/api";
+                import.meta.env.VITE_API_URL || "https://xpecto.org/api";
 
               const res = await fetch(`${apiUrl}/auth/google-onetap`, {
                 method: "POST",

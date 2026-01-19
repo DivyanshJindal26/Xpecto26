@@ -37,8 +37,7 @@ export default function About() {
     const fetchTeamMembers = async () => {
       try {
         setLoading(true);
-        const apiUrl =
-          import.meta.env.VITE_API_URL || "https://xpecto.iitmandi.co.in/api";
+        const apiUrl = import.meta.env.VITE_API_URL || "https://xpecto.org/api";
         const response = await fetch(`${apiUrl}/team`, {
           credentials: "include",
         });
