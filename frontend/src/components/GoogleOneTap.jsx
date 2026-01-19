@@ -60,7 +60,7 @@ export default function GoogleOneTap() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
-                body: JSON.stringify({ credential }),
+                body: JSON.stringify({ id_token: credential }),
               });
 
               if (res.ok) {
