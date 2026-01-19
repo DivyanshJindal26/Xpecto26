@@ -69,7 +69,7 @@ export default function GoogleOneTap() {
               });
 
               if (res.ok) {
-                window.location.reload();
+                window.location.href = "/auth/success";
               } else {
                 console.error("One Tap sign-in failed", await res.json());
               }
