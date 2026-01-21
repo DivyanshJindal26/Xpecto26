@@ -20,12 +20,28 @@ export default function About() {
     { name: "Vansh Pandey", role: "Full Stack Developer" },
   ];
 
-  const conveners = [
-    { name: "Convener Name", role: "Convener" },
-    { name: "Co-Convener 1", role: "Co-Convener" },
-    { name: "Co-Convener 2", role: "Co-Convener" },
-    { name: "Co-Convener 3", role: "Co-Convener" },
-  ];
+const conveners = [
+  { 
+    name: "Piyush Roy", 
+    role: "Convener",
+    image: "https://image2url.com/r2/default/images/1768932765590-426cf6b2-f71f-4c55-af2f-4903470952"
+  },
+  { 
+    name: "Parth Modi", 
+    role: "Co-Convener",
+    image: "https://image2url.com/r2/default/images/1768932558818-3736647a-c2cb-4998-924f-5c030c08a802.jpeg"
+  },
+  { 
+    name: "Ayush Sawarn", 
+    role: "Co-Convener",
+    image: "https://image2url.com/r2/default/images/1768932490117-92c0c581-23a4-4bb1-be11-ff50314dd327.jpg"
+  },
+  { 
+    name: "Parv", 
+    role: "Co-Convener",
+    image: "https://image2url.com/r2/default/images/1768932603264-4f632151-fefa-494a-8a2a-3c5546c4db2e.jpg"
+  },
+];
 
   const contacts = [
     { label: "tech@xpecto.org", href: "mailto:tech@xpecto.org" },
@@ -225,30 +241,40 @@ export default function About() {
             </motion.a>
 
             {/* Leadership Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="md:col-span-8 backdrop-blur-md bg-black/60 border border-white/10 rounded-3xl p-8 hover:bg-black/70 hover:border-white/20 transition-all duration-500 shadow-2xl"
-            >
-              <span className="text-xs text-white/30 uppercase tracking-widest font-['Roboto']">
-                Leadership
-              </span>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
-                {conveners.map((person, idx) => (
-                  <div key={idx} className="text-center">
-                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-white/10" />
-                    <p className="font-['Roboto'] text-sm font-medium text-white">
-                      {person.name}
-                    </p>
-                    <p className="font-['Roboto'] text-xs text-white/40 mt-1">
-                      {person.role}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
+{/* Leadership Card */}
+
+<motion.div
+  initial={{ opacity: 0, y: 30 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.6, delay: 0.3 }}
+  className="md:col-span-8 backdrop-blur-md bg-black/60 border border-white/10 rounded-3xl p-8 hover:bg-black/70 hover:border-white/20 transition-all duration-500 shadow-2xl"
+>
+  <span className="text-xs text-white/30 uppercase tracking-widest font-['Roboto']">
+    Leadership
+  </span>
+  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
+    {conveners.map((person, idx) => (
+      <div key={idx} className="text-center">
+        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-white/10">
+          {person.image && (
+            <img
+              src={person.image}
+              alt={person.name}
+              className="w-full h-full rounded-full object-cover"
+            />
+          )}
+        </div>
+        <p className="font-['Roboto'] text-sm font-medium text-white">
+          {person.name}
+        </p>
+        <p className="font-['Roboto'] text-xs text-white/40 mt-1">
+          {person.role}
+        </p>
+      </div>
+    ))}
+  </div>
+</motion.div>
 
             {/* Map Card - Full Width */}
             <motion.div
