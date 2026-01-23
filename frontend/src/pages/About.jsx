@@ -16,15 +16,15 @@ export default function About() {
   const [error, setError] = useState(null);
 
   const developers = [
-    { name: "Divyansh Jindal", role: "Full Stack Developer" },
-    { name: "Vansh Pandey", role: "Full Stack Developer" },
+    { name: "Divyansh Jindal", role: "Full Stack Developer" , image : "https://image2url.com/r2/default/images/1769153935938-8daa0940-3eb3-43f5-b3fc-55d7ea222d98.png" },
+    { name: "Vansh Pandey", role: "Full Stack Developer" , image : "https://image2url.com/r2/default/images/1769154252767-6f378aa0-3bbe-4b62-90e4-1d602793cfc5.png" },
   ];
 
 const conveners = [
   { 
     name: "Piyush Roy", 
     role: "Convener",
-    image: "https://image2url.com/r2/default/images/1768932765590-426cf6b2-f71f-4c55-af2f-4903470952"
+    image: "https://image2url.com/r2/default/images/1769153674001-3e82bd23-4f70-45c3-9ef8-cb6a47223b72.jpeg"
   },
   { 
     name: "Parth Modi", 
