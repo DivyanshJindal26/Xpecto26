@@ -126,7 +126,7 @@ const EventCard = ({
               <div className="absolute top-6 left-6 flex flex-wrap gap-2">
                 {event.club_name && (
                   <motion.div
-                    className="px-5 py-2 rounded-full bg-gradient-to-r from-white/90 to-gray-100/90 backdrop-blur-md border border-white/40"
+                    className="px-3 sm:px-5 py-2 rounded-full bg-gradient-to-r from-white/90 to-gray-100/90 backdrop-blur-md border border-white/40"
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.3 }}
                   >
@@ -137,7 +137,7 @@ const EventCard = ({
                 )}
                 {event.company && (
                   <motion.div
-                    className="px-5 py-2 rounded-full bg-gradient-to-r from-cyan-100/90 to-blue-100/90 backdrop-blur-md border border-cyan-200/40"
+                    className="px-3 sm:px-5 py-2 rounded-full bg-gradient-to-r from-cyan-100/90 to-blue-100/90 backdrop-blur-md border border-cyan-200/40"
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.3 }}
                   >
@@ -151,16 +151,16 @@ const EventCard = ({
           </div>
 
           {/* Right Side - Content Section */}
-          <div className="relative lg:w-3/5 p-8 lg:p-12 flex flex-col justify-center bg-gradient-to-br from-slate-900/95 to-black/95">
+          <div className="relative lg:w-3/5 p-6 sm:p-8 lg:p-12 flex flex-col justify-center bg-gradient-to-br from-slate-900/95 to-black/95">
             <motion.div
               animate={{ x: isHovered ? -5 : 0 }}
               transition={{ duration: 0.5 }}
-              className="space-y-6"
+              className="space-y-4 sm:space-y-6"
             >
               {/* Title with gradient */}
               <div>
                 <motion.h3
-                  className="font-['Michroma'] text-3xl lg:text-4xl xl:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-blue-300 mb-3 tracking-wide leading-tight"
+                  className="font-['Michroma'] text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-blue-300 mb-3 tracking-wide leading-tight"
                   animate={{
                     backgroundPosition: isHovered ? "200% center" : "0% center",
                   }}
@@ -180,15 +180,15 @@ const EventCard = ({
               </div>
 
               {/* Description */}
-              <p className="font-['Michroma'] text-gray-300 text-base lg:text-lg leading-relaxed">
+              <p className="font-['Michroma'] text-gray-300 text-sm sm:text-base lg:text-lg leading-relaxed">
                 {event.description}
               </p>
 
               {/* Event Details List */}
-              <div className="space-y-3 pt-4">
+              <div className="space-y-3 pt-2 sm:pt-4">
                 {event.date && (
                   <motion.div
-                    className="flex items-start gap-4 group"
+                    className="flex items-start gap-3 sm:gap-4 group"
                     initial={{ opacity: 0, x: -30 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.1, duration: 0.5 }}
@@ -208,7 +208,7 @@ const EventCard = ({
                         }}
                       />
                     </div>
-                    <span className="font-['Michroma'] text-gray-400 group-hover:text-gray-200 transition-colors duration-300">
+                    <span className="font-['Michroma'] text-sm sm:text-base text-gray-400 group-hover:text-gray-200 transition-colors duration-300">
                       <span className="font-semibold text-white">Date:</span>{" "}
                       {new Date(event.date).toLocaleDateString("en-US", {
                         weekday: "long",
@@ -222,7 +222,7 @@ const EventCard = ({
 
                 {event.venue && (
                   <motion.div
-                    className="flex items-start gap-4 group"
+                    className="flex items-start gap-3 sm:gap-4 group"
                     initial={{ opacity: 0, x: -30 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.2, duration: 0.5 }}
@@ -243,7 +243,7 @@ const EventCard = ({
                         }}
                       />
                     </div>
-                    <span className="font-['Michroma'] text-gray-400 group-hover:text-gray-200 transition-colors duration-300">
+                    <span className="font-['Michroma'] text-sm sm:text-base text-gray-400 group-hover:text-gray-200 transition-colors duration-300">
                       <span className="font-semibold text-white">Venue:</span>{" "}
                       {event.venue}
                     </span>
@@ -252,11 +252,11 @@ const EventCard = ({
               </div>
 
               {/* CTA Button with enhanced design */}
-              <div className="pt-6">
+              <div className="pt-4 sm:pt-6">
                 <motion.button
                   onClick={onRegister}
                   disabled={registering}
-                  className="group relative px-10 py-4 font-['Michroma'] font-bold text-white overflow-hidden rounded-xl shadow-lg w-full sm:w-auto"
+                  className="group relative px-8 sm:px-10 py-3 sm:py-4 font-['Michroma'] font-bold text-white overflow-hidden rounded-xl shadow-lg w-full sm:w-auto"
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.3 }}
@@ -279,15 +279,15 @@ const EventCard = ({
                     transition={{ duration: 0.3 }}
                   />
 
-                  <span className="relative z-10 flex items-center justify-center gap-3 text-base tracking-wider text-black font-bold">
+                  <span className="relative z-10 flex items-center justify-center gap-2 sm:gap-3 text-sm sm:text-base tracking-wider text-black font-bold">
                     {registering ? (
                       <>
-                        <IconLoader2 className="w-5 h-5 animate-spin" />
+                        <IconLoader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
                         PROCESSING...
                       </>
                     ) : isRegistered ? (
                       <>
-                        <IconCheck className="w-5 h-5" />
+                        <IconCheck className="w-4 h-4 sm:w-5 sm:h-5" />
                         REGISTERED
                       </>
                     ) : (
@@ -296,7 +296,7 @@ const EventCard = ({
                         <motion.span
                           animate={{ x: isHovered ? 5 : 0 }}
                           transition={{ duration: 0.3 }}
-                          className="text-xl"
+                          className="text-lg sm:text-xl"
                         >
                           →
                         </motion.span>
@@ -485,7 +485,7 @@ export default function Events() {
   };
 
   return (
-    <div className="w-full min-h-screen relative bg-black">
+    <div className="w-full min-h-screen relative bg-black overflow-x-hidden">
       {/* Fixed Background Section */}
       <div className="fixed top-0 left-0 w-full h-screen z-0">
         <div className="absolute inset-0">
@@ -493,7 +493,7 @@ export default function Events() {
           <div className="absolute inset-0 bg-black/30" />
         </div>
 
-        {/* Fixed Planet - RIGHT CENTER */}
+        {/* Fixed Planet - CENTER */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-75 md:scale-90 lg:scale-100">
           <FloatingElement
             floatIntensity={50}
@@ -503,7 +503,7 @@ export default function Events() {
             <motion.img
               src="./void_planet.png"
               alt="Planet"
-              className="w-[400px] h-[400px] lg:w-[500px] lg:h-[500px] object-contain"
+              className="w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] lg:w-[500px] lg:h-[500px] object-contain"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.2, delay: 0.2 }}
@@ -515,7 +515,7 @@ export default function Events() {
       {/* Scrollable Content */}
       <div className="relative z-10">
         {/* Header Section */}
-        <div className="relative pt-32 pb-16 px-6">
+        <div className="relative pt-24 sm:pt-28 lg:pt-32 pb-12 sm:pb-16 px-4 sm:px-6">
           <motion.div
             className="text-center max-w-5xl mx-auto"
             initial={{ opacity: 0, y: -40 }}
@@ -523,20 +523,20 @@ export default function Events() {
             transition={{ duration: 1, ease: "easeOut" }}
           >
             <motion.div
-              className="inline-block mb-6"
+              className="inline-block mb-4 sm:mb-6"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <div className="px-6 py-2 rounded-full border border-white/30 bg-white/10 backdrop-blur-sm">
-                <span className="font-['Michroma'] text-sm text-white tracking-widest">
+              <div className="px-4 sm:px-6 py-2 rounded-full border border-white/30 bg-white/10 backdrop-blur-sm">
+                <span className="font-['Michroma'] text-xs sm:text-sm text-white tracking-widest">
                   XPECTO'26 PRESENTS
                 </span>
               </div>
             </motion.div>
 
             <motion.h1
-              className="font-['Michroma'] text-5xl md:text-7xl font-light text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-white mb-8 tracking-[0.2em] leading-tight"
+              className="font-['Michroma'] text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-white mb-6 sm:mb-8 tracking-[0.15em] sm:tracking-[0.2em] leading-tight px-4"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.2, delay: 0.3 }}
@@ -545,14 +545,14 @@ export default function Events() {
             </motion.h1>
 
             <motion.div
-              className="h-1 w-48 mx-auto bg-gradient-to-r from-transparent via-white to-transparent mb-8"
+              className="h-1 w-32 sm:w-48 mx-auto bg-gradient-to-r from-transparent via-white to-transparent mb-6 sm:mb-8"
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: 1, delay: 0.5 }}
             />
 
             <motion.p
-              className="font-['Michroma'] text-xl md:text-2xl text-gray-300 tracking-wider max-w-3xl mx-auto leading-relaxed mb-8"
+              className="font-['Michroma'] text-sm sm:text-lg md:text-xl lg:text-2xl text-gray-300 tracking-wider max-w-3xl mx-auto leading-relaxed mb-6 sm:mb-8 px-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.6 }}
@@ -563,32 +563,32 @@ export default function Events() {
 
             {/* Search Bar */}
             <motion.div
-              className="max-w-xl mx-auto relative mt-8"
+              className="max-w-xl mx-auto relative mt-6 sm:mt-8"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.7 }}
             >
-              <IconSearch className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <IconSearch className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search events..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-black/50 backdrop-blur-xl border border-white/20 rounded-2xl px-12 py-4 text-base text-white placeholder:text-gray-500 focus:outline-none focus:border-white/40 transition-all duration-300"
+                className="w-full bg-black/50 backdrop-blur-xl border border-white/20 rounded-2xl px-10 sm:px-12 py-3 sm:py-4 text-sm sm:text-base text-white placeholder:text-gray-500 focus:outline-none focus:border-white/40 transition-all duration-300"
               />
             </motion.div>
           </motion.div>
         </div>
 
         {/* Events Content */}
-        <div className="relative px-6 pb-24 min-h-[600px]">
+        <div className="relative px-4 sm:px-6 pb-16 sm:pb-24 min-h-[600px]">
           {/* Loading State */}
           {loading && (
             <div className="flex items-center justify-center py-32">
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full"
+                className="w-12 h-12 sm:w-16 sm:h-16 border-4 border-white/20 border-t-white rounded-full"
               />
             </div>
           )}
@@ -596,11 +596,11 @@ export default function Events() {
           {/* Error State */}
           {error && (
             <div className="flex items-center justify-center py-32">
-              <div className="bg-red-500/10 border border-red-500/30 rounded-xl px-8 py-6 backdrop-blur-xl max-w-md">
-                <p className="text-red-400 text-center mb-4">{error}</p>
+              <div className="bg-red-500/10 border border-red-500/30 rounded-xl px-6 sm:px-8 py-6 backdrop-blur-xl max-w-md mx-4">
+                <p className="text-red-400 text-center mb-4 text-sm sm:text-base">{error}</p>
                 <button
                   onClick={fetchEvents}
-                  className="w-full px-6 py-3 border border-red-400/40 rounded-lg text-red-300 hover:bg-red-400/10 transition font-['Michroma'] font-bold tracking-wider"
+                  className="w-full px-6 py-3 border border-red-400/40 rounded-lg text-red-300 hover:bg-red-400/10 transition font-['Michroma'] font-bold tracking-wider text-sm sm:text-base"
                 >
                   RETRY
                 </button>
@@ -615,13 +615,13 @@ export default function Events() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
-                className="text-center space-y-6 max-w-md"
+                className="text-center space-y-6 max-w-md mx-4"
               >
-                <div className="relative w-32 h-32 mx-auto">
+                <div className="relative w-24 h-24 sm:w-32 sm:h-32 mx-auto">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-gray-500/10 rounded-full blur-2xl" />
                   <div className="relative w-full h-full flex items-center justify-center">
                     <svg
-                      className="w-24 h-24 text-white/40"
+                      className="w-16 h-16 sm:w-24 sm:h-24 text-white/40"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -636,10 +636,10 @@ export default function Events() {
                   </div>
                 </div>
                 <div>
-                  <h3 className="font-['Michroma'] text-2xl text-white tracking-wider mb-2">
+                  <h3 className="font-['Michroma'] text-xl sm:text-2xl text-white tracking-wider mb-2">
                     NO EVENTS FOUND
                   </h3>
-                  <p className="font-['Michroma'] text-gray-400 text-sm">
+                  <p className="font-['Michroma'] text-gray-400 text-xs sm:text-sm">
                     {searchQuery
                       ? "Try adjusting your search query"
                       : "No events available at the moment"}
@@ -648,7 +648,7 @@ export default function Events() {
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery("")}
-                    className="px-6 py-3 border border-white/40 rounded-xl text-white font-['Michroma'] font-bold tracking-wider hover:border-white hover:bg-white/10 transition"
+                    className="px-6 py-3 border border-white/40 rounded-xl text-white font-['Michroma'] font-bold tracking-wider hover:border-white hover:bg-white/10 transition text-sm sm:text-base"
                   >
                     CLEAR SEARCH
                   </button>
@@ -667,18 +667,18 @@ export default function Events() {
                     onClick={handlePrev}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 z-20 p-4 bg-black/60 backdrop-blur-xl border border-white/20 rounded-full hover:border-white/40 hover:bg-black/80 transition-all duration-300 hidden lg:block"
+                    className="absolute left-0 top-1/2 -translate-y-1/2 z-20 p-3 sm:p-4 bg-black/60 backdrop-blur-xl border border-white/20 rounded-full hover:border-white/40 hover:bg-black/80 transition-all duration-300 hidden lg:block"
                   >
-                    <IconChevronLeft className="h-6 w-6 text-white" />
+                    <IconChevronLeft className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                   </motion.button>
 
                   <motion.button
                     onClick={handleNext}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 z-20 p-4 bg-black/60 backdrop-blur-xl border border-white/20 rounded-full hover:border-white/40 hover:bg-black/80 transition-all duration-300 hidden lg:block"
+                    className="absolute right-0 top-1/2 -translate-y-1/2 z-20 p-3 sm:p-4 bg-black/60 backdrop-blur-xl border border-white/20 rounded-full hover:border-white/40 hover:bg-black/80 transition-all duration-300 hidden lg:block"
                   >
-                    <IconChevronRight className="h-6 w-6 text-white" />
+                    <IconChevronRight className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                   </motion.button>
                 </>
               )}
@@ -726,11 +726,11 @@ export default function Events() {
 
               {/* Pagination Dots */}
               {filteredEvents.length > 1 && (
-                <div className="text-center mt-12">
-                  <p className="font-['Michroma'] text-gray-400 text-sm mb-4 tracking-wider">
+                <div className="text-center mt-8 sm:mt-12">
+                  <p className="font-['Michroma'] text-gray-400 text-xs sm:text-sm mb-3 sm:mb-4 tracking-wider">
                     {currentIndex + 1} / {filteredEvents.length}
                   </p>
-                  <div className="flex justify-center gap-2.5">
+                  <div className="flex justify-center gap-2 sm:gap-2.5">
                     {filteredEvents.map((_, idx) => (
                       <motion.button
                         key={idx}
@@ -743,9 +743,9 @@ export default function Events() {
                         }}
                         whileHover={{ scale: idx === currentIndex ? 1.3 : 1.1 }}
                         transition={{ duration: 0.3 }}
-                        className={`h-2 rounded-full transition-all duration-500 ${idx === currentIndex
-                          ? "w-10 bg-white shadow-[0_0_15px_rgba(255,255,255,0.8)]"
-                          : "w-2 bg-white/30 hover:bg-white/50"
+                        className={`h-1.5 sm:h-2 rounded-full transition-all duration-500 ${idx === currentIndex
+                          ? "w-8 sm:w-10 bg-white shadow-[0_0_15px_rgba(255,255,255,0.8)]"
+                          : "w-1.5 sm:w-2 bg-white/30 hover:bg-white/50"
                           }`}
                       />
                     ))}
@@ -758,26 +758,26 @@ export default function Events() {
 
         {/* Footer Section */}
         <motion.div
-          className="relative py-20 text-center border-t border-white/10"
+          className="relative py-16 sm:py-20 text-center border-t border-white/10 px-4"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1 }}
         >
           <motion.div
-            className="flex items-center justify-center gap-4 mb-4"
+            className="flex items-center justify-center gap-3 sm:gap-4 mb-3 sm:mb-4"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <div className="h-px w-16 bg-gradient-to-r from-transparent to-white" />
-            <p className="font-['Michroma'] text-gray-400 text-sm tracking-[0.3em]">
+            <div className="h-px w-12 sm:w-16 bg-gradient-to-r from-transparent to-white" />
+            <p className="font-['Michroma'] text-gray-400 text-xs sm:text-sm tracking-[0.3em]">
               XPECTO'26
             </p>
-            <div className="h-px w-16 bg-gradient-to-l from-transparent to-white" />
+            <div className="h-px w-12 sm:w-16 bg-gradient-to-l from-transparent to-white" />
           </motion.div>
-          <p className="font-['Michroma'] text-gray-500 text-xs tracking-widest">
+          <p className="font-['Michroma'] text-gray-500 text-[10px] sm:text-xs tracking-widest">
             MARCH 14-16, 2026 • HIMALAYAS' BIGGEST TECHFEST
           </p>
         </motion.div>
