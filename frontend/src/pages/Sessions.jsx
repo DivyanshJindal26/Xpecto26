@@ -57,7 +57,7 @@ const SessionCard = ({ session, index }) => {
             animate={{ y: isHovered ? -5 : 0 }}
             transition={{ duration: 0.3 }}
           >
-            <span className="font-['Roboto'] text-xs font-bold text-black tracking-wider">
+            <span className="font-['Michroma'] text-xs font-bold text-black tracking-wider">
               {displayTime}
             </span>
           </motion.div>
@@ -68,7 +68,7 @@ const SessionCard = ({ session, index }) => {
               className="px-4 py-1.5 rounded-full border border-white/30 bg-black/60 backdrop-blur-sm"
               whileHover={{ scale: 1.05 }}
             >
-              <span className="font-['Roboto'] text-xs font-semibold text-white tracking-widest">
+              <span className="font-['Michroma'] text-xs font-semibold text-white tracking-widest">
                 {session.category}
               </span>
             </motion.div>
@@ -96,7 +96,7 @@ const SessionCard = ({ session, index }) => {
             />
 
             {/* Description */}
-            <p className="font-['Roboto'] text-gray-400 text-sm leading-relaxed line-clamp-3">
+            <p className="font-['Michroma'] text-gray-400 text-sm leading-relaxed line-clamp-3">
               {session.description}
             </p>
           </motion.div>
@@ -109,15 +109,15 @@ const SessionCard = ({ session, index }) => {
               transition={{ duration: 0.3 }}
             >
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-white to-gray-400 flex items-center justify-center">
-                <span className="font-['Roboto'] text-black font-bold text-sm">
+                <span className="font-['Michroma'] text-black font-bold text-sm">
                   {(session.speaker || session.venue || "X").charAt(0)}
                 </span>
               </div>
               <div>
-                <p className="font-['Roboto'] text-white text-sm font-semibold">
+                <p className="font-['Michroma'] text-white text-sm font-semibold">
                   {session.speaker || session.venue}
                 </p>
-                <p className="font-['Roboto'] text-gray-500 text-xs">
+                <p className="font-['Michroma'] text-gray-500 text-xs">
                   {session.role || "Venue"}
                 </p>
               </div>
@@ -131,7 +131,7 @@ const SessionCard = ({ session, index }) => {
             transition={{ duration: 0.3 }}
           >
             <div className="flex items-center gap-2 text-white group-hover:text-gray-200 transition-colors">
-              <span className="font-['Roboto'] text-sm font-semibold tracking-wider">
+              <span className="font-['Michroma'] text-sm font-semibold tracking-wider">
                 LEARN MORE
               </span>
               <motion.span
@@ -305,7 +305,7 @@ export default function Sessions() {
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <div className="px-6 py-2 rounded-full border border-white/30 bg-white/10 backdrop-blur-sm">
-                <span className="font-['Roboto'] text-sm text-white tracking-widest">
+                <span className="font-['Michroma'] text-sm text-white tracking-widest">
                   XPECTO'26 PRESENTS
                 </span>
               </div>
@@ -328,7 +328,7 @@ export default function Sessions() {
             />
 
             <motion.p
-              className="font-['Roboto'] text-xl md:text-2xl text-gray-300 tracking-wider max-w-3xl mx-auto leading-relaxed"
+              className="font-['Michroma'] text-xl md:text-2xl text-gray-300 tracking-wider max-w-3xl mx-auto leading-relaxed"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.6 }}
@@ -347,19 +347,19 @@ export default function Sessions() {
           >
             {loading ? (
               <div className="flex justify-center items-center h-64">
-                <div className="text-white text-xl font-['Roboto'] animate-pulse">
+                <div className="text-white text-xl font-['Michroma'] animate-pulse">
                   Loading sessions...
                 </div>
               </div>
             ) : error ? (
               <div className="flex justify-center items-center h-64">
-                <div className="text-red-400 text-xl font-['Roboto']">
+                <div className="text-red-400 text-xl font-['Michroma']">
                   {error}
                 </div>
               </div>
             ) : Object.keys(groupedSessions).length === 0 ? (
               <div className="flex justify-center items-center h-64">
-                <div className="text-gray-400 text-xl font-['Roboto']">
+                <div className="text-gray-400 text-xl font-['Michroma']">
                   No sessions found.
                 </div>
               </div>
@@ -375,7 +375,7 @@ export default function Sessions() {
                       transition={{ duration: 0.6 }}
                     >
                       <div className="px-6 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
-                        <span className="font-['Roboto'] text-sm font-bold text-white tracking-widest">
+                        <span className="font-['Michroma'] text-sm font-bold text-white tracking-widest">
                           {dateLabel}
                         </span>
                       </div>
@@ -416,12 +416,12 @@ export default function Sessions() {
             transition={{ duration: 0.8 }}
           >
             <div className="h-px w-16 bg-gradient-to-r from-transparent to-white" />
-            <p className="font-['Roboto'] text-gray-400 text-sm tracking-[0.3em]">
+            <p className="font-['Michroma'] text-gray-400 text-sm tracking-[0.3em]">
               XPECTO'26
             </p>
             <div className="h-px w-16 bg-gradient-to-l from-transparent to-white" />
           </motion.div>
-          <p className="font-['Roboto'] text-gray-500 text-xs tracking-widest">
+          <p className="font-['Michroma'] text-gray-500 text-xs tracking-widest">
             MARCH 14-16, 2026 • HIMALAYAS' BIGGEST TECHFEST
           </p>
         </motion.div>

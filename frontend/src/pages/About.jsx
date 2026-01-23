@@ -108,7 +108,7 @@ export default function About() {
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <div className="px-6 py-2 rounded-full border border-white/30 bg-white/10 backdrop-blur-sm">
-                <span className="font-['Roboto'] text-sm text-white tracking-widest">
+                <span className="font-['Michroma'] text-sm text-white tracking-widest">
                   XPECTO'26
                 </span>
               </div>
@@ -131,7 +131,7 @@ export default function About() {
             />
 
             <motion.p
-              className="font-['Roboto'] text-xl md:text-2xl text-gray-300 tracking-wider max-w-3xl mx-auto leading-relaxed"
+              className="font-['Michroma'] text-xl md:text-2xl text-gray-300 tracking-wider max-w-3xl mx-auto leading-relaxed"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.6 }}
@@ -154,14 +154,14 @@ export default function About() {
             >
               <div className="flex items-start justify-between mb-8">
                 <IconMapPin className="w-8 h-8 text-white/40" />
-                <span className="text-xs text-white/30 uppercase tracking-widest font-['Roboto']">
+                <span className="text-xs text-white/30 uppercase tracking-widest font-['Michroma']">
                   Location
                 </span>
               </div>
               <h3 className="font-['Michroma'] text-3xl md:text-4xl font-light mb-4 text-white">
                 IIT Mandi
               </h3>
-              <p className="font-['Roboto'] text-white/50 text-lg leading-relaxed mb-6">
+              <p className="font-['Michroma'] text-white/50 text-lg leading-relaxed mb-6">
                 Kamand, Himachal Pradesh
                 <br />
                 India — 175005
@@ -170,7 +170,7 @@ export default function About() {
                 href="https://maps.google.com/?q=IIT+Mandi"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors group font-['Roboto']"
+                className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors group font-['Michroma']"
               >
                 Open in Maps
                 <IconArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -187,7 +187,7 @@ export default function About() {
             >
               <div className="flex items-start justify-between mb-8">
                 <IconMail className="w-8 h-8 text-white/40" />
-                <span className="text-xs text-white/30 uppercase tracking-widest font-['Roboto']">
+                <span className="text-xs text-white/30 uppercase tracking-widest font-['Michroma']">
                   Contact
                 </span>
               </div>
@@ -196,7 +196,7 @@ export default function About() {
                   <a
                     key={idx}
                     href={contact.href}
-                    className="block font-['Roboto'] text-xl text-white/70 hover:text-white transition-colors"
+                    className="block font-['Michroma'] text-xl text-white/70 hover:text-white transition-colors"
                   >
                     {contact.label}
                   </a>
@@ -216,10 +216,10 @@ export default function About() {
               className="md:col-span-4 backdrop-blur-md bg-gradient-to-br from-purple-900/40 to-pink-900/40 border border-white/10 rounded-3xl p-8 hover:from-purple-900/50 hover:to-pink-900/50 hover:border-white/20 transition-all duration-500 group shadow-2xl"
             >
               <IconBrandInstagram className="w-10 h-10 text-white/60 mb-6 group-hover:scale-110 transition-transform" />
-              <p className="font-['Roboto'] text-2xl font-light text-white">
+              <p className="font-['Michroma'] text-2xl font-light text-white">
                 @xpecto_iitmandi
               </p>
-              <p className="font-['Roboto'] text-white/40 text-sm mt-2">
+              <p className="font-['Michroma'] text-white/40 text-sm mt-2">
                 Follow us on Instagram
               </p>
             </motion.a>
@@ -232,17 +232,17 @@ export default function About() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="md:col-span-8 backdrop-blur-md bg-black/60 border border-white/10 rounded-3xl p-8 hover:bg-black/70 hover:border-white/20 transition-all duration-500 shadow-2xl"
             >
-              <span className="text-xs text-white/30 uppercase tracking-widest font-['Roboto']">
+              <span className="text-xs text-white/30 uppercase tracking-widest font-['Michroma']">
                 Leadership
               </span>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
                 {conveners.map((person, idx) => (
                   <div key={idx} className="text-center">
                     <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-white/10" />
-                    <p className="font-['Roboto'] text-sm font-medium text-white">
+                    <p className="font-['Michroma'] text-sm font-medium text-white">
                       {person.name}
                     </p>
-                    <p className="font-['Roboto'] text-xs text-white/40 mt-1">
+                    <p className="font-['Michroma'] text-xs text-white/40 mt-1">
                       {person.role}
                     </p>
                   </div>
@@ -280,7 +280,7 @@ export default function About() {
             >
               <div className="flex items-center gap-3 mb-8">
                 <IconCode className="w-6 h-6 text-white/40" />
-                <span className="text-xs text-white/30 uppercase tracking-widest font-['Roboto']">
+                <span className="text-xs text-white/30 uppercase tracking-widest font-['Michroma']">
                   Built by
                 </span>
               </div>
@@ -289,10 +289,10 @@ export default function About() {
                   <div key={idx} className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-400/20 to-purple-400/20 border border-white/10" />
                     <div>
-                      <p className="font-['Roboto'] font-medium text-white">
+                      <p className="font-['Michroma'] font-medium text-white">
                         {dev.name}
                       </p>
-                      <p className="font-['Roboto'] text-sm text-white/40">
+                      <p className="font-['Michroma'] text-sm text-white/40">
                         {dev.role}
                       </p>
                     </div>
@@ -318,7 +318,7 @@ export default function About() {
                 Our Team
               </h2>
             </div>
-            <p className="font-['Roboto'] text-white/50 text-lg">
+            <p className="font-['Michroma'] text-white/50 text-lg">
               Meet the people who make Xpecto happen
             </p>
           </motion.div>
@@ -337,7 +337,7 @@ export default function About() {
               animate={{ opacity: 1 }}
               className="backdrop-blur-md bg-red-900/40 border border-red-500/20 rounded-3xl p-8 text-center shadow-2xl"
             >
-              <p className="font-['Roboto'] text-red-200">
+              <p className="font-['Michroma'] text-red-200">
                 Unable to load team members. Please try again later.
               </p>
             </motion.div>
@@ -347,7 +347,7 @@ export default function About() {
               animate={{ opacity: 1 }}
               className="backdrop-blur-md bg-black/60 border border-white/10 rounded-3xl p-8 text-center shadow-2xl"
             >
-              <p className="font-['Roboto'] text-white/40">
+              <p className="font-['Michroma'] text-white/40">
                 No team members to display yet.
               </p>
             </motion.div>
@@ -391,10 +391,10 @@ export default function About() {
 
                   {/* Member Info */}
                   <div className="space-y-2">
-                    <h3 className="font-['Roboto'] text-xl font-medium text-white group-hover:text-cyan-400 transition-colors">
+                    <h3 className="font-['Michroma'] text-xl font-medium text-white group-hover:text-cyan-400 transition-colors">
                       {member.name}
                     </h3>
-                    <p className="font-['Roboto'] text-white/60 text-sm uppercase tracking-wide">
+                    <p className="font-['Michroma'] text-white/60 text-sm uppercase tracking-wide">
                       {member.team}
                     </p>
                   </div>
@@ -420,24 +420,24 @@ export default function About() {
             transition={{ duration: 0.8 }}
           >
             <div className="h-px w-16 bg-gradient-to-r from-transparent to-white" />
-            <p className="font-['Roboto'] text-gray-400 text-sm tracking-[0.3em]">
+            <p className="font-['Michroma'] text-gray-400 text-sm tracking-[0.3em]">
               XPECTO'26
             </p>
             <div className="h-px w-16 bg-gradient-to-l from-transparent to-white" />
           </motion.div>
-          <p className="font-['Roboto'] text-gray-500 text-xs tracking-widest mb-8">
+          <p className="font-['Michroma'] text-gray-500 text-xs tracking-widest mb-8">
             MARCH 14-16, 2026 • HIMALAYAS' BIGGEST TECHFEST
           </p>
 
           <div className="max-w-6xl mx-auto px-6">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
-              <p className="font-['Roboto'] text-sm text-white/30">
+              <p className="font-['Michroma'] text-sm text-white/30">
                 © 2026 Xpecto, IIT Mandi
               </p>
               <div className="flex items-center gap-6">
                 <a
                   href="mailto:tech@xpecto.org"
-                  className="font-['Roboto'] text-sm text-white/30 hover:text-white/60 transition-colors"
+                  className="font-['Michroma'] text-sm text-white/30 hover:text-white/60 transition-colors"
                 >
                   Tech Support
                 </a>
@@ -445,7 +445,7 @@ export default function About() {
                   href="https://instagram.com/xpecto_iitmandi"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-['Roboto'] text-sm text-white/30 hover:text-white/60 transition-colors"
+                  className="font-['Michroma'] text-sm text-white/30 hover:text-white/60 transition-colors"
                 >
                   Instagram
                 </a>
@@ -454,14 +454,14 @@ export default function About() {
             <div className="flex items-center justify-center gap-6 pt-4 border-t border-white/5">
               <a
                 href="/terms-of-service"
-                className="font-['Roboto'] text-xs text-white/30 hover:text-white/60 transition-colors"
+                className="font-['Michroma'] text-xs text-white/30 hover:text-white/60 transition-colors"
               >
                 Terms of Service
               </a>
               <span className="text-white/20">•</span>
               <a
                 href="/privacy-policy"
-                className="font-['Roboto'] text-xs text-white/30 hover:text-white/60 transition-colors"
+                className="font-['Michroma'] text-xs text-white/30 hover:text-white/60 transition-colors"
               >
                 Privacy Policy
               </a>

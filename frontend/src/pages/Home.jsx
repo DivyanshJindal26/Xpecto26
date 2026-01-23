@@ -37,7 +37,7 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
-  const demoItems = [{ link: "#", text: "XPECTO'26", image: "./logo.png" }];
+  const demoItems = [{ link: "#", text: "XPECTO", image: "./logo.png" }];
 
   return (
     <div className="w-full min-h-screen relative *:">
@@ -86,7 +86,7 @@ export default function Home() {
 
  
           <motion.span
-            className="flex w-232.5 h-8.5 justify-center items-center font-['Roboto'] text-[24px] font-bold leading-[32.813px] text-white  mt-2 mb-10
+            className="flex w-232.5 h-8.5 justify-center items-center font-['Michroma'] text-[24px] font-bold leading-[32.813px] text-white  mt-2 mb-10
  text-center whitespace-nowrap z-11 scale-[0.4] xs:scale-[0.5] sm:scale-[0.65] md:scale-[0.8] lg:scale-90 xl:scale-100"
             initial={{ opacity: 0, y: 30, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -123,7 +123,7 @@ export default function Home() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 1.5 }}
             >
-              <p className="font-['Roboto'] text-lg font-bold text-white/90 tracking-widest">
+              <p className="font-['Michroma'] text-lg font-bold text-white/90 tracking-widest">
                 MARCH 14-16, 2026
               </p>
             </motion.div>

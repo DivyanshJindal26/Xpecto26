@@ -44,7 +44,6 @@ export const SidebarBody = (props) => {
   return (
     <>
       <DesktopSidebar {...props} />
-      <MobileSidebar {...props} />
     </>
   );
 };

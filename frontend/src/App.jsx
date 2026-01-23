@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 // import Exhibition from "./pages/Exhibition";
@@ -12,16 +13,42 @@ import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import XpectoSideBar from "./components/XpectoSideBar";
 import SmoothCursor from "./components/ui/SmoothCursor";
+import LoadingScreen from "./components/ui/LoadingScreen";
 import ProfileCompletionModal from "./components/ProfileCompletionModal";
 import GoogleOneTap from "./components/GoogleOneTap";
 import { AuthProvider } from "./context/AuthContext";
 import Exhibitions from "./pages/Exhibitions";
 import Sessions from "./pages/Sessions";
+import HamburgerMenu from "./components/ui/HamburgerMenu";
 
 export default function App() {
+  const [showLoading, setShowLoading] = useState(() => {
+    try {
+      return !localStorage.getItem("xpecto_first_visit");
+    } catch (e) {
+      return true;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      const visited = localStorage.getItem("xpecto_first_visit");
+      if (!visited) {
+        setShowLoading(true);
+        const t = setTimeout(() => {
+          try {
+            localStorage.setItem("xpecto_first_visit", "1");
+          } catch (e) {}
+          setShowLoading(false);
+        }, 10000);
+        return () => clearTimeout(t);
+      }
+    } catch (e) {}
+  }, []);
   return (
     <AuthProvider>
       <div className="overflow-x-hidden">
+        <HamburgerMenu />
         <XpectoSideBar>
           <GoogleOneTap />
           <SmoothCursor />
@@ -41,6 +68,7 @@ export default function App() {
         </XpectoSideBar>
         {/* Profile Completion Modal - shows after OAuth if profile is incomplete */}
         <ProfileCompletionModal />
+        {showLoading && <LoadingScreen />}
       </div>
     </AuthProvider>
   );

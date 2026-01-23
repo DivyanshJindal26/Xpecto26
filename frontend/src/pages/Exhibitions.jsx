@@ -1,3 +1,18 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 "use client";
 
 import { motion } from "framer-motion";
@@ -100,7 +115,7 @@ const ExhibitionCard = ({ exhibition, index }) => {
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <span className="font-['Roboto'] text-xs font-bold text-black tracking-widest">
+                  <span className="font-['Michroma'] text-xs font-bold text-black tracking-widest">
                     {exhibition.category}
                   </span>
                 </motion.div>
@@ -139,13 +154,13 @@ const ExhibitionCard = ({ exhibition, index }) => {
               </div>
 
               {/* Description */}
-              <p className="font-['Roboto'] text-gray-300 text-base lg:text-lg leading-relaxed">
+              <p className="font-['Michroma'] text-gray-300 text-base lg:text-lg leading-relaxed">
                 {exhibition.description}
               </p>
 
               {/* Venue & Date - Added since backend provides date and venue */}
               {(exhibition.venue || exhibition.date) && (
-                <div className="flex flex-wrap gap-4 text-sm font-['Roboto'] text-gray-400">
+                <div className="flex flex-wrap gap-4 text-sm font-['Michroma'] text-gray-400">
                   {exhibition.venue && (
                     <div className="flex items-center gap-2">
                       <span className="text-cyan-300">📍</span>{" "}
@@ -191,7 +206,7 @@ const ExhibitionCard = ({ exhibition, index }) => {
                           }}
                         />
                       </div>
-                      <span className="font-['Roboto'] text-gray-400 group-hover:text-gray-200 transition-colors duration-300">
+                      <span className="font-['Michroma'] text-gray-400 group-hover:text-gray-200 transition-colors duration-300">
                         {feature}
                       </span>
                     </motion.div>
@@ -202,7 +217,7 @@ const ExhibitionCard = ({ exhibition, index }) => {
               {/* CTA Button with enhanced design */}
               <div className="pt-6">
                 <motion.button
-                  className="group relative px-10 py-4 font-['Roboto'] font-bold text-white overflow-hidden rounded-xl shadow-lg"
+                  className="group relative px-10 py-4 font-['Michroma'] font-bold text-white overflow-hidden rounded-xl shadow-lg"
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.3 }}
@@ -353,7 +368,7 @@ export default function Exhibitions() {
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <div className="px-6 py-2 rounded-full border border-white/30 bg-white/10 backdrop-blur-sm">
-                <span className="font-['Roboto'] text-sm text-white tracking-widest">
+                <span className="font-['Michroma'] text-sm text-white tracking-widest">
                   XPECTO'26 PRESENTS
                 </span>
               </div>
@@ -376,7 +391,7 @@ export default function Exhibitions() {
             />
 
             <motion.p
-              className="font-['Roboto'] text-xl md:text-2xl text-gray-300 tracking-wider max-w-3xl mx-auto leading-relaxed"
+              className="font-['Michroma'] text-xl md:text-2xl text-gray-300 tracking-wider max-w-3xl mx-auto leading-relaxed"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.6 }}
@@ -391,19 +406,19 @@ export default function Exhibitions() {
         <div className="relative px-6 pb-24">
           {loading ? (
             <div className="flex justify-center items-center h-64">
-              <div className="text-white text-xl font-['Roboto'] animate-pulse">
+              <div className="text-white text-xl font-['Michroma'] animate-pulse">
                 Loading exhibitions...
               </div>
             </div>
           ) : error ? (
             <div className="flex justify-center items-center h-64">
-              <div className="text-red-400 text-xl font-['Roboto']">
+              <div className="text-red-400 text-xl font-['Michroma']">
                 {error}
               </div>
             </div>
           ) : exhibitions.length === 0 ? (
             <div className="flex justify-center items-center h-64">
-              <div className="text-gray-400 text-xl font-['Roboto']">
+              <div className="text-gray-400 text-xl font-['Michroma']">
                 No exhibitions found.
               </div>
             </div>
@@ -434,12 +449,12 @@ export default function Exhibitions() {
             transition={{ duration: 0.8 }}
           >
             <div className="h-px w-16 bg-gradient-to-r from-transparent to-white" />
-            <p className="font-['Roboto'] text-gray-400 text-sm tracking-[0.3em]">
+            <p className="font-['Michroma'] text-gray-400 text-sm tracking-[0.3em]">
               XPECTO'26
             </p>
             <div className="h-px w-16 bg-gradient-to-l from-transparent to-white" />
           </motion.div>
-          <p className="font-['Roboto'] text-gray-500 text-xs tracking-widest">
+          <p className="font-['Michroma'] text-gray-500 text-xs tracking-widest">
             MARCH 14-16, 2026 • HIMALAYAS' BIGGEST TECHFEST
           </p>
         </motion.div>

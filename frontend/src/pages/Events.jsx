@@ -130,7 +130,7 @@ const EventCard = ({
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <span className="font-['Roboto'] text-xs font-bold text-black tracking-widest">
+                    <span className="font-['Michroma'] text-xs font-bold text-black tracking-widest">
                       {event.club_name}
                     </span>
                   </motion.div>
@@ -141,7 +141,7 @@ const EventCard = ({
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <span className="font-['Roboto'] text-xs font-bold text-black tracking-widest">
+                    <span className="font-['Michroma'] text-xs font-bold text-black tracking-widest">
                       {event.company}
                     </span>
                   </motion.div>
@@ -180,7 +180,7 @@ const EventCard = ({
               </div>
 
               {/* Description */}
-              <p className="font-['Roboto'] text-gray-300 text-base lg:text-lg leading-relaxed">
+              <p className="font-['Michroma'] text-gray-300 text-base lg:text-lg leading-relaxed">
                 {event.description}
               </p>
 
@@ -208,7 +208,7 @@ const EventCard = ({
                         }}
                       />
                     </div>
-                    <span className="font-['Roboto'] text-gray-400 group-hover:text-gray-200 transition-colors duration-300">
+                    <span className="font-['Michroma'] text-gray-400 group-hover:text-gray-200 transition-colors duration-300">
                       <span className="font-semibold text-white">Date:</span>{" "}
                       {new Date(event.date).toLocaleDateString("en-US", {
                         weekday: "long",
@@ -243,7 +243,7 @@ const EventCard = ({
                         }}
                       />
                     </div>
-                    <span className="font-['Roboto'] text-gray-400 group-hover:text-gray-200 transition-colors duration-300">
+                    <span className="font-['Michroma'] text-gray-400 group-hover:text-gray-200 transition-colors duration-300">
                       <span className="font-semibold text-white">Venue:</span>{" "}
                       {event.venue}
                     </span>
@@ -256,7 +256,7 @@ const EventCard = ({
                 <motion.button
                   onClick={onRegister}
                   disabled={registering}
-                  className="group relative px-10 py-4 font-['Roboto'] font-bold text-white overflow-hidden rounded-xl shadow-lg w-full sm:w-auto"
+                  className="group relative px-10 py-4 font-['Michroma'] font-bold text-white overflow-hidden rounded-xl shadow-lg w-full sm:w-auto"
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.3 }}
@@ -518,7 +518,7 @@ export default function Events() {
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <div className="px-6 py-2 rounded-full border border-white/30 bg-white/10 backdrop-blur-sm">
-                <span className="font-['Roboto'] text-sm text-white tracking-widest">
+                <span className="font-['Michroma'] text-sm text-white tracking-widest">
                   XPECTO'26 PRESENTS
                 </span>
               </div>
@@ -541,7 +541,7 @@ export default function Events() {
             />
 
             <motion.p
-              className="font-['Roboto'] text-xl md:text-2xl text-gray-300 tracking-wider max-w-3xl mx-auto leading-relaxed mb-8"
+              className="font-['Michroma'] text-xl md:text-2xl text-gray-300 tracking-wider max-w-3xl mx-auto leading-relaxed mb-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.6 }}
@@ -589,7 +589,7 @@ export default function Events() {
                 <p className="text-red-400 text-center mb-4">{error}</p>
                 <button
                   onClick={fetchEvents}
-                  className="w-full px-6 py-3 border border-red-400/40 rounded-lg text-red-300 hover:bg-red-400/10 transition font-['Roboto'] font-bold tracking-wider"
+                  className="w-full px-6 py-3 border border-red-400/40 rounded-lg text-red-300 hover:bg-red-400/10 transition font-['Michroma'] font-bold tracking-wider"
                 >
                   RETRY
                 </button>
@@ -628,7 +628,7 @@ export default function Events() {
                   <h3 className="font-['Michroma'] text-2xl text-white tracking-wider mb-2">
                     NO EVENTS FOUND
                   </h3>
-                  <p className="font-['Roboto'] text-gray-400 text-sm">
+                  <p className="font-['Michroma'] text-gray-400 text-sm">
                     {searchQuery
                       ? "Try adjusting your search query"
                       : "No events available at the moment"}
@@ -637,7 +637,7 @@ export default function Events() {
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery("")}
-                    className="px-6 py-3 border border-white/40 rounded-xl text-white font-['Roboto'] font-bold tracking-wider hover:border-white hover:bg-white/10 transition"
+                    className="px-6 py-3 border border-white/40 rounded-xl text-white font-['Michroma'] font-bold tracking-wider hover:border-white hover:bg-white/10 transition"
                   >
                     CLEAR SEARCH
                   </button>
@@ -701,7 +701,7 @@ export default function Events() {
               {/* Pagination Dots */}
               {filteredEvents.length > 1 && (
                 <div className="text-center mt-12">
-                  <p className="font-['Roboto'] text-gray-400 text-sm mb-4 tracking-wider">
+                  <p className="font-['Michroma'] text-gray-400 text-sm mb-4 tracking-wider">
                     {currentIndex + 1} / {filteredEvents.length}
                   </p>
                   <div className="flex justify-center gap-2.5">
@@ -747,12 +747,12 @@ export default function Events() {
             transition={{ duration: 0.8 }}
           >
             <div className="h-px w-16 bg-gradient-to-r from-transparent to-white" />
-            <p className="font-['Roboto'] text-gray-400 text-sm tracking-[0.3em]">
+            <p className="font-['Michroma'] text-gray-400 text-sm tracking-[0.3em]">
               XPECTO'26
             </p>
             <div className="h-px w-16 bg-gradient-to-l from-transparent to-white" />
           </motion.div>
-          <p className="font-['Roboto'] text-gray-500 text-xs tracking-widest">
+          <p className="font-['Michroma'] text-gray-500 text-xs tracking-widest">
             MARCH 14-16, 2026 • HIMALAYAS' BIGGEST TECHFEST
           </p>
         </motion.div>
