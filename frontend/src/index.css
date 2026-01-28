@@ -79,3 +79,11 @@ button * {
     transform: scale(1.1);
   }
 }
+
+/* Disable text selection for the whole website */
+body {
+    user-select: none;        /* Standard */
+    -webkit-user-select: none; /* Safari/Chrome */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE/Edge */
+}

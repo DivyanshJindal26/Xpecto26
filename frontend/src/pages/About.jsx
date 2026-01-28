@@ -222,7 +222,7 @@ export default function About() {
 
             {/* Instagram Card */}
             <motion.a
-              href="https://instagram.com/xpecto_iitmandi"
+              href="https://instagram.com/tech.xpecto"
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0, y: 30 }}
@@ -233,7 +233,7 @@ export default function About() {
             >
               <IconBrandInstagram className="w-10 h-10 text-white/60 mb-6 group-hover:scale-110 transition-transform" />
               <p className="font-['Michroma'] text-2xl font-light text-white">
-                @xpecto_iitmandi
+                @tech.xpecto
               </p>
               <p className="font-['Michroma'] text-white/40 text-sm mt-2">
                 Follow us on Instagram
