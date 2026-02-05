@@ -144,6 +144,15 @@ export default function AdminWorkshops() {
     }
   };
 
+  const escapeCSV = (value) => {
+    if (value == null) return "";
+    const stringValue = String(value);
+    if (stringValue.includes(",") || stringValue.includes('"') || stringValue.includes("\n")) {
+      return `"${stringValue.replace(/"/g, '""')}"`;
+    }
+    return stringValue;
+  };
+
   const exportToCSV = () => {
     const headers = [
       "Title",
@@ -173,7 +182,7 @@ export default function AdminWorkshops() {
       new Date(workshop.createdAt).toLocaleString(),
     ]);
 
-    const csv = [headers, ...rows].map((row) => row.join(",")).join("\n");
+    const csv = [headers, ...rows].map((row) => row.map(escapeCSV).join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");

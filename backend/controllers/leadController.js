@@ -1,4 +1,6 @@
 import Lead from "../models/Lead.js";
+import PaymentProof from "../models/PaymentProof.js";
+import { uploadToGridFS, downloadFromGridFS, deleteFromGridFS } from "../utils/gridfs.js";
 
 // @desc    Create a new lead
 // @route   POST /api/leads
@@ -96,18 +98,73 @@ export const getAllLeads = async (req, res, next) => {
 // @access  Private/Admin
 export const updateLeadStatus = async (req, res, next) => {
   try {
-    const { paymentStatus, paymentVerified, transactionId, notes } = req.body;
+    const { paymentStatus, paymentVerified, transactionId, notes, paymentProofData } = req.body;
+
+    const updateData = {
+      paymentStatus,
+      paymentVerified,
+      transactionId,
+      notes,
+    };
+
+    // Handle payment proof upload if provided
+    if (paymentProofData) {
+      try {
+        // Extract base64 data
+        const matches = paymentProofData.match(/^data:(.+);base64,(.+)$/);
+        if (!matches) {
+          return res.status(400).json({
+            success: false,
+            message: "Invalid payment proof format",
+          });
+        }
+
+        const contentType = matches[1];
+        const base64Data = matches[2];
+        const buffer = Buffer.from(base64Data, "base64");
+
+        // Upload to GridFS
+        const filename = `payment-proof-${req.params.id}-${Date.now()}.${contentType.split("/")[1]}`;
+        const gridFsId = await uploadToGridFS(buffer, filename, contentType);
+
+        // Create PaymentProof document
+        const paymentProof = await PaymentProof.create({
+          filename,
+          contentType,
+          size: buffer.length,
+          gridFsId,
+          uploadedBy: req.user._id,
+        });
+
+        // Delete old payment proof if exists
+        const lead = await Lead.findById(req.params.id);
+        if (lead?.paymentProof) {
+          try {
+            const oldProof = await PaymentProof.findById(lead.paymentProof);
+            if (oldProof) {
+              await deleteFromGridFS(oldProof.gridFsId);
+              await PaymentProof.findByIdAndDelete(lead.paymentProof);
+            }
+          } catch (err) {
+            console.error("Error deleting old payment proof:", err);
+          }
+        }
+
+        updateData.paymentProof = paymentProof._id;
+      } catch (error) {
+        console.error("Error uploading payment proof:", error);
+        return res.status(400).json({
+          success: false,
+          message: "Failed to upload payment proof",
+        });
+      }
+    }
 
     const lead = await Lead.findByIdAndUpdate(
       req.params.id,
-      {
-        paymentStatus,
-        paymentVerified,
-        transactionId,
-        notes,
-      },
+      updateData,
       { new: true, runValidators: true }
-    );
+    ).populate("paymentProof");
 
     if (!lead) {
       return res.status(404).json({
@@ -149,6 +206,46 @@ export const getLeadStats = async (req, res, next) => {
       verifiedLeads,
       stats,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get payment proof image
+// @route   GET /api/leads/payment-proof/:id
+// @access  Private
+export const getPaymentProof = async (req, res, next) => {
+  try {
+    const paymentProof = await PaymentProof.findById(req.params.id);
+    
+    if (!paymentProof) {
+      return res.status(404).json({
+        success: false,
+        message: "Payment proof not found",
+      });
+    }
+
+    // Check if user is authorized (owner or admin)
+    const lead = await Lead.findOne({ paymentProof: paymentProof._id });
+    if (!lead) {
+      return res.status(404).json({
+        success: false,
+        message: "Lead not found",
+      });
+    }
+
+    if (lead.user.toString() !== req.user._id.toString() && req.user.role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to view this payment proof",
+      });
+    }
+
+    const fileBuffer = await downloadFromGridFS(paymentProof.gridFsId);
+    
+    res.set("Content-Type", paymentProof.contentType);
+    res.set("Content-Disposition", `inline; filename="${paymentProof.filename}"`);
+    res.send(fileBuffer);
   } catch (error) {
     next(error);
   }

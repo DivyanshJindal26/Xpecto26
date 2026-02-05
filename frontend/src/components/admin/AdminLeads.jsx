@@ -15,7 +15,7 @@ import {
   IconAlertCircle,
 } from "@tabler/icons-react";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "https://xpecto.org/api";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 export default function AdminLeads() {
   const [leads, setLeads] = useState([]);
@@ -144,6 +144,15 @@ export default function AdminLeads() {
     }
   };
 
+  const escapeCSV = (value) => {
+    if (value == null) return "";
+    const stringValue = String(value);
+    if (stringValue.includes(",") || stringValue.includes('"') || stringValue.includes("\n")) {
+      return `"${stringValue.replace(/"/g, '""')}"`;
+    }
+    return stringValue;
+  };
+
   const exportToCSV = () => {
     const headers = [
       "Name",
@@ -173,7 +182,7 @@ export default function AdminLeads() {
       lead.notes || "",
     ]);
 
-    const csv = [headers, ...rows].map((row) => row.join(",")).join("\n");
+    const csv = [headers, ...rows].map((row) => row.map(escapeCSV).join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -467,10 +476,20 @@ function LeadDetailsModal({ lead, onClose, onUpdate, updating }) {
     notes: lead.notes || "",
   });
 
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "https://xpecto.org/api";
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onUpdate(lead._id, formData);
   };
+
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
+  }, [onClose]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
@@ -520,6 +539,26 @@ function LeadDetailsModal({ lead, onClose, onUpdate, updating }) {
               />
             </div>
           </div>
+
+          {/* Payment Proof */}
+          {lead.paymentProof && (
+            <div className="mb-6">
+              <h4 className="text-sm font-medium text-white/60 mb-3">
+                Payment Proof
+              </h4>
+              <div className="rounded-lg border border-white/10 overflow-hidden">
+                <img
+                  src={`${API_BASE_URL}/leads/payment-proof/${lead.paymentProof}`}
+                  alt="Payment Proof"
+                  crossOrigin="use-credentials"
+                  className="w-full h-auto max-h-96 object-contain bg-white/5"
+                  onError={(e) => {
+                    e.target.style.display = "none";
+                  }}
+                />
+              </div>
+            </div>
+          )}
 
           {/* Update Form */}
           <form onSubmit={handleSubmit} className="space-y-4">

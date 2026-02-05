@@ -188,6 +188,15 @@ export default function AdminEvents() {
     }));
   };
 
+  const escapeCSV = (value) => {
+    if (value == null) return "";
+    const stringValue = String(value);
+    if (stringValue.includes(",") || stringValue.includes('"') || stringValue.includes("\n")) {
+      return `"${stringValue.replace(/"/g, '""')}"`;
+    }
+    return stringValue;
+  };
+
   const exportEventDetails = () => {
     const headers = [
       "Title",
@@ -215,7 +224,7 @@ export default function AdminEvents() {
       new Date(event.createdAt).toLocaleString(),
     ]);
 
-    const csv = [headers, ...rows].map((row) => row.join(",")).join("\n");
+    const csv = [headers, ...rows].map((row) => row.map(escapeCSV).join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -228,14 +237,14 @@ export default function AdminEvents() {
     try {
       // Fetch all registrations for all events
       const allRegistrations = [];
-      
+
       for (const event of events) {
         const response = await fetch(
           `${API_BASE_URL}/events/${event._id}/registrations`,
-          { credentials: "include" }
+          { credentials: "include" },
         );
         const result = await response.json();
-        
+
         if (result.success && result.data.registrations) {
           result.data.registrations.forEach((reg) => {
             allRegistrations.push({
@@ -255,8 +264,8 @@ export default function AdminEvents() {
         "Name",
         "Email",
         "Phone",
+        "College Mail",
         "College",
-        "Registration Date",
       ];
 
       const rows = allRegistrations.map((reg) => [
@@ -265,16 +274,12 @@ export default function AdminEvents() {
         reg.eventDate ? new Date(reg.eventDate).toLocaleDateString() : "",
         reg.name || "",
         reg.email || "",
-        reg.phone || "",
+        reg.contactNumber || "",
+        reg.collegeEmail || reg.email || "",
         reg.collegeName || "",
-        reg.registeredAt
-          ? new Date(reg.registeredAt).toLocaleString()
-          : reg.createdAt
-            ? new Date(reg.createdAt).toLocaleString()
-            : "",
       ]);
 
-      const csv = [headers, ...rows].map((row) => row.join(",")).join("\n");
+      const csv = [headers, ...rows].map((row) => row.map(escapeCSV).join(",")).join("\n");
       const blob = new Blob([csv], { type: "text/csv" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -322,7 +327,10 @@ export default function AdminEvents() {
               successCount++;
             } else {
               failCount++;
-              console.error(`Failed to create event: ${eventData.title}`, result.message);
+              console.error(
+                `Failed to create event: ${eventData.title}`,
+                result.message,
+              );
             }
           } catch (error) {
             failCount++;
@@ -332,7 +340,7 @@ export default function AdminEvents() {
 
         fetchEvents();
         alert(
-          `Import completed!\nSuccessfully created: ${successCount}\nFailed: ${failCount}`
+          `Import completed!\nSuccessfully created: ${successCount}\nFailed: ${failCount}`,
         );
       } catch (error) {
         console.error("Failed to import events:", error);

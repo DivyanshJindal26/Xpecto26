@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { IconLoader2, IconCheck } from "@tabler/icons-react";
+import { IconLoader2, IconCheck, IconUpload, IconX } from "@tabler/icons-react";
 import FloatingElement from "../components/ui/FloatingElement";
 import { useAuth } from "../context/AuthContext";
 
@@ -147,56 +147,244 @@ const CTAButton = ({ onClick, disabled, loading, isRegistered, children }) => {
 };
 
 // Payment QR modal component (simplified to match Events UI)
-const PaymentModal = ({ isOpen, onClose, amount }) => {
+const PaymentModal = ({ isOpen, onClose, amount, onSubmit, submitting, existingLead }) => {
+  const [transactionId, setTransactionId] = useState("");
+  const [paymentProof, setPaymentProof] = useState("");
+  const [paymentProofUrl, setPaymentProofUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleEsc = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
+  }, [isOpen, onClose]);
+
+  // Prefill when viewing existing lead
+  useEffect(() => {
+    if (!existingLead) return;
+    if (existingLead.transactionId) setTransactionId(existingLead.transactionId);
+    if (existingLead.paymentProof) {
+      setPaymentProofUrl(`${API_BASE_URL}/leads/payment-proof/${existingLead.paymentProof}`);
+    }
+  }, [existingLead]);
+
   if (!isOpen) return null;
 
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Check file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setErrors({ ...errors, paymentProof: "File size must be less than 5MB" });
+      return;
+    }
+
+    // Check file type
+    if (!file.type.startsWith("image/")) {
+      setErrors({ ...errors, paymentProof: "Only image files are allowed" });
+      return;
+    }
+
+    setUploading(true);
+    setErrors({ ...errors, paymentProof: null });
+
+    try {
+      // Convert to base64
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPaymentProof(reader.result);
+        setUploading(false);
+      };
+      reader.onerror = () => {
+        setErrors({ ...errors, paymentProof: "Failed to read file" });
+        setUploading(false);
+      };
+      reader.readAsDataURL(file);
+    } catch (error) {
+      setErrors({ ...errors, paymentProof: "Failed to upload file" });
+      setUploading(false);
+    }
+  };
+
+  const handleSubmit = () => {
+    const newErrors = {};
+
+    if (!transactionId.trim()) {
+      newErrors.transactionId = "Transaction ID is required";
+    }
+
+    if (!paymentProof) {
+      newErrors.paymentProof = "Payment proof screenshot is required";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    onSubmit({ transactionId, paymentProof });
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
-      <div className="relative max-w-lg w-full bg-[#0b0b0b] rounded-2xl border border-white/10 p-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+      <div className="relative max-w-2xl w-full bg-[#0b0b0b] rounded-2xl border border-white/10 p-6 max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-white/60 hover:text-white"
+          className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"
         >
-          ✕
+          <IconX className="w-6 h-6" />
         </button>
 
         <h3 className="text-xl font-bold text-white mb-2">Complete Payment</h3>
-        <p className="text-cyan-400 mb-4 font-semibold">Amount: ₹{amount}</p>
+        <p className="text-cyan-400 mb-6 font-semibold">Amount: ₹{amount}</p>
 
-        <div className="flex items-start gap-6">
-          <div className="w-40 h-40 bg-white rounded-xl p-2 flex items-center justify-center">
+        <div className="flex flex-col lg:flex-row items-start gap-6 mb-6">
+          <div className="w-40 h-40 bg-white rounded-xl p-2 flex items-center justify-center flex-shrink-0">
             <img src="/qr.png" alt="QR" />
           </div>
 
-          <div className="flex-1 text-white">
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm text-gray-300">
-                <span>Account Name</span>
-                <span className="font-mono">Xpecto IIT Mandi</span>
-              </div>
-              <div className="flex justify-between text-sm text-gray-300">
-                <span>Account No.</span>
-                <span className="font-mono">7315000100034536</span>
-              </div>
-              <div className="flex justify-between text-sm text-gray-300">
-                <span>IFSC</span>
-                <span className="font-mono">PUNB0731500</span>
-              </div>
-              <div className="flex justify-between text-sm text-gray-300">
-                <span>Branch</span>
-                <span className="text-sm">IIT Kamand, Mandi HP</span>
-              </div>
-              <div className="flex justify-between text-sm text-gray-300">
-                <span>UPI ID</span>
-                <span className="font-mono text-cyan-400">8628963924m@pnb</span>
-              </div>
+          <div className="flex-1 text-white space-y-2">
+            <div className="flex justify-between text-sm text-gray-300">
+              <span>Account Name</span>
+              <span className="font-mono">Xpecto IIT Mandi</span>
             </div>
-
-            <p className="text-sm text-gray-400 mt-4">
-              After payment, your registration will be verified within 24-48
-              hours.
-            </p>
+            <div className="flex justify-between text-sm text-gray-300">
+              <span>Account No.</span>
+              <span className="font-mono">7315000100034536</span>
+            </div>
+            <div className="flex justify-between text-sm text-gray-300">
+              <span>IFSC</span>
+              <span className="font-mono">PUNB0731500</span>
+            </div>
+            <div className="flex justify-between text-sm text-gray-300">
+              <span>Branch</span>
+              <span className="text-sm">IIT Kamand, Mandi HP</span>
+            </div>
+            <div className="flex justify-between text-sm text-gray-300">
+              <span>UPI ID</span>
+              <span className="font-mono text-cyan-400">8628963924m@pnb</span>
+            </div>
           </div>
+        </div>
+
+        <div className="border-t border-white/10 pt-6 space-y-4">
+          <h4 className="text-white font-semibold mb-3">
+            Payment Confirmation
+          </h4>
+
+          {/* Transaction ID */}
+          <div>
+            <label className="block text-sm font-medium text-white/80 mb-2">
+              Transaction ID / UPI Reference Number *
+            </label>
+            <input
+              type="text"
+              value={transactionId}
+              onChange={(e) => {
+                setTransactionId(e.target.value);
+                setErrors({ ...errors, transactionId: null });
+              }}
+              placeholder="Enter your transaction ID"
+              className={`w-full px-4 py-3 rounded-xl bg-white/5 border ${
+                errors.transactionId ? "border-red-500/50" : "border-white/10"
+              } text-white placeholder-white/30 focus:outline-none focus:border-cyan-500/50 transition-colors`}
+            />
+            {errors.transactionId && (
+              <p className="mt-1 text-sm text-red-400">
+                {errors.transactionId}
+              </p>
+            )}
+          </div>
+
+          {/* Payment Proof Upload / View */}
+          <div>
+            <label className="block text-sm font-medium text-white/80 mb-2">
+              Payment Screenshot
+            </label>
+            {!paymentProofUrl && (
+              <div className="relative">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                  id="payment-proof"
+                  disabled={uploading}
+                />
+                <label
+                  htmlFor="payment-proof"
+                  className={`flex flex-col items-center justify-center w-full px-4 py-8 rounded-xl border-2 border-dashed ${
+                    errors.paymentProof
+                      ? "border-red-500/50 bg-red-500/5"
+                      : paymentProof
+                        ? "border-green-500/50 bg-green-500/5"
+                        : "border-white/20 bg-white/5"
+                  } cursor-pointer hover:border-cyan-500/50 transition-colors`}
+                >
+                  {uploading ? (
+                    <IconLoader2 className="w-8 h-8 text-white/60 animate-spin mb-2" />
+                  ) : paymentProof ? (
+                    <>
+                      <IconCheck className="w-8 h-8 text-green-400 mb-2" />
+                      <p className="text-sm text-green-400">Screenshot uploaded</p>
+                      <p className="text-xs text-white/40 mt-1">Click to change</p>
+                    </>
+                  ) : (
+                    <>
+                      <IconUpload className="w-8 h-8 text-white/60 mb-2" />
+                      <p className="text-sm text-white/60">Click to upload screenshot</p>
+                      <p className="text-xs text-white/40 mt-1">PNG, JPG up to 5MB</p>
+                    </>
+                  )}
+                </label>
+              </div>
+            )}
+
+            {/* Preview (from upload or existing) */}
+            {(paymentProof || paymentProofUrl) && (
+              <div className="mt-4">
+                <p className="text-sm text-white/60 mb-2">Preview:</p>
+                <img
+                  src={paymentProof || paymentProofUrl}
+                  alt="Payment proof"
+                  crossOrigin="use-credentials"
+                  className="max-w-full h-auto max-h-48 rounded-lg border border-white/10"
+                />
+              </div>
+            )}
+            {errors.paymentProof && (
+              <p className="mt-1 text-sm text-red-400">{errors.paymentProof}</p>
+            )}
+          </div>
+
+          <p className="text-sm text-gray-400">
+            After submitting, your payment will be verified within 24-48 hours.
+          </p>
+
+          <button
+            onClick={handleSubmit}
+            disabled={submitting || uploading}
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+          >
+            {submitting ? (
+              <>
+                <IconLoader2 className="w-5 h-5 animate-spin" />
+                Submitting...
+              </>
+            ) : (
+              <>
+                <IconCheck className="w-5 h-5" />
+                Submit Payment Details
+              </>
+            )}
+          </button>
         </div>
       </div>
     </div>
@@ -208,6 +396,7 @@ export default function Register() {
   const [isHovered, setIsHovered] = useState(false);
   const [loading, setLoading] = useState(false);
   const [registering, setRegistering] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [existingLead, setExistingLead] = useState(null);
   const [showPayment, setShowPayment] = useState(false);
 
@@ -270,6 +459,40 @@ export default function Register() {
       console.error(err);
     } finally {
       setRegistering(false);
+    }
+  };
+
+  const handlePaymentSubmit = async ({ transactionId, paymentProof }) => {
+    if (!existingLead) return;
+
+    setSubmitting(true);
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/leads/${existingLead._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          transactionId,
+          paymentProofData: paymentProof,
+          paymentStatus: "pending",
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setExistingLead(data.lead);
+        setShowPayment(false);
+        alert(
+          "Payment details submitted successfully! Your payment will be verified within 24-48 hours.",
+        );
+      } else {
+        alert(data.message || "Failed to submit payment details");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to submit payment details");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -376,7 +599,7 @@ export default function Register() {
 
                 <p className="text-sm text-gray-500 mt-6">
                   For queries:{" "}
-                  <span className="text-white">xpecto@iitmandi.ac.in</span>
+                  <span className="text-white">publicity@xpecto.org</span>
                 </p>
               </div>
             </div>
@@ -388,6 +611,9 @@ export default function Register() {
         isOpen={showPayment}
         onClose={() => setShowPayment(false)}
         amount={existingLead?.amount || price}
+        onSubmit={handlePaymentSubmit}
+        submitting={submitting}
+        existingLead={existingLead}
       />
     </div>
   );

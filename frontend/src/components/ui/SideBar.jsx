@@ -40,10 +40,11 @@ export const Sidebar = ({ children, open, setOpen, animate }) => {
   );
 };
 
-export const SidebarBody = (props) => {
+export const SidebarBody = ({ children, className, mobileContent, ...props }) => {
   return (
     <>
-      <DesktopSidebar {...props} />
+      <DesktopSidebar className={className} {...props}>{children}</DesktopSidebar>
+      <MobileSidebar>{mobileContent}</MobileSidebar>
     </>
   );
 };

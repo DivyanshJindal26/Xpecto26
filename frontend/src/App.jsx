@@ -47,7 +47,6 @@ export default function App() {
     } catch (e) {}
   }, []);
 
-  
   useEffect(() => {
     setShowLoading(false);
   }, [location]);
@@ -62,7 +61,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/events" element={<Events />} />
             <Route path="/about" element={<About />} />
-            <Route path="/profile" element={<Profile />} /> 
+            <Route path="/profile" element={<Profile />} />
             <Route path="/workshops" element={<Sessions />} />
             <Route path="/register" element={<Register />} />
             <Route path="/admin" element={<AdminPanel />} />

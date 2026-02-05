@@ -5,6 +5,7 @@ import {
   getAllLeads,
   updateLeadStatus,
   getLeadStats,
+  getPaymentProof,
 } from "../controllers/leadController.js";
 import authMiddleware, { adminMiddleware } from "../middleware/authMiddleware.js";
 
@@ -13,6 +14,7 @@ const router = express.Router();
 // Private routes (authenticated users)
 router.post("/", authMiddleware, createLead);
 router.get("/my-lead", authMiddleware, getMyLead);
+router.get("/payment-proof/:id", authMiddleware, getPaymentProof);
 
 // Admin only routes
 router.get("/", authMiddleware, adminMiddleware, getAllLeads);

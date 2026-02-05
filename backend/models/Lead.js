@@ -48,6 +48,10 @@ const leadSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    paymentProof: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "PaymentProof",
+    },
     notes: {
       type: String,
       trim: true,

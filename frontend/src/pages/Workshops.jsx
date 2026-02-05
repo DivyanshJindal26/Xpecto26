@@ -314,7 +314,7 @@ export default function Workshops() {
             </motion.div>
 
             <motion.h1
-              className="font-['Michroma'] text-6xl md:text-8xl font-light text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-white mb-8 tracking-[0.2em] leading-tight"
+              className="font-['Michroma'] text-4xl sm:text-6xl md:text-8xl font-light text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-white mb-8 tracking-[0.1em] sm:tracking-[0.2em] leading-tight whitespace-nowrap"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.2, delay: 0.3 }}

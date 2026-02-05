@@ -143,6 +143,15 @@ export default function AdminTeam() {
     }
   };
 
+  const escapeCSV = (value) => {
+    if (value == null) return "";
+    const stringValue = String(value);
+    if (stringValue.includes(",") || stringValue.includes('"') || stringValue.includes("\n")) {
+      return `"${stringValue.replace(/"/g, '""')}"`;
+    }
+    return stringValue;
+  };
+
   const exportToCSV = () => {
     const headers = ["Name", "Team/Role", "Image URL", "Display Order", "Created At"];
 
@@ -154,7 +163,7 @@ export default function AdminTeam() {
       member.createdAt ? new Date(member.createdAt).toLocaleString() : "",
     ]);
 
-    const csv = [headers, ...rows].map((row) => row.join(",")).join("\n");
+    const csv = [headers, ...rows].map((row) => row.map(escapeCSV).join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
