@@ -120,6 +120,7 @@ export const MobileSidebar = ({ className, children, ...props }) => {
           </span>
         </a>
 
+
         <AnimatePresence>
           {open && (
             <>
