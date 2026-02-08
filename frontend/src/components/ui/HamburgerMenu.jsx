@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { IconLogout, IconUserPlus, IconLoader2, IconUser } from "@tabler/icons-react";
+import {
+  IconLogout,
+  IconUserPlus,
+  IconLoader2,
+  IconUser,
+  IconHome,
+  IconCalendarEvent,
+  IconUsers,
+  IconInfoCircle,
+} from "@tabler/icons-react";
 import { useAuth } from "../../context/AuthContext";
 import "./HamburgerMenu.css";
 
@@ -8,6 +17,30 @@ const HamburgerMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, isAuthenticated, loading, loginWithGoogle, logout } = useAuth();
   const navigate = useNavigate();
+
+  const links = [
+    { label: "Home", href: "/", icon: <IconHome className="h-5 w-5" /> },
+    {
+      label: "Events",
+      href: "/events",
+      icon: <IconCalendarEvent className="h-5 w-5" />,
+    },
+    {
+      label: "Profile",
+      href: "/profile",
+      icon: <IconUser className="h-5 w-5" />,
+    },
+    {
+      label: "Workshops",
+      href: "/workshops",
+      icon: <IconUsers className="h-5 w-5" />,
+    },
+    {
+      label: "About",
+      href: "/about",
+      icon: <IconInfoCircle className="h-5 w-5" />,
+    },
+  ];
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -39,11 +72,14 @@ const HamburgerMenu = () => {
           <div className="hamburger-backdrop" onClick={closeMenu}></div>
           <nav className="hamburger-menu">
             <ul>
-              <li><Link to="/" onClick={closeMenu}>Home</Link></li>
-              <li><Link to="/events" onClick={closeMenu}>Events</Link></li> 
-              <li><Link to="/profile" onClick={closeMenu}>Profile</Link></li> 
-              <li><Link to="/workshops" onClick={closeMenu}>Workshops</Link></li>
-              <li><Link to="/about" onClick={closeMenu}>About</Link></li>
+              {links.map((link) => (
+                <li key={link.href}>
+                  <Link to={link.href} onClick={closeMenu}>
+                    <span className="hamburger-link-icon">{link.icon}</span>
+                    <span>{link.label}</span>
+                  </Link>
+                </li>
+              ))}
             </ul>
 
             {/* Auth Section */}
