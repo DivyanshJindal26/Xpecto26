@@ -120,6 +120,13 @@ export const MobileSidebar = ({ className, children, ...props }) => {
           </span>
         </a>
 
+        <motion.button
+          whileTap={{ scale: 0.92 }}
+          onClick={() => setOpen(!open)}
+          className="p-2 rounded-lg hover:bg-white/[0.04] transition-colors"
+        >
+          <IconMenu2 className="text-white/70 h-5 w-5" />
+        </motion.button>
 
         <AnimatePresence>
           {open && (
