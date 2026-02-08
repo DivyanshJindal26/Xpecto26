@@ -62,116 +62,6 @@ export default function XpectoSideBar({ children }) {
     return location.pathname.startsWith(href);
   };
 
-  // Mobile sidebar content (passed as prop to SidebarBody)
-  const mobileContent = (
-    <>
-      {/* Mobile Links */}
-      <nav className="flex-1 flex flex-col gap-1 overflow-y-auto overflow-x-hidden no-scrollbar">
-        {links.map((link, idx) => (
-          <motion.div
-            key={link.href}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1 + idx * 0.05 }}
-          >
-            <SidebarLink
-              link={link}
-              isActive={isActive(link.href)}
-              className="py-3.5"
-              onClick={() => setOpen(false)}
-            />
-          </motion.div>
-        ))}
-
-        {/* Admin Link - Mobile */}
-        {isAdmin && (
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1 + links.length * 0.05 }}
-            className="mt-2 pt-2 border-t border-white/4"
-          >
-            <SidebarLink
-              link={adminLink}
-              isActive={isActive(adminLink.href)}
-              className="py-3.5 bg-linear-to-r from-orange-500/10 to-red-500/5 border border-orange-500/20"
-              onClick={() => setOpen(false)}
-            />
-          </motion.div>
-        )}
-      </nav>
-
-      {/* Mobile Sign Up / User Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="pt-4 mt-4 border-t border-white/4"
-      >
-        {loading ? (
-          <div className="flex items-center justify-center py-3">
-            <IconLoader2 className="h-5 w-5 text-white/40 animate-spin" />
-          </div>
-        ) : isAuthenticated && user ? (
-          <div className="space-y-3">
-            <Link
-              to="/profile"
-              onClick={() => setOpen(false)}
-              className="flex items-center gap-3 px-3 py-3 rounded-xl bg-white/2 border border-white/4"
-            >
-              {user.avatar ? (
-                <img
-                  src={user.avatar}
-                  alt={user.name}
-                  className="h-10 w-10 rounded-full border border-purple-500/30"
-                />
-              ) : (
-                <div className="h-10 w-10 rounded-full bg-linear-to-br from-purple-500/20 to-violet-500/10 border border-purple-500/30 flex items-center justify-center">
-                  <span className="text-lg font-medium text-purple-300">
-                    {user.name?.charAt(0) || "?"}
-                  </span>
-                </div>
-              )}
-              <div className="flex-1 overflow-hidden">
-                <p className="text-sm font-medium text-white/90 truncate">
-                  {user.name}
-                </p>
-                <p className="text-xs text-white/50 truncate">
-                  {user.collegeName || user.email}
-                </p>
-              </div>
-              <IconUser className="h-5 w-5 text-white/30" />
-            </Link>
-
-            <button
-              onClick={() => {
-                logout();
-                setOpen(false);
-              }}
-              className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400"
-            >
-              <IconLogout className="h-5 w-5" />
-              <span className="text-sm font-medium">Sign Out</span>
-            </button>
-          </div>
-        ) : (
-          <button
-            onClick={() => {
-              loginWithGoogle();
-              setOpen(false);
-            }}
-            className="w-full flex items-center justify-center gap-2 px-3 py-3.5 rounded-xl bg-linear-to-r from-purple-500/10 to-violet-500/5 border border-purple-500/20"
-          >
-            <IconUserPlus className="h-5 w-5 text-purple-400" />
-            <span className="text-sm font-medium text-white/80">
-              Sign Up with Google
-            </span>
-          </button>
-        )}
-      </motion.div>
-    </>
-  );
-
   return (
     <div
       className={cn("flex h-screen w-screen overflow-hidden", "bg-[#050508]")}
@@ -179,7 +69,6 @@ export default function XpectoSideBar({ children }) {
       <Sidebar open={open} setOpen={setOpen}>
         <SidebarBody
           className="bg-[#050508] z-50 border-r border-white/30"
-          mobileContent={mobileContent}
         >
           {/* Desktop Content */}
           <div className="flex flex-1 flex-col overflow-hidden">
