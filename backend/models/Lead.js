@@ -52,6 +52,20 @@ const leadSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "PaymentProof",
     },
+    campusAmbassadorCode: {
+      type: String,
+      trim: true,
+    },
+    selectedEvents: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Event",
+      },
+    ],
+    numberOfParticipants: {
+      type: Number,
+      min: 1,
+    },
     notes: {
       type: String,
       trim: true,

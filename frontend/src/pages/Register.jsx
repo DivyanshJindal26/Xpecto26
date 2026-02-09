@@ -153,6 +153,11 @@ const PaymentModal = ({ isOpen, onClose, amount, onSubmit, submitting, existingL
   const [paymentProofUrl, setPaymentProofUrl] = useState("");
   const [uploading, setUploading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [campusAmbassadorCode, setCampusAmbassadorCode] = useState("");
+  const [numberOfParticipants, setNumberOfParticipants] = useState("");
+  const [events, setEvents] = useState([]);
+  const [selectedEvents, setSelectedEvents] = useState([]);
+  const [loadingEvents, setLoadingEvents] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -172,7 +177,32 @@ const PaymentModal = ({ isOpen, onClose, amount, onSubmit, submitting, existingL
     if (existingLead.paymentProof) {
       setPaymentProofUrl(`${API_BASE_URL}/leads/payment-proof/${existingLead.paymentProof}`);
     }
+    if (existingLead.campusAmbassadorCode) setCampusAmbassadorCode(existingLead.campusAmbassadorCode);
+    if (existingLead.numberOfParticipants) setNumberOfParticipants(String(existingLead.numberOfParticipants));
+    if (existingLead.selectedEvents?.length) {
+      setSelectedEvents(existingLead.selectedEvents.map(e => typeof e === "string" ? e : e._id));
+    }
   }, [existingLead]);
+
+  // Fetch events for selection
+  useEffect(() => {
+    if (!isOpen) return;
+    const fetchEvents = async () => {
+      setLoadingEvents(true);
+      try {
+        const res = await fetch(`${API_BASE_URL}/events`);
+        const data = await res.json();
+        if (data.success) {
+          setEvents(data.data || []);
+        }
+      } catch (err) {
+        console.error("Failed to fetch events:", err);
+      } finally {
+        setLoadingEvents(false);
+      }
+    };
+    fetchEvents();
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -220,7 +250,7 @@ const PaymentModal = ({ isOpen, onClose, amount, onSubmit, submitting, existingL
       newErrors.transactionId = "Transaction ID is required";
     }
 
-    if (!paymentProof) {
+    if (!paymentProof && !paymentProofUrl) {
       newErrors.paymentProof = "Payment proof screenshot is required";
     }
 
@@ -229,7 +259,19 @@ const PaymentModal = ({ isOpen, onClose, amount, onSubmit, submitting, existingL
       return;
     }
 
-    onSubmit({ transactionId, paymentProof });
+    onSubmit({
+      transactionId,
+      paymentProof,
+      campusAmbassadorCode: campusAmbassadorCode.trim() || undefined,
+      selectedEvents,
+      numberOfParticipants: numberOfParticipants ? parseInt(numberOfParticipants) : undefined,
+    });
+  };
+
+  const toggleEvent = (eventId) => {
+    setSelectedEvents((prev) =>
+      prev.includes(eventId) ? prev.filter((id) => id !== eventId) : [...prev, eventId]
+    );
   };
 
   return (
@@ -306,7 +348,7 @@ const PaymentModal = ({ isOpen, onClose, amount, onSubmit, submitting, existingL
           {/* Payment Proof Upload / View */}
           <div>
             <label className="block text-sm font-medium text-white/80 mb-2">
-              Payment Screenshot
+              Payment Screenshot *
             </label>
             {!paymentProofUrl && (
               <div className="relative">
@@ -361,6 +403,77 @@ const PaymentModal = ({ isOpen, onClose, amount, onSubmit, submitting, existingL
             )}
             {errors.paymentProof && (
               <p className="mt-1 text-sm text-red-400">{errors.paymentProof}</p>
+            )}
+          </div>
+
+          {/* Campus Ambassador Code */}
+          <div>
+            <label className="block text-sm font-medium text-white/80 mb-2">
+              Campus Ambassador Code (Optional)
+            </label>
+            <input
+              type="text"
+              value={campusAmbassadorCode}
+              onChange={(e) => setCampusAmbassadorCode(e.target.value)}
+              placeholder="Enter ambassador code if you have one"
+              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-cyan-500/50 transition-colors"
+            />
+          </div>
+
+          {/* Number of Participants */}
+          <div>
+            <label className="block text-sm font-medium text-white/80 mb-2">
+              Number of Participants (Optional)
+            </label>
+            <input
+              type="number"
+              min="1"
+              value={numberOfParticipants}
+              onChange={(e) => setNumberOfParticipants(e.target.value)}
+              placeholder="e.g. 1"
+              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-cyan-500/50 transition-colors"
+            />
+          </div>
+
+          {/* Event Selection */}
+          <div>
+            <label className="block text-sm font-medium text-white/80 mb-2">
+              Events you plan to participate in (Optional)
+            </label>
+            {loadingEvents ? (
+              <div className="flex items-center gap-2 text-white/40 text-sm py-2">
+                <IconLoader2 className="w-4 h-4 animate-spin" />
+                Loading events...
+              </div>
+            ) : events.length === 0 ? (
+              <p className="text-sm text-white/40">No events available yet.</p>
+            ) : (
+              <div className="max-h-48 overflow-y-auto space-y-2 rounded-xl bg-white/5 border border-white/10 p-3">
+                {events.map((event) => (
+                  <label
+                    key={event._id}
+                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 cursor-pointer transition-colors"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedEvents.includes(event._id)}
+                      onChange={() => toggleEvent(event._id)}
+                      className="w-4 h-4 rounded border-white/30 bg-white/10 text-cyan-500 focus:ring-cyan-500 focus:ring-offset-0 accent-cyan-500"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white text-sm font-medium truncate">{event.title}</p>
+                      {event.club_name && (
+                        <p className="text-white/40 text-xs">{event.club_name}</p>
+                      )}
+                    </div>
+                    {event.date && (
+                      <span className="text-white/30 text-xs flex-shrink-0">
+                        {new Date(event.date).toLocaleDateString()}
+                      </span>
+                    )}
+                  </label>
+                ))}
+              </div>
             )}
           </div>
 
@@ -462,20 +575,22 @@ export default function Register() {
     }
   };
 
-  const handlePaymentSubmit = async ({ transactionId, paymentProof }) => {
+  const handlePaymentSubmit = async ({ transactionId, paymentProof, campusAmbassadorCode, selectedEvents, numberOfParticipants }) => {
     if (!existingLead) return;
 
     setSubmitting(true);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/leads/${existingLead._id}`, {
+      const res = await fetch(`${API_BASE_URL}/leads/submit-payment`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
           transactionId,
           paymentProofData: paymentProof,
-          paymentStatus: "pending",
+          campusAmbassadorCode,
+          selectedEvents,
+          numberOfParticipants,
         }),
       });
       const data = await res.json();
