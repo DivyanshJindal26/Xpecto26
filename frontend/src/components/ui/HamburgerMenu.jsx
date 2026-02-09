@@ -9,6 +9,8 @@ import {
   IconCalendarEvent,
   IconUsers,
   IconInfoCircle,
+  IconShieldCheck,
+  IconAddressBook,
 } from "@tabler/icons-react";
 import { useAuth } from "../../context/AuthContext";
 import "./HamburgerMenu.css";
@@ -26,14 +28,14 @@ const HamburgerMenu = () => {
       icon: <IconCalendarEvent className="h-5 w-5" />,
     },
     {
-      label: "Profile",
-      href: "/profile",
-      icon: <IconUser className="h-5 w-5" />,
-    },
-    {
       label: "Workshops",
       href: "/workshops",
       icon: <IconUsers className="h-5 w-5" />,
+    },
+    {
+      label: "Register",
+      href: "/register",
+      icon: <IconAddressBook className="h-5 w-5" />,
     },
     {
       label: "About",
@@ -41,6 +43,15 @@ const HamburgerMenu = () => {
       icon: <IconInfoCircle className="h-5 w-5" />,
     },
   ];
+
+  // Admin link - only visible to admins
+  const adminLink = {
+    label: "Admin Panel",
+    href: "/admin",
+    icon: <IconShieldCheck className="h-5 w-5" />,
+  };
+
+  const isAdmin = user?.role === "admin";
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -80,6 +91,16 @@ const HamburgerMenu = () => {
                   </Link>
                 </li>
               ))}
+
+              {/* Admin Link - Only for Admins */}
+              {isAdmin && (
+                <li key={adminLink.href} className="hamburger-admin-link">
+                  <Link to={adminLink.href} onClick={closeMenu}>
+                    <span className="hamburger-link-icon">{adminLink.icon}</span>
+                    <span>{adminLink.label}</span>
+                  </Link>
+                </li>
+              )}
             </ul>
 
             {/* Auth Section */}
