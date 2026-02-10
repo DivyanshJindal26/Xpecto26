@@ -27,6 +27,7 @@ export default function AdminEvents() {
     title: "",
     description: "",
     venue: "",
+    rulebook: "",
     date: "",
     club_name: "",
     company: "",
@@ -80,6 +81,7 @@ export default function AdminEvents() {
       title: "",
       description: "",
       venue: "",
+      rulebook: "",
       date: "",
       club_name: "",
       company: "",
@@ -96,6 +98,7 @@ export default function AdminEvents() {
       title: event.title || "",
       description: event.description || "",
       venue: event.venue || "",
+      rulebook: event.rulebook || "",
       date: event.date ? new Date(event.date).toISOString().split("T")[0] : "",
       club_name: event.club_name || "",
       company: event.company || "",
@@ -570,7 +573,24 @@ export default function AdminEvents() {
                           className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-orange-500/50"
                         />
                       </div>
+                    </div>
 
+                    <div>
+                      <label className="block text-sm font-medium text-white/80 mb-2">
+                        Rulebook URL
+                      </label>
+                      <input
+                        type="url"
+                        value={formData.rulebook}
+                        onChange={(e) =>
+                          handleChange("rulebook", e.target.value)
+                        }
+                        placeholder="https://example.com/rulebook.pdf"
+                        className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-orange-500/50"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-white/80 mb-2">
                           Date *

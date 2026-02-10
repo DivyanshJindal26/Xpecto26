@@ -14,6 +14,9 @@ const eventSchema = new mongoose.Schema(
     venue: {
       type: String,
     },
+    rulebook: {
+      type: String,
+    },
     club_name: {
       type: String,
     },

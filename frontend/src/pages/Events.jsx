@@ -13,6 +13,7 @@ import {
   Building2,
   Users,
   Sparkles,
+  BookOpen,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import FloatingElement from "../components/ui/FloatingElement";
@@ -176,6 +177,30 @@ const EventCard = ({
                       <p className="font-['Michroma'] text-sm text-white/80">
                         {event.venue}
                       </p>
+                    </div>
+                  </motion.div>
+                )}
+
+                {event.rulebook && (
+                  <motion.div
+                    className="flex items-start gap-3 group"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.25, duration: 0.5 }}
+                  >
+                    <BookOpen className="w-5 h-5 text-white/40 mt-0.5 shrink-0" />
+                    <div>
+                      <p className="font-['Michroma'] text-xs text-white/40 mb-1">
+                        Rulebook
+                      </p>
+                      <a
+                        href={event.rulebook}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-['Michroma'] text-sm text-white/80 hover:text-white underline decoration-white/30 hover:decoration-white/60 transition-colors"
+                      >
+                        View Rulebook
+                      </a>
                     </div>
                   </motion.div>
                 )}
