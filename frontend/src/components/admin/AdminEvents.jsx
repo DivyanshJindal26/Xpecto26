@@ -194,7 +194,11 @@ export default function AdminEvents() {
   const escapeCSV = (value) => {
     if (value == null) return "";
     const stringValue = String(value);
-    if (stringValue.includes(",") || stringValue.includes('"') || stringValue.includes("\n")) {
+    if (
+      stringValue.includes(",") ||
+      stringValue.includes('"') ||
+      stringValue.includes("\n")
+    ) {
       return `"${stringValue.replace(/"/g, '""')}"`;
     }
     return stringValue;
@@ -227,7 +231,9 @@ export default function AdminEvents() {
       new Date(event.createdAt).toLocaleString(),
     ]);
 
-    const csv = [headers, ...rows].map((row) => row.map(escapeCSV).join(",")).join("\n");
+    const csv = [headers, ...rows]
+      .map((row) => row.map(escapeCSV).join(","))
+      .join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -282,7 +288,9 @@ export default function AdminEvents() {
         reg.collegeName || "",
       ]);
 
-      const csv = [headers, ...rows].map((row) => row.map(escapeCSV).join(",")).join("\n");
+      const csv = [headers, ...rows]
+        .map((row) => row.map(escapeCSV).join(","))
+        .join("\n");
       const blob = new Blob([csv], { type: "text/csv" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");

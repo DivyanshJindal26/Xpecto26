@@ -254,7 +254,10 @@ export default function Sessions() {
   }, []);
 
   return (
-    <div ref={containerRef} className="w-full min-h-screen relative bg-black overflow-x-hidden">
+    <div
+      ref={containerRef}
+      className="w-full min-h-screen relative bg-black overflow-x-hidden"
+    >
       {/* Fixed Background Section */}
       <div className="fixed top-0 left-0 w-full h-screen z-0">
         <div className="absolute inset-0">
@@ -292,8 +295,6 @@ export default function Sessions() {
 
       {/* Scrollable Content */}
       <div className="relative z-10">
-       
-
         {/* Header Section */}
         <div className="relative pt-24 sm:pt-32 lg:pt-40 pb-12 sm:pb-16 px-4 sm:px-6">
           <motion.div

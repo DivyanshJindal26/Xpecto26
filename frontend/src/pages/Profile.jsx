@@ -64,15 +64,16 @@ export default function Profile() {
   useEffect(() => {
     const fetchLeadInfo = async () => {
       if (!user) return;
-      
+
       try {
         setLoadingLead(true);
-        const API_BASE_URL = import.meta.env.VITE_API_URL || "https://xpecto.org/api";
+        const API_BASE_URL =
+          import.meta.env.VITE_API_URL || "https://xpecto.org/api";
         const response = await fetch(`${API_BASE_URL}/leads/my-lead`, {
           credentials: "include",
         });
         const result = await response.json();
-        
+
         if (result.success && result.lead) {
           setLeadInfo(result.lead);
         }
@@ -101,7 +102,9 @@ export default function Profile() {
 
     if (!formData.contactNumber.trim()) {
       newErrors.contactNumber = "Contact number is required";
-    } else if (!/^[0-9]{10}$/.test(formData.contactNumber.replace(/[\s-]/g, ""))) {
+    } else if (
+      !/^[0-9]{10}$/.test(formData.contactNumber.replace(/[\s-]/g, ""))
+    ) {
       newErrors.contactNumber = "Please enter a valid 10-digit contact number";
     }
 
@@ -256,7 +259,7 @@ export default function Profile() {
                 <IconTicket className="w-5 h-5 text-purple-400" />
                 Pass Details
               </h3>
-              
+
               {loadingLead ? (
                 <div className="flex items-center justify-center py-8">
                   <IconLoader2 className="w-6 h-6 text-purple-400 animate-spin" />
@@ -267,23 +270,31 @@ export default function Profile() {
                     <div>
                       <p className="text-xs text-white/40 mb-1">Pass Type</p>
                       <p className="text-sm text-white font-medium capitalize">
-                        {leadInfo.passType === "early_bird" ? "Early Bird" : "Regular"}
+                        {leadInfo.passType === "early_bird"
+                          ? "Early Bird"
+                          : "Regular"}
                       </p>
                     </div>
                     <div>
                       <p className="text-xs text-white/40 mb-1">Amount</p>
-                      <p className="text-sm text-white font-medium">₹{leadInfo.amount}</p>
+                      <p className="text-sm text-white font-medium">
+                        ₹{leadInfo.amount}
+                      </p>
                     </div>
                     <div>
-                      <p className="text-xs text-white/40 mb-1">Payment Status</p>
+                      <p className="text-xs text-white/40 mb-1">
+                        Payment Status
+                      </p>
                       <div className="flex items-center gap-1">
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${
-                          leadInfo.paymentStatus === "completed"
-                            ? "bg-green-500/20 text-green-400 border border-green-500/30"
-                            : leadInfo.paymentStatus === "pending"
-                            ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30"
-                            : "bg-red-500/20 text-red-400 border border-red-500/30"
-                        }`}>
+                        <span
+                          className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${
+                            leadInfo.paymentStatus === "completed"
+                              ? "bg-green-500/20 text-green-400 border border-green-500/30"
+                              : leadInfo.paymentStatus === "pending"
+                                ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30"
+                                : "bg-red-500/20 text-red-400 border border-red-500/30"
+                          }`}
+                        >
                           {leadInfo.paymentStatus}
                         </span>
                       </div>
@@ -302,7 +313,9 @@ export default function Profile() {
                     </div>
                     {leadInfo.transactionId && (
                       <div className="col-span-2">
-                        <p className="text-xs text-white/40 mb-1">Transaction ID</p>
+                        <p className="text-xs text-white/40 mb-1">
+                          Transaction ID
+                        </p>
                         <p className="text-sm text-white/80 font-mono break-all">
                           {leadInfo.transactionId}
                         </p>
@@ -313,7 +326,9 @@ export default function Profile() {
               ) : (
                 <div className="p-6 rounded-xl bg-white/[0.02] border border-white/10 text-center">
                   <IconAlertCircle className="w-12 h-12 text-white/20 mx-auto mb-3" />
-                  <p className="text-white/60 mb-4">You haven't purchased a pass yet</p>
+                  <p className="text-white/60 mb-4">
+                    You haven't purchased a pass yet
+                  </p>
                   <Link
                     to="/register"
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-violet-500 text-white font-medium hover:from-purple-600 hover:to-violet-600 transition-all"

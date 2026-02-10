@@ -34,15 +34,15 @@ export default function App() {
 
   // Critical images to preload for smooth experience
   const criticalImages = [
-    "./bg.png",           // Home background
-    "./home_planet.png",  // Home planet
-    "./logo.png",         // Logo
+    "./bg.png", // Home background
+    "./home_planet.png", // Home planet
+    "./logo.png", // Logo
   ];
 
   // Preload critical images
   const { isLoading: imagesLoading, progress } = useImagePreloader(
     criticalImages,
-    showLoading
+    showLoading,
   );
 
   useEffect(() => {

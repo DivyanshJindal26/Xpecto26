@@ -43,7 +43,7 @@ export default function OptimizedImage({
       },
       {
         rootMargin: "50px", // Start loading 50px before image enters viewport
-      }
+      },
     );
 
     if (imgRef.current) {

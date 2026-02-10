@@ -17,30 +17,44 @@ export default function About() {
   const [error, setError] = useState(null);
 
   const developers = [
-    { name: "Divyansh Jindal", role: "Full Stack Developer", image: "https://image2url.com/r2/default/images/1769153935938-8daa0940-3eb3-43f5-b3fc-55d7ea222d98.png" },
-    { name: "Vansh Pandey", role: "Full Stack Developer", image: "https://image2url.com/r2/default/images/1769154252767-6f378aa0-3bbe-4b62-90e4-1d602793cfc5.png" },
+    {
+      name: "Divyansh Jindal",
+      role: "Full Stack Developer",
+      image:
+        "https://image2url.com/r2/default/images/1769153935938-8daa0940-3eb3-43f5-b3fc-55d7ea222d98.png",
+    },
+    {
+      name: "Vansh Pandey",
+      role: "Full Stack Developer",
+      image:
+        "https://image2url.com/r2/default/images/1769154252767-6f378aa0-3bbe-4b62-90e4-1d602793cfc5.png",
+    },
   ];
 
   const conveners = [
     {
       name: "Piyush Roy",
       role: "Convener",
-      image: "https://image2url.com/r2/default/images/1769153674001-3e82bd23-4f70-45c3-9ef8-cb6a47223b72.jpeg"
+      image:
+        "https://image2url.com/r2/default/images/1769153674001-3e82bd23-4f70-45c3-9ef8-cb6a47223b72.jpeg",
     },
     {
       name: "Parth Modi",
       role: "Co-Convener",
-      image: "https://image2url.com/r2/default/images/1768932558818-3736647a-c2cb-4998-924f-5c030c08a802.jpeg"
+      image:
+        "https://image2url.com/r2/default/images/1768932558818-3736647a-c2cb-4998-924f-5c030c08a802.jpeg",
     },
     {
       name: "Ayush Sawarn",
       role: "Co-Convener",
-      image: "https://image2url.com/r2/default/images/1768932490117-92c0c581-23a4-4bb1-be11-ff50314dd327.jpg"
+      image:
+        "https://image2url.com/r2/default/images/1768932490117-92c0c581-23a4-4bb1-be11-ff50314dd327.jpg",
     },
     {
       name: "Parv",
       role: "Co-Convener",
-      image: "https://image2url.com/r2/default/images/1768932603264-4f632151-fefa-494a-8a2a-3c5546c4db2e.jpg"
+      image:
+        "https://image2url.com/r2/default/images/1768932603264-4f632151-fefa-494a-8a2a-3c5546c4db2e.jpg",
     },
   ];
 
@@ -329,7 +343,11 @@ export default function About() {
                       key={idx}
                       className="flex items-center gap-4 min-w-65"
                       whileHover={{ scale: 1.03 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 20,
+                      }}
                     >
                       {/* Image */}
                       <div className="w-12 h-12 rounded-full overflow-hidden bg-linear-to-br from-cyan-400/20 to-purple-400/20 border border-white/10">
@@ -354,7 +372,6 @@ export default function About() {
                   ))}
                 </motion.div>
               </div>
-
             </motion.div>
           </div>
         </section>

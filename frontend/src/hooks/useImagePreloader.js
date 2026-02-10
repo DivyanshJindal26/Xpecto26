@@ -57,7 +57,7 @@ export function useImagePreloader(images = [], enabled = true) {
                 loadedCount++;
                 setProgress((loadedCount / images.length) * 100);
               }
-            })
+            }),
         );
 
         await Promise.all(promises);

@@ -206,25 +206,6 @@ const EventCard = ({
                     </div>
                   </motion.div>
                 )}
-
-                {registrationCount > 0 && (
-                  <motion.div
-                    className="flex items-start gap-3 group"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3, duration: 0.5 }}
-                  >
-                    <Users className="w-5 h-5 text-white/40 mt-0.5 shrink-0" />
-                    <div>
-                      <p className="font-['Michroma'] text-xs text-white/40 mb-1">
-                        Registrations
-                      </p>
-                      <p className="font-['Michroma'] text-sm text-white/80">
-                        {registrationCount} {registrationCount === 1 ? "participant" : "participants"}
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
               </div>
 
               {/* CTA Button */}
@@ -237,7 +218,10 @@ const EventCard = ({
                       ? "bg-emerald-500"
                       : "bg-linear-to-r from-white via-gray-100 to-white"
                   }`}
-                  whileHover={{ scale: registering ? 1 : 1.02, y: registering ? 0 : -2 }}
+                  whileHover={{
+                    scale: registering ? 1 : 1.02,
+                    y: registering ? 0 : -2,
+                  }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.25 }}
                 >
@@ -533,7 +517,8 @@ export default function Events() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
-              Join us for extraordinary experiences and groundbreaking competitions
+              Join us for extraordinary experiences and groundbreaking
+              competitions
             </motion.p>
 
             {/* Search Bar */}
@@ -572,7 +557,9 @@ export default function Events() {
           {error && (
             <div className="flex items-center justify-center py-32">
               <div className="backdrop-blur-md bg-red-900/40 border border-red-500/20 rounded-3xl px-8 py-6 max-w-md shadow-2xl">
-                <p className="text-red-200 text-center mb-4 font-['Michroma']">{error}</p>
+                <p className="text-red-200 text-center mb-4 font-['Michroma']">
+                  {error}
+                </p>
                 <button
                   onClick={fetchEvents}
                   className="w-full px-6 py-3 border border-red-400/40 rounded-xl text-red-300 hover:bg-red-400/10 transition font-['Michroma'] font-bold tracking-wider"
