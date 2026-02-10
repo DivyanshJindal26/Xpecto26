@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { IconLoader2, IconCheck, IconUpload, IconX, IconSparkles, IconShieldCheck } from "@tabler/icons-react";
 import { Utensils, Home, Bed, Music, GraduationCap, Gift, Ticket } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import OptimizedImage from "../components/ui/OptimizedImage";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "https://xpecto.org/api";
 
@@ -518,7 +519,13 @@ export default function Register() {
       {/* Fixed Background */}
       <div className="fixed top-0 left-0 w-full h-screen z-0">
         <div className="absolute inset-0">
-          <img src="./bg6.png" alt="" className="w-full h-full object-cover" />
+          <OptimizedImage
+            src="./bg6.png"
+            alt="Background"
+            className="w-full h-full object-cover"
+            priority={false}
+            skeleton={false}
+          />
           <div className="absolute inset-0 bg-black/70" />
         </div>
 

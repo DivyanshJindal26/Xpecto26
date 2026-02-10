@@ -426,6 +426,7 @@ export default function AdminEvents() {
                 src={event.image[0]}
                 alt={event.title}
                 className="w-full h-40 object-cover rounded-lg mb-3"
+                loading="lazy"
               />
             )}
             <h3 className="text-lg font-semibold text-white mb-2 truncate">
@@ -663,6 +664,7 @@ export default function AdminEvents() {
                               src={img}
                               alt=""
                               className="w-16 h-16 object-cover rounded"
+                              loading="lazy"
                             />
                             <span className="flex-1 text-white/60 text-sm truncate">
                               {img}

@@ -9,6 +9,7 @@ import {
   IconArrowUpRight,
   IconUsers,
 } from "@tabler/icons-react";
+import OptimizedImage from "../components/ui/OptimizedImage";
 
 export default function About() {
   const [teamMembers, setTeamMembers] = useState([]);
@@ -82,7 +83,13 @@ export default function About() {
       {/* Fixed Background Section */}
       <div className="fixed top-0 left-0 w-full h-screen z-0">
         <div className="absolute inset-0">
-          <img src="./bg4.png" alt="" className="w-full h-full object-cover" />
+          <OptimizedImage
+            src="./bg4.png"
+            alt="Background"
+            className="w-full h-full object-cover"
+            priority={false}
+            skeleton={false}
+          />
           <div className="absolute inset-0 bg-black/70" />
         </div>
 
@@ -260,6 +267,7 @@ export default function About() {
                           src={person.image}
                           alt={person.name}
                           className="w-full h-full rounded-full object-cover"
+                          loading="lazy"
                         />
                       )}
                     </div>
@@ -329,6 +337,7 @@ export default function About() {
                           src={dev.image}
                           alt={dev.name}
                           className="w-full h-full object-cover"
+                          loading="lazy"
                         />
                       </div>
 

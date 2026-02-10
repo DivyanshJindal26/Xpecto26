@@ -20,6 +20,7 @@ import { AuthProvider } from "./context/AuthContext";
 import Register from "./pages/Register";
 import Sessions from "./pages/Sessions";
 import HamburgerMenu from "./components/ui/HamburgerMenu";
+import useImagePreloader from "./hooks/useImagePreloader";
 
 export default function App() {
   const [showLoading, setShowLoading] = useState(() => {
@@ -31,24 +32,45 @@ export default function App() {
   });
   const location = useLocation();
 
+  // Critical images to preload for smooth experience
+  const criticalImages = [
+    "./bg.png",           // Home background
+    "./home_planet.png",  // Home planet
+    "./logo.png",         // Logo
+  ];
+
+  // Preload critical images
+  const { isLoading: imagesLoading, progress } = useImagePreloader(
+    criticalImages,
+    showLoading
+  );
+
   useEffect(() => {
     try {
       const visited = localStorage.getItem("xpecto_first_visit");
       if (!visited) {
         setShowLoading(true);
-        const t = setTimeout(() => {
-          try {
-            localStorage.setItem("xpecto_first_visit", "1");
-          } catch (e) {}
-          setShowLoading(false);
-        }, 10000);
-        return () => clearTimeout(t);
       }
     } catch (e) {}
   }, []);
 
+  // Hide loading screen when images are loaded
   useEffect(() => {
-    setShowLoading(false);
+    if (!imagesLoading && showLoading) {
+      const timer = setTimeout(() => {
+        try {
+          localStorage.setItem("xpecto_first_visit", "1");
+        } catch (e) {}
+        setShowLoading(false);
+      }, 500); // Small delay for smooth transition
+      return () => clearTimeout(timer);
+    }
+  }, [imagesLoading, showLoading]);
+
+  useEffect(() => {
+    if (localStorage.getItem("xpecto_first_visit")) {
+      setShowLoading(false);
+    }
   }, [location]);
   return (
     <AuthProvider>
@@ -73,7 +95,7 @@ export default function App() {
         </XpectoSideBar>
         {/* Profile Completion Modal - shows after OAuth if profile is incomplete */}
         <ProfileCompletionModal />
-        {showLoading && <LoadingScreen />}
+        {showLoading && <LoadingScreen progress={progress} />}
       </div>
     </AuthProvider>
   );

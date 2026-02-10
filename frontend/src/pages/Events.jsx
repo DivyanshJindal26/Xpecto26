@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import FloatingElement from "../components/ui/FloatingElement";
+import OptimizedImage from "../components/ui/OptimizedImage";
 
 const BACKEND_URL = import.meta.env.BACKEND_URL || "https://xpecto.org/api";
 
@@ -55,10 +56,11 @@ const EventCard = ({
                 <div className="relative w-full max-w-sm">
                   <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10">
                     {event.image && event.image.length > 0 ? (
-                      <img
+                      <OptimizedImage
                         src={event.image[0]}
                         alt={event.title}
                         className="w-full h-full object-cover"
+                        skeleton={true}
                       />
                     ) : (
                       <div className="w-full h-64 bg-white/5 flex items-center justify-center">
@@ -457,7 +459,13 @@ export default function Events() {
       {/* Fixed Background Section */}
       <div className="fixed top-0 left-0 w-full h-screen z-0">
         <div className="absolute inset-0">
-          <img src="./bg5.png" alt="" className="w-full h-full object-cover" />
+          <OptimizedImage
+            src="./bg5.png"
+            alt="Background"
+            className="w-full h-full object-cover"
+            priority={false}
+            skeleton={false}
+          />
           <div className="absolute inset-0 bg-black/70" />
         </div>
 

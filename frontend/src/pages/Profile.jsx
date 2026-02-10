@@ -204,6 +204,7 @@ export default function Profile() {
                     src={user.avatar}
                     alt={user.name}
                     className="w-24 h-24 rounded-full border-4 border-[#0a0a0f] object-cover"
+                    loading="lazy"
                   />
                 ) : (
                   <div className="w-24 h-24 rounded-full border-4 border-[#0a0a0f] bg-gradient-to-br from-purple-500/20 to-violet-500/10 flex items-center justify-center">

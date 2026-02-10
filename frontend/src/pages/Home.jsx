@@ -8,6 +8,7 @@ import ParticleBackground from "../components/ui/ParticleBackground";
 import MagneticButton from "../components/ui/MagneticButton";
 import FloatingElement from "../components/ui/FloatingElement";
 import AnimatedCounter from "../components/ui/AnimatedCounter"; 
+import OptimizedImage from "../components/ui/OptimizedImage";
 import { useAuth } from "../context/AuthContext";
 
 export default function Home() {
@@ -53,10 +54,12 @@ export default function Home() {
     <div className="w-full min-h-screen relative">
       <div className="w-full h-screen relative overflow-hidden">
          <div className="absolute inset-0">
-          <img 
+          <OptimizedImage
             src="./bg.png" 
-            alt="" 
+            alt="Background" 
             className="w-full h-full object-cover"
+            priority={true}
+            skeleton={false}
           />
           <div className="absolute inset-0 bg-black/40" />
         </div>
