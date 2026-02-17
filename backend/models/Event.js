@@ -31,6 +31,9 @@ const eventSchema = new mongoose.Schema(
     company: {
       type: String,
     },
+    prizePool: {
+      type: String,
+    },
     registrations: [
       {
         type: mongoose.Schema.Types.ObjectId,
