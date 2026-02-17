@@ -33,6 +33,7 @@ export default function AdminEvents() {
     company: "",
     image: [],
     registrationLimit: "",
+    prizePool: "",
   });
   const [saving, setSaving] = useState(false);
   const [registrations, setRegistrations] = useState([]);
@@ -87,6 +88,7 @@ export default function AdminEvents() {
       company: "",
       image: [],
       registrationLimit: "",
+      prizePool: "",
     });
     setShowModal(true);
   };
@@ -104,6 +106,7 @@ export default function AdminEvents() {
       company: event.company || "",
       image: event.image || [],
       registrationLimit: event.registrationLimit || "",
+      prizePool: event.prizePool || "",
     });
     setShowModal(true);
   };
@@ -644,18 +647,34 @@ export default function AdminEvents() {
                       </div>
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-white/80 mb-2">
-                        Registration Limit
-                      </label>
-                      <input
-                        type="number"
-                        value={formData.registrationLimit}
-                        onChange={(e) =>
-                          handleChange("registrationLimit", e.target.value)
-                        }
-                        className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-orange-500/50"
-                      />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-white/80 mb-2">
+                          Registration Limit
+                        </label>
+                        <input
+                          type="number"
+                          value={formData.registrationLimit}
+                          onChange={(e) =>
+                            handleChange("registrationLimit", e.target.value)
+                          }
+                          className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-orange-500/50"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-white/80 mb-2">
+                          Prize Pool
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="e.g., ₹50,000 or $1000"
+                          value={formData.prizePool}
+                          onChange={(e) =>
+                            handleChange("prizePool", e.target.value)
+                          }
+                          className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-orange-500/50"
+                        />
+                      </div>
                     </div>
 
                     <div>

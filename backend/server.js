@@ -8,8 +8,10 @@ import mongoSanitize from "express-mongo-sanitize";
 import xss from "xss-clean";
 import hpp from "hpp";
 import session from "express-session";
+import { setServers } from "node:dns/promises";
 
 // Load environment variables FIRST
+setServers(["1.1.1.1", "8.8.8.8"]);
 dotenv.config();
 
 import connectDB from "./config/db.js";
