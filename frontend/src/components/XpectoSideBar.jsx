@@ -31,6 +31,11 @@ export default function XpectoSideBar({ children }) {
       icon: <IconCalendarEvent className="h-5 w-5" />,
     },
     {
+      label: "Sponsors",
+      href: "/sponsors",
+      icon: <IconPresentation className="h-5 w-5" />,
+    },
+    {
       label: "Workshops",
       href: "/workshops",
       icon: <IconUsers className="h-5 w-5" />,

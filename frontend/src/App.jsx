@@ -19,6 +19,7 @@ import GoogleOneTap from "./components/GoogleOneTap";
 import { AuthProvider } from "./context/AuthContext";
 import Exhibitions from "./pages/Exhibitions";
 import Sessions from "./pages/Sessions";
+import Sponsors from "./pages/Sponsors";
 import HamburgerMenu from "./components/ui/HamburgerMenu";
 
 export default function App() {
@@ -61,6 +62,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/events" element={<Events />} />
+            <Route path="/sponsors" element={<Sponsors />} />
             <Route path="/about" element={<About />} />
             <Route path="/profile" element={<Profile />} /> 
             <Route path="/workshops" element={<Sessions />} />

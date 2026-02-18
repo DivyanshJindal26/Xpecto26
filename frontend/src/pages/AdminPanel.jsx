@@ -13,6 +13,7 @@ import AdminEvents from "../components/admin/AdminEvents";
 import AdminSessions from "../components/admin/AdminSessions";
 import AdminExhibitions from "../components/admin/AdminExhibitions";
 import AdminTeam from "../components/admin/AdminTeam";
+import AdminSponsors from "../components/admin/AdminSponsors";
 
 export default function AdminPanel() {
   const { user, isAuthenticated, loading } = useAuth();
@@ -40,6 +41,7 @@ export default function AdminPanel() {
     { id: "events", label: "Events", icon: IconCalendarEvent },
     { id: "sessions", label: "Sessions", icon: IconUsers },
     { id: "exhibitions", label: "Exhibitions", icon: IconPresentation },
+    { id: "sponsors", label: "Sponsors", icon: IconPresentation },
     { id: "team", label: "Team", icon: IconUsers },
   ];
 
@@ -93,6 +95,7 @@ export default function AdminPanel() {
         {activeTab === "events" && <AdminEvents />}
         {activeTab === "sessions" && <AdminSessions />}
         {activeTab === "exhibitions" && <AdminExhibitions />}
+        {activeTab === "sponsors" && <AdminSponsors />}
         {activeTab === "team" && <AdminTeam />}
       </div>
     </div>
