@@ -19,7 +19,7 @@ const WorkshopCard = ({ workshop, index }) => {
   return (
     <motion.div
       ref={cardRef}
-      className="flex-shrink-0 w-[380px] h-[520px]"
+      className="shrink-0 w-95 h-130"
       initial={{ opacity: 0, scale: 0.9 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
@@ -42,7 +42,7 @@ const WorkshopCard = ({ workshop, index }) => {
         />
 
         {/* Background image section */}
-        <div className="relative h-[240px] overflow-hidden">
+        <div className="relative h-60 overflow-hidden">
           <motion.img
             src={workshop.image}
             alt={workshop.title}
@@ -50,7 +50,7 @@ const WorkshopCard = ({ workshop, index }) => {
             animate={{ scale: isHovered ? 1.1 : 1 }}
             transition={{ duration: 0.6 }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black" />
+          <div className="absolute inset-0 bg-linear-to-b from-transparent via-black/30 to-black" />
 
           {/* Floating time badge */}
           <motion.div
@@ -90,7 +90,7 @@ const WorkshopCard = ({ workshop, index }) => {
 
             {/* Subtitle line */}
             <motion.div
-              className="h-0.5 bg-gradient-to-r from-white via-gray-400 to-transparent mb-3"
+              className="h-0.5 bg-linear-to-r from-white via-gray-400 to-transparent mb-3"
               initial={{ width: "0%" }}
               whileInView={{ width: "100%" }}
               viewport={{ once: true }}
@@ -110,7 +110,7 @@ const WorkshopCard = ({ workshop, index }) => {
               animate={{ opacity: isHovered ? 1 : 0.8 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-white to-gray-400 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-linear-to-br from-white to-gray-400 flex items-center justify-center">
                 <span className="font-['Roboto'] text-black font-bold text-sm">
                   {(workshop.speaker || workshop.venue || "X").charAt(0)}
                 </span>
@@ -276,7 +276,7 @@ export default function Workshops() {
             <motion.img
               src="./blue_planet.png"
               alt="Planet"
-              className="w-[600px] h-[600px] object-contain"
+              className="w-150 h-150 object-contain"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.2, delay: 0.2 }}
@@ -314,7 +314,16 @@ export default function Workshops() {
             </motion.div>
 
             <motion.h1
-              className="font-['Michroma'] text-6xl md:text-8xl font-light text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-white mb-8 tracking-[0.2em] leading-tight"
+              className="
+              font-['Michroma']
+              text-3xl sm:text-5xl md:text-7xl lg:text-8xl
+              font-light
+              text-transparent bg-clip-text
+              bg-linear-to-r from-white via-gray-200 to-white
+              mb-6 sm:mb-8
+              tracking-widest sm:tracking-[0.15em] md:tracking-[0.2em]
+              leading-tight
+            "
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.2, delay: 0.3 }}
@@ -322,8 +331,9 @@ export default function Workshops() {
               WORKSHOPS
             </motion.h1>
 
+
             <motion.div
-              className="h-1 w-48 mx-auto bg-gradient-to-r from-transparent via-white to-transparent mb-8"
+              className="h-1 w-48 mx-auto bg-linear-to-r from-transparent via-white to-transparent mb-8"
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: 1, delay: 0.5 }}
@@ -381,7 +391,7 @@ export default function Workshops() {
                           {dateLabel}
                         </span>
                       </div>
-                      <div className="flex-1 h-px bg-gradient-to-r from-white/50 to-transparent" />
+                      <div className="flex-1 h-px bg-linear-to-r from-white/50 to-transparent" />
                     </motion.div>
 
                     <div className="overflow-x-auto scrollbar-hide">
@@ -417,11 +427,11 @@ export default function Workshops() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <div className="h-px w-16 bg-gradient-to-r from-transparent to-white" />
+            <div className="h-px w-16 bg-linear-to-r from-transparent to-white" />
             <p className="font-['Roboto'] text-gray-400 text-sm tracking-[0.3em]">
               XPECTO'26
             </p>
-            <div className="h-px w-16 bg-gradient-to-l from-transparent to-white" />
+            <div className="h-px w-16 bg-linear-to-l from-transparent to-white" />
           </motion.div>
           <p className="font-['Roboto'] text-gray-500 text-xs tracking-widest">
             MARCH 14-16, 2026 • HIMALAYAS' BIGGEST TECHFEST

@@ -10,6 +10,9 @@ import {
   IconLoader2,
   IconCheck,
   IconUsers,
+  IconDownload,
+  IconUpload,
+  IconRefresh,
 } from "@tabler/icons-react";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "https://xpecto.org/api";
@@ -24,11 +27,13 @@ export default function AdminEvents() {
     title: "",
     description: "",
     venue: "",
+    rulebook: "",
     date: "",
     club_name: "",
     company: "",
     image: [],
     registrationLimit: "",
+    prizePool: "",
   });
   const [saving, setSaving] = useState(false);
   const [registrations, setRegistrations] = useState([]);
@@ -77,11 +82,13 @@ export default function AdminEvents() {
       title: "",
       description: "",
       venue: "",
+      rulebook: "",
       date: "",
       club_name: "",
       company: "",
       image: [],
       registrationLimit: "",
+      prizePool: "",
     });
     setShowModal(true);
   };
@@ -93,11 +100,13 @@ export default function AdminEvents() {
       title: event.title || "",
       description: event.description || "",
       venue: event.venue || "",
+      rulebook: event.rulebook || "",
       date: event.date ? new Date(event.date).toISOString().split("T")[0] : "",
       club_name: event.club_name || "",
       company: event.company || "",
       image: event.image || [],
       registrationLimit: event.registrationLimit || "",
+      prizePool: event.prizePool || "",
     });
     setShowModal(true);
   };
@@ -185,6 +194,176 @@ export default function AdminEvents() {
     }));
   };
 
+  const escapeCSV = (value) => {
+    if (value == null) return "";
+    const stringValue = String(value);
+    if (
+      stringValue.includes(",") ||
+      stringValue.includes('"') ||
+      stringValue.includes("\n")
+    ) {
+      return `"${stringValue.replace(/"/g, '""')}"`;
+    }
+    return stringValue;
+  };
+
+  const exportEventDetails = () => {
+    const headers = [
+      "Title",
+      "Description",
+      "Venue",
+      "Date",
+      "Club Name",
+      "Company",
+      "Registration Limit",
+      "Total Registrations",
+      "Images",
+      "Created At",
+    ];
+
+    const rows = events.map((event) => [
+      event.title,
+      event.description,
+      event.venue || "",
+      event.date ? new Date(event.date).toLocaleDateString() : "",
+      event.club_name || "",
+      event.company || "",
+      event.registrationLimit || "",
+      event.registrations?.length || 0,
+      event.image?.join("; ") || "",
+      new Date(event.createdAt).toLocaleString(),
+    ]);
+
+    const csv = [headers, ...rows]
+      .map((row) => row.map(escapeCSV).join(","))
+      .join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `event-details-${new Date().toISOString().split("T")[0]}.csv`;
+    a.click();
+  };
+
+  const exportRegistrationDetails = async () => {
+    try {
+      // Fetch all registrations for all events
+      const allRegistrations = [];
+
+      for (const event of events) {
+        const response = await fetch(
+          `${API_BASE_URL}/events/${event._id}/registrations`,
+          { credentials: "include" },
+        );
+        const result = await response.json();
+
+        if (result.success && result.data.registrations) {
+          result.data.registrations.forEach((reg) => {
+            allRegistrations.push({
+              eventTitle: event.title,
+              eventVenue: event.venue,
+              eventDate: event.date,
+              ...reg,
+            });
+          });
+        }
+      }
+
+      const headers = [
+        "Event Title",
+        "Event Venue",
+        "Event Date",
+        "Name",
+        "Email",
+        "Phone",
+        "College Mail",
+        "College",
+      ];
+
+      const rows = allRegistrations.map((reg) => [
+        reg.eventTitle,
+        reg.eventVenue || "",
+        reg.eventDate ? new Date(reg.eventDate).toLocaleDateString() : "",
+        reg.name || "",
+        reg.email || "",
+        reg.contactNumber || "",
+        reg.collegeEmail || reg.email || "",
+        reg.collegeName || "",
+      ]);
+
+      const csv = [headers, ...rows]
+        .map((row) => row.map(escapeCSV).join(","))
+        .join("\n");
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `event-registrations-${new Date().toISOString().split("T")[0]}.csv`;
+      a.click();
+    } catch (error) {
+      console.error("Failed to export registrations:", error);
+      alert("Failed to export registration details");
+    }
+  };
+
+  const importEvents = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json";
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      try {
+        const text = await file.text();
+        const eventsData = JSON.parse(text);
+
+        if (!Array.isArray(eventsData)) {
+          alert("Invalid JSON format. Expected an array of events.");
+          return;
+        }
+
+        // Validate and create events
+        let successCount = 0;
+        let failCount = 0;
+
+        for (const eventData of eventsData) {
+          try {
+            const response = await fetch(`${API_BASE_URL}/events`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify(eventData),
+            });
+
+            const result = await response.json();
+            if (result.success) {
+              successCount++;
+            } else {
+              failCount++;
+              console.error(
+                `Failed to create event: ${eventData.title}`,
+                result.message,
+              );
+            }
+          } catch (error) {
+            failCount++;
+            console.error(`Error creating event: ${eventData.title}`, error);
+          }
+        }
+
+        fetchEvents();
+        alert(
+          `Import completed!\nSuccessfully created: ${successCount}\nFailed: ${failCount}`,
+        );
+      } catch (error) {
+        console.error("Failed to import events:", error);
+        alert("Failed to import events. Please ensure the file is valid JSON.");
+      }
+    };
+    input.click();
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -200,13 +379,48 @@ export default function AdminEvents() {
         <h2 className="text-xl font-semibold text-white">
           Events ({events.length})
         </h2>
-        <button
-          onClick={handleCreate}
-          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500/20 to-red-500/10 border border-orange-500/30 rounded-xl text-orange-300 hover:bg-orange-500/30 transition-all"
-        >
-          <IconPlus className="w-5 h-5" />
-          Create Event
-        </button>
+        <div className="flex items-center gap-2">
+          <div className="relative group">
+            <button className="flex items-center gap-2 px-4 py-2 bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 rounded-xl text-white transition-colors">
+              <IconDownload className="w-5 h-5" />
+              Export
+            </button>
+            <div className="absolute right-0 mt-2 w-56 bg-[#0a0a0f] border border-white/10 rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
+              <button
+                onClick={exportEventDetails}
+                className="w-full px-4 py-3 text-left text-white hover:bg-white/[0.05] rounded-t-xl transition-colors"
+              >
+                Export Event Details
+              </button>
+              <button
+                onClick={exportRegistrationDetails}
+                className="w-full px-4 py-3 text-left text-white hover:bg-white/[0.05] rounded-b-xl transition-colors"
+              >
+                Export Registration Details
+              </button>
+            </div>
+          </div>
+          <button
+            onClick={importEvents}
+            className="flex items-center gap-2 px-4 py-2 bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 rounded-xl text-white transition-colors"
+          >
+            <IconUpload className="w-5 h-5" />
+            Import JSON
+          </button>
+          <button
+            onClick={fetchEvents}
+            className="flex items-center gap-2 px-4 py-2 bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 rounded-xl text-white transition-colors"
+          >
+            <IconRefresh className="w-5 h-5" />
+          </button>
+          <button
+            onClick={handleCreate}
+            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500/20 to-red-500/10 border border-orange-500/30 rounded-xl text-orange-300 hover:bg-orange-500/30 transition-all"
+          >
+            <IconPlus className="w-5 h-5" />
+            Create Event
+          </button>
+        </div>
       </div>
 
       {/* Events List */}
@@ -223,6 +437,7 @@ export default function AdminEvents() {
                 src={event.image[0]}
                 alt={event.title}
                 className="w-full h-40 object-cover rounded-lg mb-3"
+                loading="lazy"
               />
             )}
             <h3 className="text-lg font-semibold text-white mb-2 truncate">
@@ -370,7 +585,24 @@ export default function AdminEvents() {
                           className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-orange-500/50"
                         />
                       </div>
+                    </div>
 
+                    <div>
+                      <label className="block text-sm font-medium text-white/80 mb-2">
+                        Rulebook URL
+                      </label>
+                      <input
+                        type="url"
+                        value={formData.rulebook}
+                        onChange={(e) =>
+                          handleChange("rulebook", e.target.value)
+                        }
+                        placeholder="https://example.com/rulebook.pdf"
+                        className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-orange-500/50"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-white/80 mb-2">
                           Date *
@@ -415,18 +647,34 @@ export default function AdminEvents() {
                       </div>
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-white/80 mb-2">
-                        Registration Limit
-                      </label>
-                      <input
-                        type="number"
-                        value={formData.registrationLimit}
-                        onChange={(e) =>
-                          handleChange("registrationLimit", e.target.value)
-                        }
-                        className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-orange-500/50"
-                      />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-white/80 mb-2">
+                          Registration Limit
+                        </label>
+                        <input
+                          type="number"
+                          value={formData.registrationLimit}
+                          onChange={(e) =>
+                            handleChange("registrationLimit", e.target.value)
+                          }
+                          className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-orange-500/50"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-white/80 mb-2">
+                          Prize Pool
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="e.g., ₹50,000 or $1000"
+                          value={formData.prizePool}
+                          onChange={(e) =>
+                            handleChange("prizePool", e.target.value)
+                          }
+                          className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-orange-500/50"
+                        />
+                      </div>
                     </div>
 
                     <div>
@@ -443,6 +691,7 @@ export default function AdminEvents() {
                               src={img}
                               alt=""
                               className="w-16 h-16 object-cover rounded"
+                              loading="lazy"
                             />
                             <span className="flex-1 text-white/60 text-sm truncate">
                               {img}

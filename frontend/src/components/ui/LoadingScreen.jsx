@@ -1,6 +1,7 @@
 import React from "react";
+import { motion } from "framer-motion";
 
-export default function LoadingScreen() {
+export default function LoadingScreen({ progress = 0 }) {
   return (
     <div
       role="status"
@@ -43,6 +44,44 @@ export default function LoadingScreen() {
       >
         Loading Xpecto...
       </div>
+
+      {/* Progress Bar */}
+      {progress > 0 && (
+        <div
+          style={{
+            width: "200px",
+            height: "3px",
+            backgroundColor: "rgba(255,255,255,0.1)",
+            borderRadius: "2px",
+            marginTop: "16px",
+            overflow: "hidden",
+          }}
+        >
+          <motion.div
+            style={{
+              height: "100%",
+              backgroundColor: "white",
+              borderRadius: "2px",
+            }}
+            initial={{ width: "0%" }}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.3 }}
+          />
+        </div>
+      )}
+
+      {/* Progress Text */}
+      {progress > 0 && (
+        <div
+          style={{
+            color: "rgba(255,255,255,0.6)",
+            marginTop: "8px",
+            fontSize: "12px",
+          }}
+        >
+          {Math.round(progress)}%
+        </div>
+      )}
 
       <style>{`
         @keyframes spin {

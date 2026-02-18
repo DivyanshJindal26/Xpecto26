@@ -7,6 +7,8 @@ import {
   IconEdit,
   IconTrash,
   IconUsers,
+  IconDownload,
+  IconRefresh,
 } from "@tabler/icons-react";
 
 export default function AdminTeam() {
@@ -141,6 +143,35 @@ export default function AdminTeam() {
     }
   };
 
+  const escapeCSV = (value) => {
+    if (value == null) return "";
+    const stringValue = String(value);
+    if (stringValue.includes(",") || stringValue.includes('"') || stringValue.includes("\n")) {
+      return `"${stringValue.replace(/"/g, '""')}"`;
+    }
+    return stringValue;
+  };
+
+  const exportToCSV = () => {
+    const headers = ["Name", "Team/Role", "Image URL", "Display Order", "Created At"];
+
+    const rows = teamMembers.map((member) => [
+      member.name,
+      member.team,
+      member.image || "",
+      member.order || 0,
+      member.createdAt ? new Date(member.createdAt).toLocaleString() : "",
+    ]);
+
+    const csv = [headers, ...rows].map((row) => row.map(escapeCSV).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `team-members-${new Date().toISOString().split("T")[0]}.csv`;
+    a.click();
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -160,13 +191,28 @@ export default function AdminTeam() {
             {teamMembers.length}
           </span>
         </div>
-        <button
-          onClick={handleCreate}
-          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-lg font-medium transition-all duration-200"
-        >
-          <IconPlus className="w-5 h-5" />
-          Add Member
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={exportToCSV}
+            className="flex items-center gap-2 px-4 py-2 bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 rounded-xl text-white transition-colors"
+          >
+            <IconDownload className="w-5 h-5" />
+            Export
+          </button>
+          <button
+            onClick={fetchTeamMembers}
+            className="flex items-center gap-2 px-4 py-2 bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 rounded-xl text-white transition-colors"
+          >
+            <IconRefresh className="w-5 h-5" />
+          </button>
+          <button
+            onClick={handleCreate}
+            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-lg font-medium transition-all duration-200"
+          >
+            <IconPlus className="w-5 h-5" />
+            Add Member
+          </button>
+        </div>
       </div>
 
       {/* Error Message */}

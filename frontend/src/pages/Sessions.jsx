@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from "motion/react";
 import { useState, useRef, useEffect } from "react";
 import FlowingMenu from "../components/ui/FlowingMenu";
 import FloatingElement from "../components/ui/FloatingElement";
+import OptimizedImage from "../components/ui/OptimizedImage";
 
 const SessionCard = ({ session, index }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -253,11 +254,20 @@ export default function Sessions() {
   }, []);
 
   return (
-    <div ref={containerRef} className="w-full min-h-screen relative bg-black overflow-x-hidden">
+    <div
+      ref={containerRef}
+      className="w-full min-h-screen relative bg-black overflow-x-hidden"
+    >
       {/* Fixed Background Section */}
       <div className="fixed top-0 left-0 w-full h-screen z-0">
         <div className="absolute inset-0">
-          <img src="./bg3.png" alt="" className="w-full h-full object-cover" />
+          <OptimizedImage
+            src="./bg3.png"
+            alt="Background"
+            className="w-full h-full object-cover"
+            priority={false}
+            skeleton={false}
+          />
           <div className="absolute inset-0 bg-black/40" />
         </div>
 
@@ -285,8 +295,6 @@ export default function Sessions() {
 
       {/* Scrollable Content */}
       <div className="relative z-10">
-       
-
         {/* Header Section */}
         <div className="relative pt-24 sm:pt-32 lg:pt-40 pb-12 sm:pb-16 px-4 sm:px-6">
           <motion.div

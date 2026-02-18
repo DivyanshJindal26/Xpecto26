@@ -1,4 +1,4 @@
-import Session from '../models/Session.js';
+import Session from "../models/Session.js";
 
 // @desc    Create a new session
 // @route   POST /api/sessions
@@ -6,7 +6,7 @@ import Session from '../models/Session.js';
 export const createSession = async (req, res, next) => {
   try {
     const session = await Session.create(req.body);
-    
+
     res.status(201).json({
       success: true,
       data: session,
@@ -22,7 +22,7 @@ export const createSession = async (req, res, next) => {
 export const getAllSessions = async (req, res, next) => {
   try {
     const sessions = await Session.find().sort({ date: 1 });
-    
+
     res.status(200).json({
       success: true,
       count: sessions.length,
@@ -43,7 +43,7 @@ export const getSessionById = async (req, res, next) => {
     if (!session) {
       return res.status(404).json({
         success: false,
-        message: 'Session not found',
+        message: "Session not found",
       });
     }
 
@@ -61,19 +61,15 @@ export const getSessionById = async (req, res, next) => {
 // @access  Public
 export const updateSession = async (req, res, next) => {
   try {
-    const session = await Session.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+    const session = await Session.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!session) {
       return res.status(404).json({
         success: false,
-        message: 'Session not found',
+        message: "Session not found",
       });
     }
 
@@ -96,13 +92,13 @@ export const deleteSession = async (req, res, next) => {
     if (!session) {
       return res.status(404).json({
         success: false,
-        message: 'Session not found',
+        message: "Session not found",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: 'Session deleted successfully',
+      message: "Session deleted successfully",
       data: {},
     });
   } catch (error) {

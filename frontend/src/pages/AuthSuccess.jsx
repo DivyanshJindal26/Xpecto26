@@ -33,7 +33,7 @@ export default function AuthSuccess() {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-          className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-green-500/20 to-emerald-500/10 border border-green-500/30 flex items-center justify-center"
+          className="w-20 h-20 mx-auto mb-6 rounded-full bg-linear-to-br from-green-500/20 to-emerald-500/10 border border-green-500/30 flex items-center justify-center"
         >
           <motion.svg
             initial={{ pathLength: 0 }}

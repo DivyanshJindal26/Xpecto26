@@ -19,6 +19,15 @@ export default function AdminSessions() {
   const [modalMode, setModalMode] = useState("create");
   const [selectedSession, setSelectedSession] = useState(null);
 
+  useEffect(() => {
+    if (!showModal) return;
+    const handleEsc = (e) => {
+      if (e.key === "Escape") setShowModal(false);
+    };
+    document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
+  }, [showModal]);
+
   const fetchSessions = async () => {
     setLoading(true);
     try {

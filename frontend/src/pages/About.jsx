@@ -9,6 +9,7 @@ import {
   IconArrowUpRight,
   IconUsers,
 } from "@tabler/icons-react";
+import OptimizedImage from "../components/ui/OptimizedImage";
 
 export default function About() {
   const [teamMembers, setTeamMembers] = useState([]);
@@ -16,30 +17,44 @@ export default function About() {
   const [error, setError] = useState(null);
 
   const developers = [
-    { name: "Divyansh Jindal", role: "Full Stack Developer", image: "https://image2url.com/r2/default/images/1769153935938-8daa0940-3eb3-43f5-b3fc-55d7ea222d98.png" },
-    { name: "Vansh Pandey", role: "Full Stack Developer", image: "https://image2url.com/r2/default/images/1769154252767-6f378aa0-3bbe-4b62-90e4-1d602793cfc5.png" },
+    {
+      name: "Divyansh Jindal",
+      role: "Full Stack Developer",
+      image:
+        "https://image2url.com/r2/default/images/1769153935938-8daa0940-3eb3-43f5-b3fc-55d7ea222d98.png",
+    },
+    {
+      name: "Vansh Pandey",
+      role: "Full Stack Developer",
+      image:
+        "https://image2url.com/r2/default/images/1769154252767-6f378aa0-3bbe-4b62-90e4-1d602793cfc5.png",
+    },
   ];
 
   const conveners = [
     {
       name: "Piyush Roy",
       role: "Convener",
-      image: "https://image2url.com/r2/default/images/1769153674001-3e82bd23-4f70-45c3-9ef8-cb6a47223b72.jpeg"
+      image:
+        "https://image2url.com/r2/default/images/1769153674001-3e82bd23-4f70-45c3-9ef8-cb6a47223b72.jpeg",
     },
     {
       name: "Parth Modi",
       role: "Co-Convener",
-      image: "https://image2url.com/r2/default/images/1768932558818-3736647a-c2cb-4998-924f-5c030c08a802.jpeg"
+      image:
+        "https://image2url.com/r2/default/images/1768932558818-3736647a-c2cb-4998-924f-5c030c08a802.jpeg",
     },
     {
       name: "Ayush Sawarn",
       role: "Co-Convener",
-      image: "https://image2url.com/r2/default/images/1768932490117-92c0c581-23a4-4bb1-be11-ff50314dd327.jpg"
+      image:
+        "https://image2url.com/r2/default/images/1768932490117-92c0c581-23a4-4bb1-be11-ff50314dd327.jpg",
     },
     {
       name: "Parv",
       role: "Co-Convener",
-      image: "https://image2url.com/r2/default/images/1768932603264-4f632151-fefa-494a-8a2a-3c5546c4db2e.jpg"
+      image:
+        "https://image2url.com/r2/default/images/1768932603264-4f632151-fefa-494a-8a2a-3c5546c4db2e.jpg",
     },
   ];
 
@@ -82,7 +97,13 @@ export default function About() {
       {/* Fixed Background Section */}
       <div className="fixed top-0 left-0 w-full h-screen z-0">
         <div className="absolute inset-0">
-          <img src="./bg4.png" alt="" className="w-full h-full object-cover" />
+          <OptimizedImage
+            src="./bg4.png"
+            alt="Background"
+            className="w-full h-full object-cover"
+            priority={false}
+            skeleton={false}
+          />
           <div className="absolute inset-0 bg-black/70" />
         </div>
 
@@ -98,7 +119,7 @@ export default function About() {
             <motion.img
               src="./golden_planet.png"
               alt="Planet"
-              className="w-[350px] h-[350px] lg:w-[450px] lg:h-[450px] object-contain"
+              className="w-87.5 h-87.5 lg:w-112.5 lg:h-112.5 object-contain"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.2, delay: 0.2 }}
@@ -131,7 +152,7 @@ export default function About() {
             </motion.div>
 
             <motion.h1
-              className="font-['Michroma'] text-5xl md:text-7xl font-light text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-white mb-8 tracking-[0.2em] leading-tight"
+              className="font-['Michroma'] text-5xl md:text-7xl font-light text-transparent bg-clip-text bg-linear-to-r from-white via-gray-200 to-white mb-8 tracking-[0.2em] leading-tight"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.2, delay: 0.3 }}
@@ -140,7 +161,7 @@ export default function About() {
             </motion.h1>
 
             <motion.div
-              className="h-1 w-48 mx-auto bg-gradient-to-r from-transparent via-white to-transparent mb-8"
+              className="h-1 w-48 mx-auto bg-linear-to-r from-transparent via-white to-transparent mb-8"
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: 1, delay: 0.5 }}
@@ -229,7 +250,7 @@ export default function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="md:col-span-4 backdrop-blur-md bg-gradient-to-br from-purple-900/40 to-pink-900/40 border border-white/10 rounded-3xl p-8 hover:from-purple-900/50 hover:to-pink-900/50 hover:border-white/20 transition-all duration-500 group shadow-2xl"
+              className="md:col-span-4 backdrop-blur-md bg-linear-to-br from-purple-900/40 to-pink-900/40 border border-white/10 rounded-3xl p-8 hover:from-purple-900/50 hover:to-pink-900/50 hover:border-white/20 transition-all duration-500 group shadow-2xl"
             >
               <IconBrandInstagram className="w-10 h-10 text-white/60 mb-6 group-hover:scale-110 transition-transform" />
               <p className="font-['Michroma'] text-2xl font-light text-white">
@@ -254,12 +275,13 @@ export default function About() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
                 {conveners.map((person, idx) => (
                   <div key={idx} className="text-center">
-                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-white/10">
+                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-linear-to-br from-cyan-500/20 to-blue-500/20 border border-white/10">
                       {person.image && (
                         <img
                           src={person.image}
                           alt={person.name}
                           className="w-full h-full rounded-full object-cover"
+                          loading="lazy"
                         />
                       )}
                     </div>
@@ -290,7 +312,7 @@ export default function About() {
                 allowFullScreen=""
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="grayscale invert-[0.9] opacity-80 hover:opacity-100 transition-opacity duration-500 md:h-[400px]"
+                className="grayscale invert-[0.9] opacity-80 hover:opacity-100 transition-opacity duration-500 md:h-100"
               />
             </motion.div>
 
@@ -319,16 +341,21 @@ export default function About() {
                   {developers.map((dev, idx) => (
                     <motion.div
                       key={idx}
-                      className="flex items-center gap-4 min-w-[260px]"
+                      className="flex items-center gap-4 min-w-65"
                       whileHover={{ scale: 1.03 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 20,
+                      }}
                     >
                       {/* Image */}
-                      <div className="w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br from-cyan-400/20 to-purple-400/20 border border-white/10">
+                      <div className="w-12 h-12 rounded-full overflow-hidden bg-linear-to-br from-cyan-400/20 to-purple-400/20 border border-white/10">
                         <img
                           src={dev.image}
                           alt={dev.name}
                           className="w-full h-full object-cover"
+                          loading="lazy"
                         />
                       </div>
 
@@ -345,7 +372,6 @@ export default function About() {
                   ))}
                 </motion.div>
               </div>
-
             </motion.div>
           </div>
         </section>
@@ -411,7 +437,7 @@ export default function About() {
                 >
                   {/* Member Image */}
                   <div className="relative mb-6">
-                    <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-white/10">
+                    <div className="aspect-square rounded-2xl overflow-hidden bg-linear-to-br from-cyan-500/20 to-purple-500/20 border border-white/10">
                       {member.image ? (
                         <img
                           src={member.image}
@@ -466,11 +492,11 @@ export default function About() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <div className="h-px w-16 bg-gradient-to-r from-transparent to-white" />
+            <div className="h-px w-16 bg-linear-to-r from-transparent to-white" />
             <p className="font-['Michroma'] text-gray-400 text-sm tracking-[0.3em]">
               XPECTO'26
             </p>
-            <div className="h-px w-16 bg-gradient-to-l from-transparent to-white" />
+            <div className="h-px w-16 bg-linear-to-l from-transparent to-white" />
           </motion.div>
           <p className="font-['Michroma'] text-gray-500 text-xs tracking-widest mb-8">
             MARCH 14-16, 2026 • HIMALAYAS' BIGGEST TECHFEST

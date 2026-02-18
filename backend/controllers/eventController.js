@@ -225,7 +225,7 @@ export const getEventRegistrations = async (req, res, next) => {
   try {
     const event = await Event.findById(req.params.id).populate(
       "registrations",
-      "name email collegeEmail collegeName",
+      "name email contactNumber collegeEmail collegeName",
     );
 
     if (!event) {

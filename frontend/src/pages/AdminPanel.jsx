@@ -6,12 +6,12 @@ import {
   IconArrowLeft,
   IconCalendarEvent,
   IconUsers,
-  IconPresentation,
+  IconReceipt,
+  IconSchool,
 } from "@tabler/icons-react";
 import { useAuth } from "../context/AuthContext";
 import AdminEvents from "../components/admin/AdminEvents";
-import AdminSessions from "../components/admin/AdminSessions";
-import AdminExhibitions from "../components/admin/AdminExhibitions";
+import AdminWorkshops from "../components/admin/AdminWorkshops";
 import AdminTeam from "../components/admin/AdminTeam";
 import AdminSponsors from "../components/admin/AdminSponsors";
 
@@ -78,8 +78,8 @@ export default function AdminPanel() {
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-sm sm:text-base font-medium transition-all duration-200 ${
                 activeTab === tab.id
-                  ? "bg-gradient-to-r from-orange-500/20 to-red-500/10 border border-orange-500/30 text-orange-300"
-                  : "bg-white/[0.02] border border-white/10 text-white/60 hover:bg-white/[0.04] hover:text-white/80"
+                  ? "bg-linear-to-r from-orange-500/20 to-red-500/10 border border-orange-500/30 text-orange-300"
+                  : "bg-white/2 border border-white/10 text-white/60 hover:bg-white/4 hover:text-white/80"
               }`}
             >
               <Icon className="w-4 h-4 sm:w-5 sm:h-5" />

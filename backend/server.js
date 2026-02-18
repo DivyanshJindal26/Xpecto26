@@ -8,8 +8,10 @@ import mongoSanitize from "express-mongo-sanitize";
 import xss from "xss-clean";
 import hpp from "hpp";
 import session from "express-session";
+import { setServers } from "node:dns/promises";
 
 // Load environment variables FIRST
+setServers(["1.1.1.1", "8.8.8.8"]);
 dotenv.config();
 
 import connectDB from "./config/db.js";
@@ -25,6 +27,7 @@ import proniteRoutes from "./routes/proniteRoutes.js";
 import ticketRoutes from "./routes/ticketRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import teamRoutes from "./routes/teamRoutes.js";
+import leadRoutes from "./routes/leadRoutes.js";
 
 // Connect to database
 connectDB();
@@ -71,6 +74,8 @@ const corsOptions = {
   origin: function (origin, callback) {
     const allowedOrigins = [
       process.env.FRONTEND_URL,
+      "https://xpecto.org",
+      "https://www.xpecto.org",
       "http://localhost:5173",
     ].filter(Boolean);
 
@@ -89,9 +94,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(cookieParser());
 
-// Body parser with size limits
-app.use(express.json({ limit: "10kb" }));
-app.use(express.urlencoded({ extended: true, limit: "10kb" }));
+// Body parser with size limits (increased to allow base64 file uploads)
+// NOTE: Keep this reasonably constrained in production or switch to multipart uploads.
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 // Data sanitization against NoSQL injection
 app.use(mongoSanitize());
@@ -134,6 +140,7 @@ app.use("/api/workshops", workshopRoutes);
 app.use("/api/pronites", proniteRoutes);
 app.use("/api/tickets", ticketRoutes);
 app.use("/api/team", teamRoutes);
+app.use("/api/leads", leadRoutes);
 
 // Error handling middleware (must be last)
 app.use(errorHandler);

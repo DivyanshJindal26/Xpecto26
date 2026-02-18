@@ -21,7 +21,7 @@ export default function AuthError() {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-          className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-red-500/20 to-rose-500/10 border border-red-500/30 flex items-center justify-center"
+          className="w-20 h-20 mx-auto mb-6 rounded-full bg-linear-to-br from-red-500/20 to-rose-500/10 border border-red-500/30 flex items-center justify-center"
         >
           <IconAlertTriangle className="w-10 h-10 text-red-400" />
         </motion.div>
@@ -54,7 +54,7 @@ export default function AuthError() {
         >
           <button
             onClick={handleRetry}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-purple-500/20 to-violet-500/10 border border-purple-500/30 text-white hover:border-purple-400/50 transition-all duration-200"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-linear-to-r from-purple-500/20 to-violet-500/10 border border-purple-500/30 text-white hover:border-purple-400/50 transition-all duration-200"
           >
             <IconRefresh className="w-5 h-5" />
             Try Again
@@ -62,7 +62,7 @@ export default function AuthError() {
 
           <Link
             to="/"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white/80 hover:bg-white/[0.08] hover:border-white/20 transition-all duration-200"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white/4 border border-white/10 text-white/80 hover:bg-white/8 hover:border-white/20 transition-all duration-200"
           >
             <IconHome className="w-5 h-5" />
             Go Home
