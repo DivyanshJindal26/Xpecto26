@@ -13,7 +13,7 @@ import { useAuth } from "../context/AuthContext";
 import AdminEvents from "../components/admin/AdminEvents";
 import AdminWorkshops from "../components/admin/AdminWorkshops";
 import AdminTeam from "../components/admin/AdminTeam";
-import AdminLeads from "../components/admin/AdminLeads";
+import AdminSponsors from "../components/admin/AdminSponsors";
 
 export default function AdminPanel() {
   const { user, isAuthenticated, loading } = useAuth();
@@ -39,8 +39,9 @@ export default function AdminPanel() {
 
   const tabs = [
     { id: "events", label: "Events", icon: IconCalendarEvent },
-    { id: "workshops", label: "Workshops", icon: IconSchool },
-    { id: "leads", label: "Leads", icon: IconReceipt },
+    { id: "sessions", label: "Sessions", icon: IconUsers },
+    { id: "exhibitions", label: "Exhibitions", icon: IconPresentation },
+    { id: "sponsors", label: "Sponsors", icon: IconPresentation },
     { id: "team", label: "Team", icon: IconUsers },
   ];
 
@@ -92,8 +93,9 @@ export default function AdminPanel() {
       {/* Content */}
       <div className="mt-6">
         {activeTab === "events" && <AdminEvents />}
-        {activeTab === "workshops" && <AdminWorkshops />}
-        {activeTab === "leads" && <AdminLeads />}
+        {activeTab === "sessions" && <AdminSessions />}
+        {activeTab === "exhibitions" && <AdminExhibitions />}
+        {activeTab === "sponsors" && <AdminSponsors />}
         {activeTab === "team" && <AdminTeam />}
       </div>
     </div>
