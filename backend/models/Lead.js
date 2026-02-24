@@ -28,7 +28,6 @@ const leadSchema = new mongoose.Schema(
     },
     passType: {
       type: String,
-      enum: ["early_bird", "regular"],
       required: true,
     },
     amount: {
