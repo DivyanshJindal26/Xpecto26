@@ -466,7 +466,7 @@ export default function Register() {
   const now = new Date();
   const earlyBirdDeadline = new Date("2026-02-15T23:59:59");
   const isEarlyBird = now <= earlyBirdDeadline;
-  const price = isEarlyBird ? 2299 : 2499;
+  const price = 2299; // On Popular Demand pricing
 
   const benefits = [
     { icon: Utensils, text: "Food & Refreshments" },
@@ -505,7 +505,7 @@ export default function Register() {
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
-          passType: isEarlyBird ? "early_bird" : "regular",
+          passType: "popular_demand",
         }),
       });
       const data = await res.json();
@@ -667,13 +667,9 @@ export default function Register() {
               </h2>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-4 mb-6">
+            <div className="grid md:grid-cols-1 gap-4 mb-6">
               <motion.div
-                className={`p-6 rounded-2xl border ${
-                  isEarlyBird
-                    ? "border-white bg-white/10"
-                    : "border-white/10 bg-white/5"
-                }`}
+                className="p-6 rounded-2xl border border-white bg-white/10"
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
@@ -681,44 +677,15 @@ export default function Register() {
                   <span className="font-['Michroma'] text-4xl font-light text-white">
                     ₹2299
                   </span>
-                  {isEarlyBird && (
-                    <span className="px-2 py-1 rounded-md bg-white/20 text-xs font-['Michroma'] text-white">
-                      ACTIVE
-                    </span>
-                  )}
-                </div>
-                <p className="font-['Michroma'] text-white/60 text-sm">
-                  Early Bird
-                </p>
-                <p className="font-['Michroma'] text-white/40 text-xs mt-1">
-                  Valid till 15 Feb 2026
-                </p>
-              </motion.div>
-
-              <motion.div
-                className={`p-6 rounded-2xl border ${
-                  !isEarlyBird
-                    ? "border-white bg-white/10"
-                    : "border-white/10 bg-white/5"
-                }`}
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <div className="flex items-baseline gap-2 mb-2">
-                  <span className="font-['Michroma'] text-4xl font-light text-white">
-                    ₹2499
+                  <span className="px-2 py-1 rounded-md bg-white/20 text-xs font-['Michroma'] text-white">
+                    ACTIVE
                   </span>
-                  {!isEarlyBird && (
-                    <span className="px-2 py-1 rounded-md bg-white/20 text-xs font-['Michroma'] text-white">
-                      ACTIVE
-                    </span>
-                  )}
                 </div>
                 <p className="font-['Michroma'] text-white/60 text-sm">
-                  Regular
+                  On Popular Demand
                 </p>
                 <p className="font-['Michroma'] text-white/40 text-xs mt-1">
-                  From 16 Feb 2026
+                  Limited time offer
                 </p>
               </motion.div>
             </div>
