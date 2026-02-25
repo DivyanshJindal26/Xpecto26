@@ -1,17 +1,23 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
+
+const MERCH_SEEN_KEY = "xpecto_merch_seen";
 
 export default function MerchPopup() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    try {
+      if (sessionStorage.getItem(MERCH_SEEN_KEY)) return;
+    } catch (e) {}
     const timer = setTimeout(() => setVisible(true), 1200);
     return () => clearTimeout(timer);
   }, []);
 
   const handleClose = () => {
+    try {
+      sessionStorage.setItem(MERCH_SEEN_KEY, "1");
+    } catch (e) {}
     setVisible(false);
   };
 
@@ -132,7 +138,7 @@ export default function MerchPopup() {
 
               {/* CTA */}
               <a
-                href="http://forms.gle/FSdF9TVFnokBydJ47"
+                href="https://forms.gle/FSdF9TVFnokBydJ47"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={handleClose}
