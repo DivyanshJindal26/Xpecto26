@@ -1,12 +1,12 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "motion/react";
-import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import FlowingMenu from "../components/ui/FlowingMenu";
 import FloatingElement from "../components/ui/FloatingElement";
 import OptimizedImage from "../components/ui/OptimizedImage";
 
-const SessionCard = ({ session, index }) => {
+const SessionCard = ({ session, index, onClick }) => {
   const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef(null);
 
@@ -19,8 +19,8 @@ const SessionCard = ({ session, index }) => {
     <motion.div
       ref={cardRef}
       className="flex-shrink-0 w-[340px] sm:w-[380px] h-[520px]"
-      initial={{ opacity: 0, scale: 0.9 }}
-      whileInView={{ opacity: 1, scale: 1 }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
     >
@@ -28,6 +28,7 @@ const SessionCard = ({ session, index }) => {
         className="relative h-full rounded-3xl overflow-hidden backdrop-blur-md bg-black/50 border border-white/20 shadow-2xl cursor-pointer group"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        onClick={onClick}
       >
         {/* Animated border glow */}
         <motion.div
@@ -42,37 +43,29 @@ const SessionCard = ({ session, index }) => {
 
         {/* Background image section */}
         <div className="relative h-[240px] overflow-hidden">
-          <motion.img
+          <img
             src={session.image}
             alt={session.title}
             className="w-full h-full object-cover"
-            animate={{ scale: isHovered ? 1.1 : 1 }}
-            transition={{ duration: 0.6 }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black" />
 
           {/* Floating time badge */}
-          <motion.div
-            className="absolute top-4 right-4 px-3 sm:px-4 py-2 rounded-full bg-white/90 backdrop-blur-sm"
-            whileHover={{ scale: 1.1 }}
-            animate={{ y: isHovered ? -5 : 0 }}
-            transition={{ duration: 0.3 }}
-          >
+          <div className="absolute top-4 right-4 px-3 sm:px-4 py-2 rounded-full bg-white/90 backdrop-blur-sm">
             <span className="font-['Michroma'] text-xs font-bold text-black tracking-wider">
               {displayTime}
             </span>
-          </motion.div>
+          </div>
 
           {/* Category badge */}
           <div className="absolute bottom-4 left-4">
-            <motion.div
+            <div
               className="px-3 sm:px-4 py-1.5 rounded-full border border-white/30 bg-black/60 backdrop-blur-sm"
-              whileHover={{ scale: 1.05 }}
             >
               <span className="font-['Michroma'] text-xs font-semibold text-white tracking-widest">
                 {session.category}
               </span>
-            </motion.div>
+            </div>
           </div>
         </div>
 
@@ -131,7 +124,10 @@ const SessionCard = ({ session, index }) => {
             animate={{ x: isHovered ? 5 : 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="flex items-center gap-2 text-white group-hover:text-gray-200 transition-colors">
+            <button
+              onClick={(e) => { e.stopPropagation(); onClick && onClick(); }}
+              className="flex items-center gap-2 text-white group-hover:text-gray-200 transition-colors cursor-pointer"
+            >
               <span className="font-['Michroma'] text-xs sm:text-sm font-semibold tracking-wider">
                 LEARN MORE
               </span>
@@ -142,7 +138,7 @@ const SessionCard = ({ session, index }) => {
               >
                 →
               </motion.span>
-            </div>
+            </button>
           </motion.div>
         </div>
 
@@ -159,6 +155,229 @@ const SessionCard = ({ session, index }) => {
         />
       </div>
     </motion.div>
+  );
+};
+
+const SessionDetailModal = ({ session, isOpen, onClose }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === "Escape" && isOpen) onClose();
+    };
+    if (isOpen) document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isOpen, onClose]);
+
+  if (!session) return null;
+
+  const displayTime =
+    session.time ||
+    (session.startTime ? `${session.startTime} - ${session.endTime}` : "TBA");
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
+          {/* Backdrop */}
+          <motion.div
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+          />
+
+          {/* Modal Content */}
+          <motion.div
+            className="relative w-full max-w-5xl mx-auto my-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Close Button */}
+            <motion.button
+              onClick={onClose}
+              className="absolute -top-3 -right-3 z-10 p-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full hover:bg-white/20 hover:border-white/40 transition-all cursor-pointer"
+              whileHover={{ rotate: 90 }}
+            >
+              <svg width="20" height="20" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1L13 13M13 1L1 13" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
+              </svg>
+            </motion.button>
+
+            <div
+              className="relative overflow-hidden rounded-3xl backdrop-blur-md bg-black/80 border border-white/20 shadow-2xl"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              <div className="relative flex flex-col lg:flex-row items-stretch gap-0">
+                {/* Left — Image */}
+                <div className="relative lg:w-2/5 overflow-hidden bg-black/40">
+                  <div className="relative h-full min-h-80 lg:min-h-100">
+                    <div className="relative h-full flex items-center justify-center p-6">
+                      <div className="relative w-full max-w-sm">
+                        <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+                          {session.image ? (
+                            <OptimizedImage
+                              src={session.image}
+                              alt={session.title}
+                              className="w-full h-full object-cover"
+                              skeleton={true}
+                            />
+                          ) : (
+                            <div className="w-full h-64 bg-white/5 flex items-center justify-center">
+                              <span className="font-['Michroma'] text-white/30 text-4xl">✦</span>
+                            </div>
+                          )}
+                        </div>
+                        <motion.div
+                          className="absolute -top-2 -left-2 w-8 h-8 border-t-2 border-l-2 border-white/30 rounded-tl-lg"
+                          animate={{ opacity: isHovered ? 1 : 0 }}
+                          transition={{ duration: 0.3 }}
+                        />
+                        <motion.div
+                          className="absolute -bottom-2 -right-2 w-8 h-8 border-b-2 border-r-2 border-white/30 rounded-br-lg"
+                          animate={{ opacity: isHovered ? 1 : 0 }}
+                          transition={{ duration: 0.3 }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Category badge */}
+                    {session.category && (
+                      <div className="absolute top-6 left-6">
+                        <div
+                          className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20"
+                        >
+                          <span className="font-['Michroma'] text-xs font-medium text-white tracking-wider">
+                            {session.category}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Right — Content */}
+                <div className="relative lg:w-3/5 p-6 lg:p-8 flex flex-col justify-center">
+                  <div className="space-y-4">
+                    {/* Title */}
+                    <div>
+                      <h3 className="font-['Michroma'] text-2xl lg:text-3xl xl:text-4xl font-light text-white mb-2 tracking-wide leading-tight">
+                        {session.title}
+                      </h3>
+                      <motion.div
+                        className="h-1 bg-white/20 rounded-full"
+                        initial={{ width: "0%" }}
+                        animate={{ width: "60%" }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                      />
+                    </div>
+
+                    {/* Description */}
+                    <p className="font-['Michroma'] text-white/70 text-xs lg:text-sm leading-relaxed">
+                      {session.description}
+                    </p>
+
+                    {/* Details */}
+                    <div className="space-y-2.5 pt-3">
+                      {/* Time */}
+                      <motion.div
+                        className="flex items-start gap-3"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.05, duration: 0.5 }}
+                      >
+                        <svg className="w-4 h-4 text-white/40 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10" strokeWidth="1.5"/><path d="M12 6v6l4 2" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                        <div>
+                          <p className="font-['Michroma'] text-xs text-white/40 mb-0.5">Time</p>
+                          <p className="font-['Michroma'] text-xs text-white/80">{displayTime}</p>
+                        </div>
+                      </motion.div>
+
+                      {/* Date */}
+                      {session.date && (
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.1, duration: 0.5 }}
+                        >
+                          <svg className="w-4 h-4 text-white/40 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" strokeWidth="1.5"/><path d="M16 2v4M8 2v4M3 10h18" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                          <div>
+                            <p className="font-['Michroma'] text-xs text-white/40 mb-0.5">Date</p>
+                            <p className="font-['Michroma'] text-xs text-white/80">
+                              {new Date(session.date).toLocaleDateString("en-US", {
+                                weekday: "long",
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              })}
+                            </p>
+                          </div>
+                        </motion.div>
+                      )}
+
+                      {/* Venue */}
+                      {session.venue && (
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.15, duration: 0.5 }}
+                        >
+                          <svg className="w-4 h-4 text-white/40 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" strokeWidth="1.5"/><circle cx="12" cy="9" r="2.5" strokeWidth="1.5"/></svg>
+                          <div>
+                            <p className="font-['Michroma'] text-xs text-white/40 mb-0.5">Venue</p>
+                            <p className="font-['Michroma'] text-xs text-white/80">{session.venue}</p>
+                          </div>
+                        </motion.div>
+                      )}
+
+                      {/* Speaker */}
+                      {session.speaker && (
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.2, duration: 0.5 }}
+                        >
+                          <svg className="w-4 h-4 text-white/40 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="8" r="4" strokeWidth="1.5"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                          <div>
+                            <p className="font-['Michroma'] text-xs text-white/40 mb-0.5">Speaker</p>
+                            <p className="font-['Michroma'] text-xs text-white/80">
+                              {session.speaker}{session.role ? ` — ${session.role}` : ""}
+                            </p>
+                          </div>
+                        </motion.div>
+                      )}
+
+                      {/* Club / Company */}
+                      {(session.club_name || session.company) && (session.club_name || session.company) !== session.category && (
+                        <motion.div
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.25, duration: 0.5 }}
+                        >
+                          <svg className="w-4 h-4 text-white/40 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="2" y="7" width="20" height="14" rx="2" strokeWidth="1.5"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" strokeWidth="1.5"/></svg>
+                          <div>
+                            <p className="font-['Michroma'] text-xs text-white/40 mb-0.5">Organised by</p>
+                            <p className="font-['Michroma'] text-xs text-white/80">{session.club_name || session.company}</p>
+                          </div>
+                        </motion.div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
   );
 };
 
@@ -179,15 +398,28 @@ export default function Sessions() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [selectedSession, setSelectedSession] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleSessionClick = useCallback((session) => {
+    setSelectedSession(session);
+    setIsModalOpen(true);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setIsModalOpen(false);
+    setTimeout(() => setSelectedSession(null), 300);
+  }, []);
+
   const API_BASE_URL = import.meta.env.VITE_API_URL || "https://xpecto.org/api";
 
   useEffect(() => {
     const fetchSessions = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${API_BASE_URL}/sessions`);
+        const response = await fetch(`${API_BASE_URL}/workshops`);
         if (!response.ok) {
-          throw new Error("Failed to fetch sessions");
+          throw new Error("Failed to fetch workshops");
         }
         const data = await response.json();
 
@@ -210,7 +442,7 @@ export default function Sessions() {
                 item.image && item.image.length > 0
                   ? item.image[0]
                   : randomImage,
-              category: item.club_name || item.company || "SESSION",
+              category: item.club_name || item.company || "WORKSHOP",
             };
           });
           setSessions(transformedData);
@@ -317,7 +549,7 @@ export default function Sessions() {
             </motion.div>
 
             <motion.h1
-              className="font-['Michroma'] text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-white mb-6 sm:mb-8 tracking-[0.15em] sm:tracking-[0.2em] leading-tight px-4 break-words"
+              className="font-['Michroma'] text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-white mb-6 sm:mb-8 tracking-[0.15em] sm:tracking-[0.2em] leading-tight px-4 break-words"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.2, delay: 0.3 }}
@@ -394,6 +626,7 @@ export default function Sessions() {
                             key={session._id || index}
                             session={session}
                             index={index}
+                            onClick={() => handleSessionClick(session)}
                           />
                         ))}
                       </div>
@@ -442,6 +675,13 @@ export default function Sessions() {
           scrollbar-width: none;
         }
       `}</style>
+
+      {/* Session Detail Modal */}
+      <SessionDetailModal
+        session={selectedSession}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 }
