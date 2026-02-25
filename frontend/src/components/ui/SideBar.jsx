@@ -51,7 +51,6 @@ export const SidebarBody = ({
       <DesktopSidebar className={className} {...props}>
         {children}
       </DesktopSidebar>
-      <MobileSidebar>{mobileContent}</MobileSidebar>
     </>
   );
 };
