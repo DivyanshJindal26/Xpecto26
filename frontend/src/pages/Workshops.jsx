@@ -298,27 +298,27 @@ const SessionDetailModal = ({ session, isOpen, onClose }) => {
                       </motion.div>
 
                       {/* Date */}
-                      {session.date && (
-                        <motion.div
-                          className="flex items-start gap-3"
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.1, duration: 0.5 }}
-                        >
-                          <svg className="w-4 h-4 text-white/40 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" strokeWidth="1.5"/><path d="M16 2v4M8 2v4M3 10h18" strokeWidth="1.5" strokeLinecap="round"/></svg>
-                          <div>
-                            <p className="font-['Michroma'] text-xs text-white/40 mb-0.5">Date</p>
-                            <p className="font-['Michroma'] text-xs text-white/80">
-                              {new Date(session.date).toLocaleDateString("en-US", {
-                                weekday: "long",
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })}
-                            </p>
-                          </div>
-                        </motion.div>
-                      )}
+                      <motion.div
+                        className="flex items-start gap-3"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.1, duration: 0.5 }}
+                      >
+                        <svg className="w-4 h-4 text-white/40 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" strokeWidth="1.5"/><path d="M16 2v4M8 2v4M3 10h18" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                        <div>
+                          <p className="font-['Michroma'] text-xs text-white/40 mb-0.5">Date</p>
+                          <p className="font-['Michroma'] text-xs text-white/80">
+                            {session.date
+                              ? new Date(session.date).toLocaleDateString("en-US", {
+                                  weekday: "long",
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                })
+                              : "TBD"}
+                          </p>
+                        </div>
+                      </motion.div>
 
                       {/* Venue */}
                       {session.venue && (
@@ -449,12 +449,26 @@ export default function Sessions() {
 
           // Group by Date
           const groups = {};
-          // Sort by date first to ensure order is correct if backend didn't
-          transformedData.sort((a, b) => new Date(a.date) - new Date(b.date));
+          const sessionsWithoutDate = [];
 
-          transformedData.forEach((session) => {
+          // Separate sessions with and without dates
+          const sessionsWithDate = transformedData.filter((session) => {
+            if (!session.date) {
+              sessionsWithoutDate.push(session);
+              return false;
+            }
+            return true;
+          });
+
+          // Sort sessions with dates by date
+          sessionsWithDate.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+          sessionsWithDate.forEach((session) => {
             const dateObj = new Date(session.date);
-            if (isNaN(dateObj.getTime())) return;
+            if (isNaN(dateObj.getTime())) {
+              sessionsWithoutDate.push(session);
+              return;
+            }
 
             // Format: MARCH 14
             const dateKey = dateObj
@@ -467,12 +481,19 @@ export default function Sessions() {
             groups[dateKey].push(session);
           });
 
+          // Create final ordered groups with TBD first if there are sessions without dates
+          const orderedGroups = {};
+          if (sessionsWithoutDate.length > 0) {
+            orderedGroups["TBD"] = sessionsWithoutDate;
+          }
+          Object.assign(orderedGroups, groups);
+
           // If grouping failed (e.g. no valid dates), fallback
-          if (Object.keys(groups).length === 0 && transformedData.length > 0) {
-            groups["UPCOMING WORKSHOP"] = transformedData;
+          if (Object.keys(orderedGroups).length === 0 && transformedData.length > 0) {
+            orderedGroups["UPCOMING WORKSHOP"] = transformedData;
           }
 
-          setGroupedSessions(groups);
+          setGroupedSessions(orderedGroups);
         }
       } catch (err) {
         console.error("Error fetching workshops:", err);
