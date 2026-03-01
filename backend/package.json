@@ -26,8 +26,10 @@
         "hpp": "^0.2.3",
         "jsonwebtoken": "^9.0.2",
         "mongoose": "^8.0.0",
+        "nodemailer": "^8.0.1",
         "passport": "^0.7.0",
         "passport-google-oauth20": "^2.0.0",
+        "qrcode": "^1.5.4",
         "xss-clean": "^0.1.4"
     },
     "devDependencies": {

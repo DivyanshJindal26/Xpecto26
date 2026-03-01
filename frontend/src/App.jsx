@@ -19,6 +19,9 @@ import GoogleOneTap from "./components/GoogleOneTap";
 import { AuthProvider } from "./context/AuthContext";
 import Register from "./pages/Register";
 import Sessions from "./pages/Sessions";
+import Pronites from "./pages/Pronites";
+import ProniteVerification from "./pages/ProniteVerification";
+import ProniteScanner from "./pages/ProniteScanner";
 import HamburgerMenu from "./components/ui/HamburgerMenu";
 import useImagePreloader from "./hooks/useImagePreloader";
 
@@ -86,6 +89,9 @@ export default function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/workshops" element={<Sessions />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/pronites" element={<Pronites />} />
+            <Route path="/pronite-verify" element={<ProniteVerification />} />
+            <Route path="/pronite-scan" element={<ProniteScanner />} />
             <Route path="/admin" element={<AdminPanel />} />
             <Route path="/auth/success" element={<AuthSuccess />} />
             <Route path="/auth/error" element={<AuthError />} />
