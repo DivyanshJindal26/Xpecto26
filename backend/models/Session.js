@@ -28,7 +28,6 @@ const sessionSchema = new mongoose.Schema(
     },
     date: {
       type: Date,
-      required: true,
     },
     image: [
       {
