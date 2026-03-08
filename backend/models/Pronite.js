@@ -2,50 +2,17 @@ import mongoose from "mongoose";
 
 const proniteSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
-    venue: {
-      type: String,
-    },
-    date: {
-      type: Date,
-    },
-    startTime: {
-      type: String,
-    },
-    endTime: {
-      type: String,
-    },
-    artist: {
-      type: String,
-    },
-    genre: {
-      type: String,
-    },
-    image: [
-      {
-        type: String,
-      }
-    ],
-    ticketPrice: {
-      type: Number,
-      default: 0,
-    },
-    maxCapacity: {
-      type: Number,
-      default: 500,
-    },
-    availableTickets: {
-      type: Number,
-      default: 500,
-    },
+    title: { type: String, required: true, trim: true },
+    artist: { type: String, required: true, trim: true },
+    venue: { type: String, trim: true },
+    date: { type: Date },
+    // Emails allowed to verify registrations (view sheet + send QR)
+    verifierEmails: [{ type: String, lowercase: true, trim: true }],
+    // Emails allowed to scan QR codes at entry (pronite-specific)
+    scannerEmails: [{ type: String, lowercase: true, trim: true }],
+    // The value in the "ProNite Date" dropdown column of the Google Form
+    // that identifies this pronite's registrations (e.g. "14 March")
+    googleSheetDateLabel: { type: String, trim: true },
   },
   { timestamps: true }
 );

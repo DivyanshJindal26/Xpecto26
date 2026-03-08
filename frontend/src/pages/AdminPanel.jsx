@@ -8,12 +8,14 @@ import {
   IconUsers,
   IconReceipt,
   IconSchool,
+  IconMusic,
 } from "@tabler/icons-react";
 import { useAuth } from "../context/AuthContext";
 import AdminEvents from "../components/admin/AdminEvents";
 import AdminWorkshops from "../components/admin/AdminWorkshops";
 import AdminTeam from "../components/admin/AdminTeam";
 import AdminLeads from "../components/admin/AdminLeads";
+import AdminPronites from "../components/admin/AdminPronites";
 
 export default function AdminPanel() {
   const { user, isAuthenticated, loading } = useAuth();
@@ -41,6 +43,7 @@ export default function AdminPanel() {
     { id: "events", label: "Events", icon: IconCalendarEvent },
     { id: "workshops", label: "Workshops", icon: IconSchool },
     { id: "leads", label: "Leads", icon: IconReceipt },
+    { id: "pronites", label: "Pronites", icon: IconMusic },
     { id: "team", label: "Team", icon: IconUsers },
   ];
 
@@ -94,6 +97,7 @@ export default function AdminPanel() {
         {activeTab === "events" && <AdminEvents />}
         {activeTab === "workshops" && <AdminWorkshops />}
         {activeTab === "leads" && <AdminLeads />}
+        {activeTab === "pronites" && <AdminPronites />}
         {activeTab === "team" && <AdminTeam />}
       </div>
     </div>

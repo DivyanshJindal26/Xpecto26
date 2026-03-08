@@ -4,7 +4,6 @@ import { useLocation, Link } from "react-router-dom";
 import { Sidebar, SidebarBody, SidebarLink } from "./ui/SideBar";
 import {
   IconHome,
-  IconPresentation,
   IconCalendarEvent,
   IconUsers,
   IconUserPlus,
