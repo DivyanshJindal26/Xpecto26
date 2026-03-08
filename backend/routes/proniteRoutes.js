@@ -5,13 +5,8 @@ import {
   getProniteById,
   updatePronite,
   deletePronite,
-  registerForPronite,
-  getMyRegistration,
-  getMyQrCode,
-  getRegistrations,
-  approveRegistration,
-  denyRegistration,
-  getPaymentProof,
+  getSheetRegistrations,
+  generateQrForRegistrant,
   scanQrCode,
   checkVerifierAccess,
   checkScannerAccess,
@@ -21,24 +16,10 @@ import Pronite from "../models/Pronite.js";
 
 const router = express.Router();
 
-// ── Middleware: verify caller's email is in pronite.verifierEmails ──
+// ── Verifier middleware: user must be in verifierEmails for the target pronite ──
 const verifierMiddleware = async (req, res, next) => {
   try {
-    // For routes with :id param, check that specific pronite
-    let proniteId = req.params.id;
-
-    // For routes like /registrations/:regId/approve we need to look up the registration
-    if (!proniteId && req.params.regId) {
-      const { default: ProniteRegistration } = await import(
-        "../models/ProniteRegistration.js"
-      );
-      const reg = await ProniteRegistration.findById(req.params.regId);
-      if (!reg) {
-        return res.status(404).json({ success: false, message: "Registration not found" });
-      }
-      proniteId = reg.pronite;
-    }
-
+    const proniteId = req.params.id;
     if (!proniteId) {
       return res.status(400).json({ success: false, message: "Missing pronite context" });
     }
@@ -65,26 +46,30 @@ const verifierMiddleware = async (req, res, next) => {
   }
 };
 
-// ── Middleware: verify caller's email is in pronite.scannerEmails ──
+// ── Scanner middleware: user must be in scannerEmails for the SPECIFIC pronite in the QR ──
 const scannerMiddleware = async (req, res, next) => {
   try {
-    const { proniteId } = req.body;
-
-    // Scanner can scan for any pronite they're assigned to
-    // Check if user is scanner for ANY pronite or is admin
     const userEmail = req.user.email.toLowerCase();
     const isAdmin = req.user.role === "admin";
-
     if (isAdmin) return next();
 
-    const assignedPronite = await Pronite.findOne({
+    const { proniteId } = req.body;
+    if (!proniteId) {
+      return res.status(400).json({
+        success: false,
+        message: "proniteId is required in the QR payload",
+      });
+    }
+
+    const pronite = await Pronite.findOne({
+      _id: proniteId,
       scannerEmails: { $in: [userEmail] },
     });
 
-    if (!assignedPronite) {
+    if (!pronite) {
       return res.status(403).json({
         success: false,
-        message: "Access denied. You are not a scanner.",
+        message: "Access denied. You are not a scanner for this pronite.",
       });
     }
 
@@ -94,27 +79,22 @@ const scannerMiddleware = async (req, res, next) => {
   }
 };
 
-// ── Public routes ──
-router.get("/", getAllPronites);
+// ── Access-check routes (public to authenticated users) ──
 router.get("/check-verifier", authMiddleware, checkVerifierAccess);
 router.get("/check-scanner", authMiddleware, checkScannerAccess);
-router.get("/:id", getProniteById);
 
-// ── Authenticated user routes ──
-router.post("/:id/register", authMiddleware, registerForPronite);
-router.get("/:id/my-registration", authMiddleware, getMyRegistration);
-router.get("/:id/my-qr", authMiddleware, getMyQrCode);
+// ── Admin read-all ──
+router.get("/", authMiddleware, adminMiddleware, getAllPronites);
+router.get("/:id", authMiddleware, adminMiddleware, getProniteById);
 
 // ── Verifier routes ──
-router.get("/:id/registrations", authMiddleware, verifierMiddleware, getRegistrations);
-router.put("/registrations/:regId/approve", authMiddleware, verifierMiddleware, approveRegistration);
-router.put("/registrations/:regId/deny", authMiddleware, verifierMiddleware, denyRegistration);
-router.get("/registrations/:regId/payment-proof", authMiddleware, verifierMiddleware, getPaymentProof);
+router.get("/:id/sheet-registrations", authMiddleware, verifierMiddleware, getSheetRegistrations);
+router.post("/:id/generate-qr", authMiddleware, verifierMiddleware, generateQrForRegistrant);
 
-// ── Scanner routes ──
+// ── Scanner route ──
 router.post("/scan", authMiddleware, scannerMiddleware, scanQrCode);
 
-// ── Admin only routes ──
+// ── Admin-only CRUD ──
 router.post("/", authMiddleware, adminMiddleware, createPronite);
 router.put("/:id", authMiddleware, adminMiddleware, updatePronite);
 router.delete("/:id", authMiddleware, adminMiddleware, deletePronite);

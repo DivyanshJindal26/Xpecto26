@@ -4,7 +4,6 @@ import { useLocation, Link } from "react-router-dom";
 import { Sidebar, SidebarBody, SidebarLink } from "./ui/SideBar";
 import {
   IconHome,
-  IconPresentation,
   IconCalendarEvent,
   IconUsers,
   IconUserPlus,
@@ -40,11 +39,6 @@ export default function XpectoSideBar({ children }) {
       label: "Register",
       href: "/register",
       icon: <IconAddressBook className="h-5 w-5" />,
-    },
-    {
-      label: "Pronite",
-      href: "/pronites",
-      icon: <IconPresentation className="h-5 w-5" />,
     },
     {
       label: "About",
