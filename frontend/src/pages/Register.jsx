@@ -678,7 +678,7 @@ export default function Register() {
                     ₹2299
                   </span>
                   <span className="px-2 py-1 rounded-md bg-white/20 text-xs font-['Michroma'] text-white">
-                    ACTIVE
+                    CLOSED
                   </span>
                 </div>
                 <p className="font-['Michroma'] text-white/60 text-sm">
@@ -773,15 +773,13 @@ export default function Register() {
           <div className="flex flex-col sm:flex-row items-center gap-4">
             <CTAButton
               onClick={handleRegister}
-              disabled={
-                registering || existingLead?.paymentStatus === "completed"
-              }
+              disabled={true}
               loading={registering}
               isRegistered={existingLead?.paymentStatus === "completed"}
             >
               {existingLead?.paymentStatus === "completed"
                 ? "✓ Registration Complete"
-                : `Pay ₹${price} & Register`}
+                : `Registrations are closed!`}
             </CTAButton>
           </div>
 
