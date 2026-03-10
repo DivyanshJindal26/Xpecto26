@@ -10,7 +10,6 @@ import FloatingElement from "../components/ui/FloatingElement";
 import AnimatedCounter from "../components/ui/AnimatedCounter";
 import OptimizedImage from "../components/ui/OptimizedImage";
 import { useAuth } from "../context/AuthContext";
-import MerchPopup from "../components/MerchPopup";
 
 export default function Home() {
   const { isAuthenticated } = useAuth();
@@ -57,7 +56,6 @@ export default function Home() {
 
   return (
     <div className="w-full min-h-screen relative">
-      <MerchPopup />
       <div className="w-full h-screen relative overflow-hidden">
         <div className="absolute inset-0">
           <OptimizedImage
