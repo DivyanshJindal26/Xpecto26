@@ -23,11 +23,11 @@ const playApprovedSound = () => {
       osc.start(ctx.currentTime + i * 0.1);
       osc.stop(ctx.currentTime + i * 0.1 + 0.5);
     });
-    if ("speechSynthesis" in window) {
-      const u = new SpeechSynthesisUtterance("Approved");
-      u.rate = 0.9;
-      setTimeout(() => window.speechSynthesis.speak(u), 400);
-    }
+    // if ("speechSynthesis" in window) {
+    //   const u = new SpeechSynthesisUtterance("Approved");
+    //   u.rate = 0.9;
+    //   setTimeout(() => window.speechSynthesis.speak(u), 400);
+    // }
   } catch {}
 };
 
@@ -460,6 +460,11 @@ export default function ProniteScanner() {
                           <p className="text-white/50 text-xs">{result.data.attendee.email}</p>
                           {result.data.attendee.college && (
                             <p className="text-white/40 text-xs">🎓 {result.data.attendee.college}</p>
+                          )}
+                          {result.data.attendee.noOfTickets && (
+                            <p className="text-blue-300 text-xs font-medium mt-1">
+                              🎟 {result.data.attendee.noOfTickets} {result.data.attendee.noOfTickets === 1 ? "pass allowed" : "passes allowed"}
+                            </p>
                           )}
                         </div>
                       )}

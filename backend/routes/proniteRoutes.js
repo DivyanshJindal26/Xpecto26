@@ -7,6 +7,8 @@ import {
   deletePronite,
   getSheetRegistrations,
   generateQrForRegistrant,
+  manualQrGenerate,
+  reactivateQrCodes,
   scanQrCode,
   checkVerifierAccess,
   checkScannerAccess,
@@ -98,5 +100,11 @@ router.post("/scan", authMiddleware, scannerMiddleware, scanQrCode);
 router.post("/", authMiddleware, adminMiddleware, createPronite);
 router.put("/:id", authMiddleware, adminMiddleware, updatePronite);
 router.delete("/:id", authMiddleware, adminMiddleware, deletePronite);
+
+// ── Admin-only: reactivate QR codes for the next night ──
+router.post("/:id/reactivate", authMiddleware, adminMiddleware, reactivateQrCodes);
+
+// ── Organizer: manually generate and send a QR ──
+router.post("/:id/manual-qr", authMiddleware, manualQrGenerate);
 
 export default router;
