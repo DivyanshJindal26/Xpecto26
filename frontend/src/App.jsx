@@ -23,6 +23,7 @@ import ProniteVerification from "./pages/ProniteVerification";
 import ProniteScanner from "./pages/ProniteScanner";
 import HamburgerMenu from "./components/ui/HamburgerMenu";
 import useImagePreloader from "./hooks/useImagePreloader";
+import Sponsors from "./pages/Sponsors";
 
 export default function App() {
   const [showLoading, setShowLoading] = useState(() => {
@@ -88,6 +89,7 @@ export default function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/workshops" element={<Sessions />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/sponsors" element={<Sponsors />} />
             <Route path="/pronite-verify" element={<ProniteVerification />} />
             <Route path="/pronite-scan" element={<ProniteScanner />} />
             <Route path="/admin" element={<AdminPanel />} />

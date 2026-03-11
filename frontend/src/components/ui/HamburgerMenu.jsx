@@ -42,6 +42,11 @@ const HamburgerMenu = () => {
       href: "/about",
       icon: <IconInfoCircle className="h-5 w-5" />,
     },
+    {
+      label: "Sponsors",
+      href: "/sponsors",
+      icon: <IconInfoCircle className="h-5 w-5" />,
+    },
   ];
 
   // Admin link - only visible to admins
