@@ -260,7 +260,7 @@ export default function ProniteVerification() {
       ) : filtered.length === 0 ? (
         <div className="text-center py-16 text-white/30">
           <p className="text-lg">No registrants found</p>
-          {!error && <p className="text-sm mt-1">Check that the ProNite Date Label is set in Admin → Pronites (e.g. &quot;14 March&quot;)</p>}
+          {!error && <p className="text-sm mt-1">Check that the Spreadsheet ID is set in Admin → Pronites</p>}
         </div>
       ) : (
         <div className="space-y-2">
@@ -286,6 +286,8 @@ export default function ProniteVerification() {
                   {reg.college && <span>🎓 {reg.college}</span>}
                   {reg.phone && <span>📱 {reg.phone}</span>}
                   {reg.transactionId && <span>💳 {reg.transactionId}</span>}
+                  {reg.noOfTickets && <span>🎟 {reg.noOfTickets} {reg.noOfTickets === 1 ? "pass" : "passes"}</span>}
+                  {reg.amount && <span>₹ {reg.amount}</span>}
                   {reg.timestamp && <span>🕐 {reg.timestamp}</span>}
                 </div>
               </div>

@@ -16,6 +16,8 @@ const sheetRegistrationSchema = new mongoose.Schema(
     college: { type: String, trim: true },
     transactionId: { type: String, trim: true },
     paymentProofUrl: { type: String, trim: true },
+    noOfTickets: { type: Number },
+    amount: { type: String, trim: true },
     pronite: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Pronite",

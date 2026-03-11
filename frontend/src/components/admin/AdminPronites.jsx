@@ -11,9 +11,12 @@ import {
   IconMusic,
   IconMail,
   IconCamera,
+  IconQrcode,
 } from "@tabler/icons-react";
+import { useAuth } from "../../context/AuthContext";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "https://xpecto.org/api";
+const ORGANIZER_EMAIL = import.meta.env.VITE_ORGANIZER_EMAIL || "";
 
 const EMPTY_FORM = {
   title: "",
@@ -22,10 +25,24 @@ const EMPTY_FORM = {
   venue: "",
   verifierEmails: "",
   scannerEmails: "",
-  googleSheetDateLabel: "",
+  spreadsheetId: "",
+  sheetTabName: "Form Responses 1",
+};
+
+const EMPTY_MANUAL = {
+  email: "",
+  name: "",
+  phone: "",
+  college: "",
+  noOfTickets: "1",
+  amount: "",
+  transactionId: "",
 };
 
 export default function AdminPronites() {
+  const { user } = useAuth();
+  const isOrganizer = ORGANIZER_EMAIL && user?.email?.toLowerCase() === ORGANIZER_EMAIL.toLowerCase();
+
   const [pronites, setPronites] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -33,6 +50,12 @@ export default function AdminPronites() {
   const [selectedPronite, setSelectedPronite] = useState(null);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState(EMPTY_FORM);
+  const [reactivating, setReactivating] = useState(null);
+
+  // Manual QR state
+  const [manualPronite, setManualPronite] = useState(null); // pronite being targeted
+  const [manualData, setManualData] = useState(EMPTY_MANUAL);
+  const [sendingManual, setSendingManual] = useState(false);
 
   useEffect(() => { fetchPronites(); }, []);
 
@@ -65,9 +88,63 @@ export default function AdminPronites() {
       venue: pronite.venue || "",
       verifierEmails: (pronite.verifierEmails || []).join(", "),
       scannerEmails: (pronite.scannerEmails || []).join(", "),
-      googleSheetDateLabel: pronite.googleSheetDateLabel || "",
+      spreadsheetId: pronite.spreadsheetId || "",
+      sheetTabName: pronite.sheetTabName || "Form Responses 1",
     });
     setShowModal(true);
+  };
+
+  const handleManualQrOpen = (pronite) => {
+    setManualPronite(pronite);
+    setManualData(EMPTY_MANUAL);
+  };
+
+  const handleManualQrSubmit = async (e) => {
+    e.preventDefault();
+    setSendingManual(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/pronites/${manualPronite._id}/manual-qr`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          ...manualData,
+          noOfTickets: parseInt(manualData.noOfTickets, 10) || 1,
+        }),
+      });
+      const result = await res.json();
+      if (result.success) {
+        alert(result.message);
+        setManualPronite(null);
+      } else {
+        alert(result.message || "Failed to generate QR");
+      }
+    } catch {
+      alert("Failed to generate QR");
+    } finally {
+      setSendingManual(false);
+    }
+  };
+
+  const handleReactivate = async (pronite) => {
+    if (!confirm(`Reactivate all QR codes for "${pronite.title}"?\n\nThis resets the scan status so the same QR codes can be used again on the next night.`)) return;
+    setReactivating(pronite._id);
+    try {
+      const res = await fetch(`${API_BASE_URL}/pronites/${pronite._id}/reactivate`, {
+        method: "POST",
+        credentials: "include",
+      });
+      const result = await res.json();
+      if (result.success) {
+        alert(result.message);
+      } else {
+        alert(result.message || "Failed to reactivate QR codes");
+      }
+    } catch {
+      alert("Failed to reactivate QR codes");
+    } finally {
+      setReactivating(null);
+    }
   };
 
   const handleDelete = async (id) => {
@@ -97,7 +174,8 @@ export default function AdminPronites() {
         title: formData.title,
         artist: formData.artist,
         venue: formData.venue,
-        googleSheetDateLabel: formData.googleSheetDateLabel,
+        spreadsheetId: formData.spreadsheetId,
+        sheetTabName: formData.sheetTabName || "Form Responses 1",
         verifierEmails: formData.verifierEmails
           .split(",").map((e) => e.trim().toLowerCase()).filter(Boolean),
         scannerEmails: formData.scannerEmails
@@ -207,9 +285,9 @@ export default function AdminPronites() {
                     {pronite.venue}
                   </span>
                 )}
-                {pronite.googleSheetDateLabel && (
+                {pronite.spreadsheetId && (
                   <span className="px-2 py-1 rounded-full bg-green-500/20 text-green-300 border border-green-500/20">
-                    Sheet: {pronite.googleSheetDateLabel}
+                    Sheet linked
                   </span>
                 )}
               </div>
@@ -233,6 +311,29 @@ export default function AdminPronites() {
                   <IconTrash className="w-4 h-4" />
                 </button>
               </div>
+
+              <button
+                onClick={() => handleReactivate(pronite)}
+                disabled={reactivating === pronite._id}
+                className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20 text-xs transition-colors disabled:opacity-50"
+              >
+                {reactivating === pronite._id ? (
+                  <IconLoader2 className="w-3.5 h-3.5 animate-spin" />
+                ) : (
+                  "↺"
+                )}
+                Reactivate QR Codes
+              </button>
+
+              {isOrganizer && (
+                <button
+                  onClick={() => handleManualQrOpen(pronite)}
+                  className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 text-xs transition-colors"
+                >
+                  <IconQrcode className="w-3.5 h-3.5" />
+                  Manual QR
+                </button>
+              )}
             </motion.div>
           ))}
         </div>
@@ -276,12 +377,18 @@ export default function AdminPronites() {
 
                 <div className="border-t border-white/10 pt-4 space-y-4">
                   <h4 className="text-xs font-semibold text-purple-300 uppercase tracking-wider">Google Sheet</h4>
-                  {field("ProNite Date Label *", "googleSheetDateLabel", {
-                    placeholder: "e.g. 14 March",
+                  {field("Spreadsheet ID *", "spreadsheetId", {
+                    placeholder: "e.g. 1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms",
                     required: true,
                   })}
                   <p className="text-xs text-white/30 -mt-2">
-                    Must exactly match the dropdown option in the Google Form
+                    The ID from the Google Sheet URL: /spreadsheets/d/<strong>ID</strong>/edit
+                  </p>
+                  {field("Sheet Tab Name", "sheetTabName", {
+                    placeholder: "Form Responses 1",
+                  })}
+                  <p className="text-xs text-white/30 -mt-2">
+                    The tab name inside the spreadsheet (default: Form Responses 1)
                   </p>
                 </div>
 
@@ -326,6 +433,98 @@ export default function AdminPronites() {
                   >
                     {saving && <IconLoader2 className="w-4 h-4 animate-spin" />}
                     {modalMode === "create" ? "Create" : "Update"}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Manual QR Modal */}
+      <AnimatePresence>
+        {manualPronite && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm"
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setManualPronite(null)}
+            />
+            <motion.div
+              className="relative w-full max-w-md bg-[#0a0a12] border border-blue-500/20 rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto"
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            >
+              <div className="sticky top-0 z-10 flex items-center justify-between p-6 border-b border-white/10 bg-[#0a0a12]/95 backdrop-blur-md">
+                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <IconQrcode className="w-5 h-5 text-blue-400" />
+                  Manual QR — {manualPronite.title}
+                </h3>
+                <button onClick={() => setManualPronite(null)} className="p-2 rounded-lg hover:bg-white/10 text-white/60">
+                  <IconX className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleManualQrSubmit} className="p-6 space-y-4">
+                {[
+                  { label: "Email *", key: "email", props: { type: "email", required: true, placeholder: "attendee@email.com" } },
+                  { label: "Full Name", key: "name", props: { placeholder: "John Doe" } },
+                  { label: "Phone", key: "phone", props: { placeholder: "9876543210" } },
+                  { label: "College", key: "college", props: { placeholder: "IIT Mandi" } },
+                  { label: "Transaction ID", key: "transactionId", props: { placeholder: "UTR123456" } },
+                ].map(({ label, key, props }) => (
+                  <div key={key}>
+                    <label className="block text-xs text-white/50 mb-1.5">{label}</label>
+                    <input
+                      value={manualData[key]}
+                      onChange={(e) => setManualData({ ...manualData, [key]: e.target.value })}
+                      className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-blue-500/50"
+                      {...props}
+                    />
+                  </div>
+                ))}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs text-white/50 mb-1.5">No of Tickets</label>
+                    <input
+                      type="number"
+                      min="1"
+                      value={manualData.noOfTickets}
+                      onChange={(e) => setManualData({ ...manualData, noOfTickets: e.target.value })}
+                      className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-blue-500/50"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-white/50 mb-1.5">Amount (₹)</label>
+                    <input
+                      value={manualData.amount}
+                      onChange={(e) => setManualData({ ...manualData, amount: e.target.value })}
+                      placeholder="500"
+                      className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-blue-500/50"
+                    />
+                  </div>
+                </div>
+
+                <p className="text-xs text-blue-300/50 pt-1">
+                  QR will be generated and emailed immediately. If this email already has a registration for this pronite, it will be updated and a new QR will be sent.
+                </p>
+
+                <div className="flex justify-end gap-3 pt-2 border-t border-white/10">
+                  <button
+                    type="button"
+                    onClick={() => setManualPronite(null)}
+                    className="px-5 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:bg-white/10 text-sm"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={sendingManual}
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-300 hover:bg-blue-500/30 text-sm disabled:opacity-50"
+                  >
+                    {sendingManual && <IconLoader2 className="w-4 h-4 animate-spin" />}
+                    Generate & Send QR
                   </button>
                 </div>
               </form>

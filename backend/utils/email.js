@@ -54,7 +54,7 @@ export const sendDenialEmail = async (toEmail, userName, proniteTitle, reason) =
 /**
  * Send an approval email with QR code to the user
  */
-export const sendApprovalEmail = async (toEmail, userName, proniteTitle, qrDataUrl) => {
+export const sendApprovalEmail = async (toEmail, userName, proniteTitle, qrDataUrl, noOfTickets = 1) => {
   // Convert base64 data URL to buffer
   const base64Data = qrDataUrl.replace(/^data:image\/png;base64,/, "");
   const qrBuffer = Buffer.from(base64Data, "base64");
@@ -77,6 +77,9 @@ export const sendApprovalEmail = async (toEmail, userName, proniteTitle, qrDataU
           <div style="background: #1a1a2e; padding: 24px; margin: 24px 0; border-radius: 12px;">
             <p style="margin: 0 0 12px; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px;">Your Entry QR Code</p>
             <img src="cid:qrcode" alt="QR Code" style="width: 200px; height: 200px; border-radius: 8px;" />
+            <div style="margin: 14px 0 0; display: inline-block; background: #0d2137; border: 1px solid #2563eb55; border-radius: 8px; padding: 8px 20px;">
+              <p style="margin: 0; font-size: 13px; color: #93c5fd;">🎟 ${noOfTickets} ${noOfTickets === 1 ? "Pass" : "Passes"}</p>
+            </div>
             <p style="margin: 12px 0 0; font-size: 11px; color: #666;">Show this QR at the venue entrance</p>
           </div>
           <p style="font-size: 13px; color: #888; line-height: 1.6;">

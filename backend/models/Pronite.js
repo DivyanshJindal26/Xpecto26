@@ -10,9 +10,9 @@ const proniteSchema = new mongoose.Schema(
     verifierEmails: [{ type: String, lowercase: true, trim: true }],
     // Emails allowed to scan QR codes at entry (pronite-specific)
     scannerEmails: [{ type: String, lowercase: true, trim: true }],
-    // The value in the "ProNite Date" dropdown column of the Google Form
-    // that identifies this pronite's registrations (e.g. "14 March")
-    googleSheetDateLabel: { type: String, trim: true },
+    // Google Sheet config for this specific pronite's form responses
+    spreadsheetId: { type: String, trim: true },
+    sheetTabName: { type: String, trim: true, default: "Form Responses 1" },
   },
   { timestamps: true }
 );

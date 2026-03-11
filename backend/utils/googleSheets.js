@@ -2,24 +2,23 @@ import { google } from "googleapis";
 
 // Column order from the Google Form response sheet:
 //   A (0): Timestamp
-//   B (1): Email
+//   B (1): Email (pre-filled from Google account)
 //   C (2): Full Name
-//   D (3): ProNite Date   ("14 March" / "15 March" / "16 March")
-//   E (4): Phone
-//   F (5): College
-//   G (6): Payment Proof  (Google Drive file URL)
-//   H (7): Transaction ID
-
-const SPREADSHEET_ID = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
-const TAB_NAME = process.env.GOOGLE_SHEETS_TAB_NAME || "Form Responses 1";
+//   D (3): Phone
+//   E (4): College
+//   F (5): No of Tickets
+//   G (6): Amount
+//   H (7): Upload Proof Image (Google Drive file URL)
+//   I (8): UTR / Transaction Number
 
 /**
- * Fetch rows from the sheet filtered by a ProNite Date label.
- * @param {string} dateLabel  e.g. "14 March"
+ * Fetch all rows from a specific sheet.
+ * @param {string} spreadsheetId  The Google Sheets document ID
+ * @param {string} tabName        The tab name (defaults to "Form Responses 1")
  */
-export async function fetchSheetRows(dateLabel) {
-  if (!SPREADSHEET_ID) {
-    throw new Error("GOOGLE_SHEETS_SPREADSHEET_ID is not set");
+export async function fetchSheetRows(spreadsheetId, tabName = "Form Responses 1") {
+  if (!spreadsheetId) {
+    throw new Error("spreadsheetId is not configured for this pronite");
   }
   if (!process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL) {
     throw new Error("GOOGLE_SERVICE_ACCOUNT_EMAIL is not set");
@@ -43,8 +42,8 @@ export async function fetchSheetRows(dateLabel) {
   const sheets = google.sheets({ version: "v4", auth });
 
   const response = await sheets.spreadsheets.values.get({
-    spreadsheetId: SPREADSHEET_ID,
-    range: `'${TAB_NAME}'!A2:H`,
+    spreadsheetId,
+    range: `'${tabName}'!A2:I`,
   });
 
   const rows = response.data.values || [];
@@ -54,11 +53,12 @@ export async function fetchSheetRows(dateLabel) {
       timestamp: row[0] || "",
       email: (row[1] || "").trim().toLowerCase(),
       name: (row[2] || "").trim(),
-      proniteDate: (row[3] || "").trim(),
-      phone: (row[4] || "").trim(),
-      college: (row[5] || "").trim(),
-      paymentProofUrl: (row[6] || "").trim(),
-      transactionId: (row[7] || "").trim(),
+      phone: (row[3] || "").trim(),
+      college: (row[4] || "").trim(),
+      noOfTickets: parseInt(row[5], 10) || 1,
+      amount: (row[6] || "").trim(),
+      paymentProofUrl: (row[7] || "").trim(),
+      transactionId: (row[8] || "").trim(),
     }))
-    .filter((r) => r.email && r.proniteDate === dateLabel);
+    .filter((r) => r.email);
 }
