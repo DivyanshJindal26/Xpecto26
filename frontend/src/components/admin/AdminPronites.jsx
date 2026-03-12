@@ -27,6 +27,8 @@ const EMPTY_FORM = {
   scannerEmails: "",
   spreadsheetId: "",
   sheetTabName: "Form Responses 1",
+  spreadsheetId2: "",
+  sheetTabName2: "Form Responses 1",
 };
 
 const EMPTY_MANUAL = {
@@ -90,6 +92,8 @@ export default function AdminPronites() {
       scannerEmails: (pronite.scannerEmails || []).join(", "),
       spreadsheetId: pronite.spreadsheetId || "",
       sheetTabName: pronite.sheetTabName || "Form Responses 1",
+      spreadsheetId2: pronite.spreadsheetId2 || "",
+      sheetTabName2: pronite.sheetTabName2 || "Form Responses 1",
     });
     setShowModal(true);
   };
@@ -176,6 +180,8 @@ export default function AdminPronites() {
         venue: formData.venue,
         spreadsheetId: formData.spreadsheetId,
         sheetTabName: formData.sheetTabName || "Form Responses 1",
+        spreadsheetId2: formData.spreadsheetId2 || undefined,
+        sheetTabName2: formData.spreadsheetId2 ? (formData.sheetTabName2 || "Form Responses 1") : undefined,
         verifierEmails: formData.verifierEmails
           .split(",").map((e) => e.trim().toLowerCase()).filter(Boolean),
         scannerEmails: formData.scannerEmails
@@ -376,7 +382,7 @@ export default function AdminPronites() {
                 </div>
 
                 <div className="border-t border-white/10 pt-4 space-y-4">
-                  <h4 className="text-xs font-semibold text-purple-300 uppercase tracking-wider">Google Sheet</h4>
+                  <h4 className="text-xs font-semibold text-purple-300 uppercase tracking-wider">Google Sheet 1</h4>
                   {field("Spreadsheet ID *", "spreadsheetId", {
                     placeholder: "e.g. 1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms",
                     required: true,
@@ -390,6 +396,19 @@ export default function AdminPronites() {
                   <p className="text-xs text-white/30 -mt-2">
                     The tab name inside the spreadsheet (default: Form Responses 1)
                   </p>
+                </div>
+
+                <div className="border-t border-white/10 pt-4 space-y-4">
+                  <h4 className="text-xs font-semibold text-purple-300 uppercase tracking-wider">Google Sheet 2 <span className="text-white/30 normal-case font-normal">(optional)</span></h4>
+                  {field("Spreadsheet ID 2", "spreadsheetId2", {
+                    placeholder: "Leave blank if not using a second sheet",
+                  })}
+                  <p className="text-xs text-white/30 -mt-2">
+                    Optional second response sheet — rows are merged with Sheet 1 (duplicate emails are ignored)
+                  </p>
+                  {formData.spreadsheetId2 && field("Sheet Tab Name 2", "sheetTabName2", {
+                    placeholder: "Form Responses 1",
+                  })}
                 </div>
 
                 <div className="border-t border-white/10 pt-4 space-y-4">

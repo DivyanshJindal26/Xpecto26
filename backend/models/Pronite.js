@@ -10,9 +10,11 @@ const proniteSchema = new mongoose.Schema(
     verifierEmails: [{ type: String, lowercase: true, trim: true }],
     // Emails allowed to scan QR codes at entry (pronite-specific)
     scannerEmails: [{ type: String, lowercase: true, trim: true }],
-    // Google Sheet config for this specific pronite's form responses
+    // Google Sheet config — supports up to 2 response sheets per pronite
     spreadsheetId: { type: String, trim: true },
     sheetTabName: { type: String, trim: true, default: "Form Responses 1" },
+    spreadsheetId2: { type: String, trim: true },
+    sheetTabName2: { type: String, trim: true, default: "Form Responses 1" },
   },
   { timestamps: true }
 );
