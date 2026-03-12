@@ -34,6 +34,7 @@ const TIERS = [
     sponsors: [
       { name: "Weilliptic", logo: "./logos/weilliptic.jpg" },
       { name: "Upstox", logo: "./logos/upstox.png" },
+      { name: "Masai School", logo: "./logos/masai.jpg" },
     ],
   },
   {
@@ -48,7 +49,7 @@ const TIERS = [
     logoAspect: "aspect-[3/1.6]",
     sponsors: [
       { name: "Inxiteout", logo: "./logos/inxiteout.jpg" },
-      { name: "Road Safety", logo: "./logos/road-safety.png" },
+      { name: "Road Safety", logo: "./logos/roadsafety.jpg" },
     ],
   },
   {
@@ -78,7 +79,7 @@ const TIERS = [
     gridCols: "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5",
     logoAspect: "aspect-[3/1.7]",
     sponsors: [
-      { name: "SJVN", logo: "./logos/sjvn.png" },
+      { name: "SJVN", logo: "./logos/sjvn.jpg" },
       { name: "IT Bhawan Shimla", logo: "./logos/it-bhawan-shimla.png" },
       { name: "EaseMyTrip", logo: "./logos/easemytrip.jpg" },
       { name: "Krafton", logo: "./logos/krafton.png" },
@@ -99,8 +100,8 @@ const TIERS = [
     sponsors: [
       { name: "BSE", logo: "./logos/bse.png" },
       { name: "Athea", logo: "./logos/athea.jpg" },
-      { name: "Nodwin", logo: "./logos/nodwin.png" },
-      { name: "Edufab", logo: "./logos/edufab.png" },
+      { name: "Nodwin", logo: "./logos/nodwin.jpg" },
+      { name: "Edufab", logo: "./logos/edufab.jpg" },
       { name: "Trip24x7", logo: "./logos/trip24x7.png" },
       { name: "Umeed", logo: "./logos/umeed.png" },
     ],
