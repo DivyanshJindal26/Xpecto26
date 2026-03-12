@@ -444,13 +444,7 @@ export default function Sponsors() {
               <h3 className="font-['Michroma'] text-xl font-light text-white tracking-wide mb-2">
                 Become a Sponsor
               </h3>
-              <p
-                className="font-['Michroma'] text-sm leading-relaxed max-w-md"
-                style={{ color: "rgba(255,255,255,0.34)" }}
-              >
-                Partner with IIT Mandi's premier tech festival and reach
-                10,000+ students, innovators, and industry leaders.
-              </p>
+           
             </div>
             <a href="mailto:publicity@xpecto.org" className="shrink-0">
               <motion.div
