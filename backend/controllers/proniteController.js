@@ -88,8 +88,23 @@ export const getSheetRegistrations = async (req, res, next) => {
       });
     }
 
-    // Fetch live data from this pronite's dedicated Google Sheet
-    const rows = await fetchSheetRows(pronite.spreadsheetId, pronite.sheetTabName);
+    // Fetch from sheet 1 (required) and sheet 2 (optional) in parallel
+    const sheetFetches = [fetchSheetRows(pronite.spreadsheetId, pronite.sheetTabName)];
+    if (pronite.spreadsheetId2) {
+      sheetFetches.push(fetchSheetRows(pronite.spreadsheetId2, pronite.sheetTabName2));
+    }
+    const sheetResults = await Promise.all(sheetFetches);
+    // Merge rows — deduplicate by email (first sheet wins)
+    const seenEmails = new Set();
+    const rows = [];
+    for (const sheetRows of sheetResults) {
+      for (const row of sheetRows) {
+        if (!seenEmails.has(row.email)) {
+          seenEmails.add(row.email);
+          rows.push(row);
+        }
+      }
+    }
 
     // Fetch all DB records for this pronite in one query
     const dbRecords = await SheetRegistration.find({ pronite: pronite._id }).lean();
@@ -153,7 +168,21 @@ export const generateQrForRegistrant = async (req, res, next) => {
       });
     }
 
-    const rows = await fetchSheetRows(pronite.spreadsheetId, pronite.sheetTabName);
+    const sheetFetches = [fetchSheetRows(pronite.spreadsheetId, pronite.sheetTabName)];
+    if (pronite.spreadsheetId2) {
+      sheetFetches.push(fetchSheetRows(pronite.spreadsheetId2, pronite.sheetTabName2));
+    }
+    const sheetResults = await Promise.all(sheetFetches);
+    const seenEmails = new Set();
+    const rows = [];
+    for (const sheetRows of sheetResults) {
+      for (const row of sheetRows) {
+        if (!seenEmails.has(row.email)) {
+          seenEmails.add(row.email);
+          rows.push(row);
+        }
+      }
+    }
     const { email, all } = req.body;
 
     const targets = all
