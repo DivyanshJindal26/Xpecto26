@@ -93,12 +93,16 @@ export const getSheetRegistrations = async (req, res, next) => {
     if (pronite.spreadsheetId2) {
       sheetFetches.push(fetchSheetRows(pronite.spreadsheetId2, pronite.sheetTabName2));
     }
-    const sheetResults = await Promise.all(sheetFetches);
-    // Merge rows — deduplicate by email (first sheet wins)
+    const sheetSettled = await Promise.allSettled(sheetFetches);
+    // Merge rows — deduplicate by email (first sheet wins); skip failed sheets
     const seenEmails = new Set();
     const rows = [];
-    for (const sheetRows of sheetResults) {
-      for (const row of sheetRows) {
+    for (const result of sheetSettled) {
+      if (result.status === "rejected") {
+        console.error("Sheet fetch failed (skipping):", result.reason?.message || result.reason);
+        continue;
+      }
+      for (const row of result.value) {
         if (!seenEmails.has(row.email)) {
           seenEmails.add(row.email);
           rows.push(row);
@@ -172,11 +176,15 @@ export const generateQrForRegistrant = async (req, res, next) => {
     if (pronite.spreadsheetId2) {
       sheetFetches.push(fetchSheetRows(pronite.spreadsheetId2, pronite.sheetTabName2));
     }
-    const sheetResults = await Promise.all(sheetFetches);
+    const sheetSettled = await Promise.allSettled(sheetFetches);
     const seenEmails = new Set();
     const rows = [];
-    for (const sheetRows of sheetResults) {
-      for (const row of sheetRows) {
+    for (const result of sheetSettled) {
+      if (result.status === "rejected") {
+        console.error("Sheet fetch failed (skipping):", result.reason?.message || result.reason);
+        continue;
+      }
+      for (const row of result.value) {
         if (!seenEmails.has(row.email)) {
           seenEmails.add(row.email);
           rows.push(row);
