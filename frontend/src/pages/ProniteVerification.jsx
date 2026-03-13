@@ -19,7 +19,10 @@ export default function ProniteVerification() {
   const [search, setSearch] = useState("");
   const [sendingQr, setSendingQr] = useState(null); // email being processed
   const [sendingAll, setSendingAll] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 25;
 
   // Check verifier access
   useEffect(() => {
@@ -52,10 +55,11 @@ export default function ProniteVerification() {
     checkAccess();
   }, [authLoading, isAuthenticated, navigate]);
 
-  // Fetch sheet registrations for the selected pronite
-  const fetchRegistrations = useCallback(async () => {
+  // Fetch sheet registrations — silent=true keeps the existing list visible while loading
+  const fetchRegistrations = useCallback(async ({ silent = false } = {}) => {
     if (!selectedProniteId) return;
-    setLoadingRegs(true);
+    if (!silent) setLoadingRegs(true);
+    else setRefreshing(true);
     setError(null);
     try {
       const res = await fetch(
@@ -72,6 +76,7 @@ export default function ProniteVerification() {
       setError("Could not reach the server");
     } finally {
       setLoadingRegs(false);
+      setRefreshing(false);
     }
   }, [selectedProniteId]);
 
@@ -79,7 +84,7 @@ export default function ProniteVerification() {
     fetchRegistrations();
   }, [fetchRegistrations]);
 
-  // Send QR to a single registrant
+  // Send QR to a single registrant — update local state, no refetch
   const handleSendQr = async (email) => {
     setSendingQr(email);
     try {
@@ -94,7 +99,9 @@ export default function ProniteVerification() {
       );
       const data = await res.json();
       if (data.success) {
-        await fetchRegistrations();
+        setRegistrations((prev) =>
+          prev.map((r) => r.email === email ? { ...r, qrEmailSent: true } : r)
+        );
       } else {
         alert(data.message || "Failed to send QR");
       }
@@ -105,7 +112,7 @@ export default function ProniteVerification() {
     }
   };
 
-  // Send QR to all who haven't received one yet
+  // Send QR to all pending — update local state, no refetch
   const handleSendAll = async () => {
     if (!confirm("Send QR codes to all registrants who haven't received one yet?")) return;
     setSendingAll(true);
@@ -121,7 +128,10 @@ export default function ProniteVerification() {
       );
       const data = await res.json();
       if (data.success) {
-        await fetchRegistrations();
+        const sentEmails = new Set((data.results || []).map((r) => r.email));
+        setRegistrations((prev) =>
+          prev.map((r) => sentEmails.has(r.email) ? { ...r, qrEmailSent: true } : r)
+        );
         alert(`Done. ${data.results?.length || 0} QR codes sent.`);
       } else {
         alert(data.message || "Failed to send QR codes");
@@ -132,6 +142,9 @@ export default function ProniteVerification() {
       setSendingAll(false);
     }
   };
+
+  // Reset page on filter/search/pronite change
+  useEffect(() => { setPage(1); }, [search, filter, selectedProniteId]);
 
   // Derived display lists
   const filtered = registrations.filter((r) => {
@@ -155,6 +168,9 @@ export default function ProniteVerification() {
     qr_pending: registrations.filter((r) => !r.qrEmailSent).length,
     scanned: registrations.filter((r) => r.scanned).length,
   };
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   if (loading || authLoading) {
     return (
@@ -238,10 +254,11 @@ export default function ProniteVerification() {
           </button>
         ))}
         <button
-          onClick={fetchRegistrations}
-          className="px-3 py-1.5 rounded-lg text-xs bg-white/5 border border-white/10 text-white/50 hover:bg-white/10 ml-auto"
+          onClick={() => fetchRegistrations({ silent: true })}
+          disabled={refreshing}
+          className="px-3 py-1.5 rounded-lg text-xs bg-white/5 border border-white/10 text-white/50 hover:bg-white/10 ml-auto disabled:opacity-50"
         >
-          ↻ Refresh
+          {refreshing ? "Refreshing…" : "↻ Refresh"}
         </button>
       </div>
 
@@ -264,7 +281,7 @@ export default function ProniteVerification() {
         </div>
       ) : (
         <div className="space-y-2">
-          {filtered.map((reg, i) => (
+          {paginated.map((reg, i) => (
             <motion.div
               key={`${reg.email}-${i}`}
               initial={{ opacity: 0, y: 8 }}
@@ -342,6 +359,29 @@ export default function ProniteVerification() {
               )}
             </motion.div>
           ))}
+        </div>
+      )}
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-3 mt-6">
+          <button
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}
+            className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:bg-white/10 text-sm disabled:opacity-30 transition-colors"
+          >
+            ← Prev
+          </button>
+          <span className="text-white/40 text-sm">
+            Page {page} of {totalPages} · {filtered.length} results
+          </span>
+          <button
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={page === totalPages}
+            className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:bg-white/10 text-sm disabled:opacity-30 transition-colors"
+          >
+            Next →
+          </button>
         </div>
       )}
     </div>
