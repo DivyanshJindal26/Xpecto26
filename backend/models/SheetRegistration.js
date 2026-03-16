@@ -40,6 +40,7 @@ const sheetRegistrationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// One record per person per pronite — 1 QR per email
 sheetRegistrationSchema.index({ email: 1, pronite: 1 }, { unique: true });
 
 sheetRegistrationSchema.methods.generateQrToken = function () {
