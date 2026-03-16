@@ -461,11 +461,14 @@ export default function ProniteScanner() {
                           {result.data.attendee.college && (
                             <p className="text-white/40 text-xs">🎓 {result.data.attendee.college}</p>
                           )}
-                          {result.data.attendee.noOfTickets && (
-                            <p className="text-blue-300 text-xs font-medium mt-1">
-                              🎟 {result.data.attendee.noOfTickets} {result.data.attendee.noOfTickets === 1 ? "pass allowed" : "passes allowed"}
-                            </p>
-                          )}
+                          {(() => {
+                            const n = result.data.attendee.noOfTickets ?? 1;
+                            return (
+                              <p className="text-blue-300 text-xs font-medium mt-1">
+                                🎟 {n} {n === 1 ? "pass allowed" : "passes allowed"}
+                              </p>
+                            );
+                          })()}
                         </div>
                       )}
 

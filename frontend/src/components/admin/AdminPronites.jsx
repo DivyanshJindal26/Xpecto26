@@ -29,6 +29,10 @@ const EMPTY_FORM = {
   sheetTabName: "Form Responses 1",
   spreadsheetId2: "",
   sheetTabName2: "Form Responses 1",
+  spreadsheetId3: "",
+  sheetTabName3: "Form Responses 1",
+  spreadsheetId4: "",
+  sheetTabName4: "Form Responses 1",
 };
 
 const EMPTY_MANUAL = {
@@ -94,6 +98,10 @@ export default function AdminPronites() {
       sheetTabName: pronite.sheetTabName || "Form Responses 1",
       spreadsheetId2: pronite.spreadsheetId2 || "",
       sheetTabName2: pronite.sheetTabName2 || "Form Responses 1",
+      spreadsheetId3: pronite.spreadsheetId3 || "",
+      sheetTabName3: pronite.sheetTabName3 || "Form Responses 1",
+      spreadsheetId4: pronite.spreadsheetId4 || "",
+      sheetTabName4: pronite.sheetTabName4 || "Form Responses 1",
     });
     setShowModal(true);
   };
@@ -182,6 +190,10 @@ export default function AdminPronites() {
         sheetTabName: formData.sheetTabName || "Form Responses 1",
         spreadsheetId2: formData.spreadsheetId2 || undefined,
         sheetTabName2: formData.spreadsheetId2 ? (formData.sheetTabName2 || "Form Responses 1") : undefined,
+        spreadsheetId3: formData.spreadsheetId3 || undefined,
+        sheetTabName3: formData.spreadsheetId3 ? (formData.sheetTabName3 || "Form Responses 1") : undefined,
+        spreadsheetId4: formData.spreadsheetId4 || undefined,
+        sheetTabName4: formData.spreadsheetId4 ? (formData.sheetTabName4 || "Form Responses 1") : undefined,
         verifierEmails: formData.verifierEmails
           .split(",").map((e) => e.trim().toLowerCase()).filter(Boolean),
         scannerEmails: formData.scannerEmails
@@ -235,7 +247,7 @@ export default function AdminPronites() {
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold text-white flex items-center gap-2">
           <IconMusic className="w-6 h-6 text-purple-400" />
-          Pronites ({pronites.length}/3)
+          Pronite
         </h2>
         <div className="flex gap-2">
           <button
@@ -244,7 +256,7 @@ export default function AdminPronites() {
           >
             <IconRefresh className="w-5 h-5" />
           </button>
-          {pronites.length < 3 && (
+          {pronites.length < 1 && (
             <button
               onClick={handleCreate}
               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-300 hover:bg-purple-500/30 transition-colors"
@@ -293,7 +305,7 @@ export default function AdminPronites() {
                 )}
                 {pronite.spreadsheetId && (
                   <span className="px-2 py-1 rounded-full bg-green-500/20 text-green-300 border border-green-500/20">
-                    Sheet linked
+                    {[pronite.spreadsheetId, pronite.spreadsheetId2, pronite.spreadsheetId3, pronite.spreadsheetId4].filter(Boolean).length} sheet(s) linked
                   </span>
                 )}
               </div>
@@ -399,14 +411,34 @@ export default function AdminPronites() {
                 </div>
 
                 <div className="border-t border-white/10 pt-4 space-y-4">
-                  <h4 className="text-xs font-semibold text-purple-300 uppercase tracking-wider">Google Sheet 2 <span className="text-white/30 normal-case font-normal">(optional)</span></h4>
+                  <h4 className="text-xs font-semibold text-purple-300 uppercase tracking-wider">Google Sheet 2 — ₹100 <span className="text-white/30 normal-case font-normal">(optional)</span></h4>
                   {field("Spreadsheet ID 2", "spreadsheetId2", {
-                    placeholder: "Leave blank if not using a second sheet",
+                    placeholder: "Leave blank if not using",
                   })}
                   <p className="text-xs text-white/30 -mt-2">
-                    Optional second response sheet — rows are merged with Sheet 1 (duplicate emails are ignored)
+                    Amounts across all sheets are summed per email. Eligible if total ≥ ₹199.
                   </p>
                   {formData.spreadsheetId2 && field("Sheet Tab Name 2", "sheetTabName2", {
+                    placeholder: "Form Responses 1",
+                  })}
+                </div>
+
+                <div className="border-t border-white/10 pt-4 space-y-4">
+                  <h4 className="text-xs font-semibold text-purple-300 uppercase tracking-wider">Google Sheet 3 — ₹100 <span className="text-white/30 normal-case font-normal">(optional)</span></h4>
+                  {field("Spreadsheet ID 3", "spreadsheetId3", {
+                    placeholder: "Leave blank if not using",
+                  })}
+                  {formData.spreadsheetId3 && field("Sheet Tab Name 3", "sheetTabName3", {
+                    placeholder: "Form Responses 1",
+                  })}
+                </div>
+
+                <div className="border-t border-white/10 pt-4 space-y-4">
+                  <h4 className="text-xs font-semibold text-purple-300 uppercase tracking-wider">Google Sheet 4 — ₹100 <span className="text-white/30 normal-case font-normal">(optional)</span></h4>
+                  {field("Spreadsheet ID 4", "spreadsheetId4", {
+                    placeholder: "Leave blank if not using",
+                  })}
+                  {formData.spreadsheetId4 && field("Sheet Tab Name 4", "sheetTabName4", {
                     placeholder: "Form Responses 1",
                   })}
                 </div>

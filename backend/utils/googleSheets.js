@@ -16,7 +16,7 @@ import { google } from "googleapis";
  * @param {string} spreadsheetId  The Google Sheets document ID
  * @param {string} tabName        The tab name (defaults to "Form Responses 1")
  */
-export async function fetchSheetRows(spreadsheetId, tabName = "Form Responses 1") {
+export async function fetchSheetRows(spreadsheetId, tabName = "Form Responses 1", sheetIndex = 0) {
   if (!spreadsheetId) {
     throw new Error("spreadsheetId is not configured for this pronite");
   }
@@ -55,7 +55,7 @@ export async function fetchSheetRows(spreadsheetId, tabName = "Form Responses 1"
       name: (row[2] || "").trim(),
       phone: (row[3] || "").trim(),
       college: (row[4] || "").trim(),
-      noOfTickets: parseInt(row[5], 10) || 1,
+      noOfTickets: parseInt(row[5], 10) || null,
       amount: (row[6] || "").trim(),
       paymentProofUrl: (row[7] || "").trim(),
       transactionId: (row[8] || "").trim(),

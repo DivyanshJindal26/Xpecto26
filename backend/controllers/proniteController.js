@@ -5,6 +5,87 @@ import { sendApprovalEmail } from "../utils/email.js";
 import { generateQrCode } from "../utils/qrcode.js";
 
 // ============================================================
+// ELIGIBILITY HELPERS
+// ============================================================
+
+const ELIGIBLE_AMOUNT_THRESHOLD = 198; // ₹99+₹99 minimum
+const AMOUNT_PER_PASS = 198;
+
+/**
+ * Build the list of sheet fetches for a pronite (up to 4 sheets).
+ */
+function buildSheetFetches(pronite) {
+  const fetches = [];
+  if (pronite.spreadsheetId)
+    fetches.push(fetchSheetRows(pronite.spreadsheetId, pronite.sheetTabName, 1));
+  if (pronite.spreadsheetId2)
+    fetches.push(fetchSheetRows(pronite.spreadsheetId2, pronite.sheetTabName2, 2));
+  if (pronite.spreadsheetId3)
+    fetches.push(fetchSheetRows(pronite.spreadsheetId3, pronite.sheetTabName3, 3));
+  if (pronite.spreadsheetId4)
+    fetches.push(fetchSheetRows(pronite.spreadsheetId4, pronite.sheetTabName4, 4));
+  return fetches;
+}
+
+/**
+ * Fetch all rows from all configured sheets, group by email, sum amounts,
+ * and return only those whose total paid >= ELIGIBLE_AMOUNT_THRESHOLD.
+ */
+async function fetchEligibleRows(pronite) {
+  if (!pronite.spreadsheetId) {
+    throw new Error("No Spreadsheet ID configured for this pronite.");
+  }
+
+  const settled = await Promise.allSettled(buildSheetFetches(pronite));
+
+  // Collect all rows — same email may appear across multiple forms
+  const allRows = [];
+  for (const result of settled) {
+    if (result.status === "rejected") {
+      console.error("Sheet fetch failed (skipping):", result.reason?.message || result.reason);
+      continue;
+    }
+    allRows.push(...result.value);
+  }
+
+  // Merge by email: sum amounts, combine transaction IDs → 1 entry per person
+  const emailMap = {};
+  for (const row of allRows) {
+    if (!emailMap[row.email]) {
+      emailMap[row.email] = {
+        email: row.email,
+        name: row.name,
+        phone: row.phone,
+        college: row.college,
+        paymentProofUrl: row.paymentProofUrl,
+        rowIndex: row.rowIndex,
+        totalAmount: 0,
+        transactionIds: [],
+      };
+    }
+    const entry = emailMap[row.email];
+    entry.totalAmount += parseFloat(row.amount) || 0;
+    if (row.transactionId) entry.transactionIds.push(row.transactionId);
+  }
+
+  // Return only eligible entries (total paid >= threshold)
+  // noOfTickets = how many passes they've paid for
+  return Object.values(emailMap)
+    .filter((e) => e.totalAmount >= ELIGIBLE_AMOUNT_THRESHOLD)
+    .map((e) => ({
+      email: e.email,
+      name: e.name,
+      phone: e.phone,
+      college: e.college,
+      amount: String(e.totalAmount),
+      transactionId: e.transactionIds.join(", "),
+      paymentProofUrl: e.paymentProofUrl,
+      noOfTickets: Math.floor(e.totalAmount / AMOUNT_PER_PASS),
+      rowIndex: e.rowIndex,
+    }));
+}
+
+// ============================================================
 // PRONITE CRUD (Admin)
 // ============================================================
 
@@ -88,27 +169,8 @@ export const getSheetRegistrations = async (req, res, next) => {
       });
     }
 
-    // Fetch from sheet 1 (required) and sheet 2 (optional) in parallel
-    const sheetFetches = [fetchSheetRows(pronite.spreadsheetId, pronite.sheetTabName)];
-    if (pronite.spreadsheetId2) {
-      sheetFetches.push(fetchSheetRows(pronite.spreadsheetId2, pronite.sheetTabName2));
-    }
-    const sheetSettled = await Promise.allSettled(sheetFetches);
-    // Merge rows — deduplicate by email (first sheet wins); skip failed sheets
-    const seenEmails = new Set();
-    const rows = [];
-    for (const result of sheetSettled) {
-      if (result.status === "rejected") {
-        console.error("Sheet fetch failed (skipping):", result.reason?.message || result.reason);
-        continue;
-      }
-      for (const row of result.value) {
-        if (!seenEmails.has(row.email)) {
-          seenEmails.add(row.email);
-          rows.push(row);
-        }
-      }
-    }
+    // Fetch eligible rows: aggregated across all 4 forms, total amount >= ₹199
+    const rows = await fetchEligibleRows(pronite);
 
     // Fetch all DB records for this pronite in one query
     const dbRecords = await SheetRegistration.find({ pronite: pronite._id }).lean();
@@ -117,7 +179,7 @@ export const getSheetRegistrations = async (req, res, next) => {
       dbMap[rec.email] = rec;
     }
 
-    // Merge sheet rows with DB scan/QR status
+    // Merge sheet rows with DB scan/QR status — keyed by email
     const merged = rows.map((row) => {
       const db = dbMap[row.email] || null;
       return {
@@ -172,25 +234,9 @@ export const generateQrForRegistrant = async (req, res, next) => {
       });
     }
 
-    const sheetFetches = [fetchSheetRows(pronite.spreadsheetId, pronite.sheetTabName)];
-    if (pronite.spreadsheetId2) {
-      sheetFetches.push(fetchSheetRows(pronite.spreadsheetId2, pronite.sheetTabName2));
-    }
-    const sheetSettled = await Promise.allSettled(sheetFetches);
-    const seenEmails = new Set();
-    const rows = [];
-    for (const result of sheetSettled) {
-      if (result.status === "rejected") {
-        console.error("Sheet fetch failed (skipping):", result.reason?.message || result.reason);
-        continue;
-      }
-      for (const row of result.value) {
-        if (!seenEmails.has(row.email)) {
-          seenEmails.add(row.email);
-          rows.push(row);
-        }
-      }
-    }
+    // Fetch eligible rows: aggregated across all 4 forms, total amount >= ₹199
+    const rows = await fetchEligibleRows(pronite);
+
     const { email, all } = req.body;
 
     const targets = all
@@ -203,15 +249,7 @@ export const generateQrForRegistrant = async (req, res, next) => {
 
     const results = [];
     for (const row of targets) {
-      // Skip if QR already sent and this isn't a bulk resend
-      if (!all) {
-        const existing = await SheetRegistration.findOne({ email: row.email, pronite: pronite._id });
-        if (existing?.qrEmailSent) {
-          // Resend to individual — allowed
-        }
-      }
-
-      // Upsert DB record
+      // Upsert DB record — 1 record per email per pronite
       let reg = await SheetRegistration.findOne({ email: row.email, pronite: pronite._id });
       if (!reg) {
         reg = new SheetRegistration({
@@ -227,7 +265,7 @@ export const generateQrForRegistrant = async (req, res, next) => {
           rowIndex: row.rowIndex,
         });
       } else {
-        // Refresh sheet data
+        // Refresh merged sheet data
         reg.name = row.name;
         reg.phone = row.phone;
         reg.college = row.college;

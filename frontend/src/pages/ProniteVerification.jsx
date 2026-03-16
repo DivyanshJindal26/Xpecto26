@@ -283,7 +283,7 @@ export default function ProniteVerification() {
         <div className="space-y-2">
           {paginated.map((reg, i) => (
             <motion.div
-              key={`${reg.email}-${i}`}
+              key={reg.email}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.02 }}
